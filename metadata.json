@@ -1,0 +1,5 @@
+{
+  "name": "SmugMug API Reference App",
+  "description": "A reference implementation and boilerplate application demonstrating key SmugMug API use cases. This app provides frontend examples for OAuth authentication guidance, fetching albums and photos, updating metadata, and integrating with AI for content analysis.",
+  "requestFramePermissions": []
+}
