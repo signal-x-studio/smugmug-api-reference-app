@@ -3,11 +3,13 @@ import { AiData, Photo, AlbumStory } from '../types';
 
 const API_KEY = process.env.API_KEY;
 
-if (!API_KEY) {
-  throw new Error("API_KEY environment variable not set");
-}
+// Make Gemini API optional for development - app will work without AI features
+const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
 
-const ai = new GoogleGenAI({ apiKey: API_KEY });
+// Helper function to check if AI is available
+function isAIAvailable(): boolean {
+  return ai !== null;
+}
 
 async function urlToGenerativePart(url: string, mimeType: string) {
   const response = await fetch(url);
@@ -110,6 +112,12 @@ export async function doesImageMatchPrompt(
     imageUrl: string,
     userPrompt: string
 ): Promise<boolean> {
+    // Return false if AI is not available
+    if (!isAIAvailable()) {
+        console.warn('Gemini API not available - returning false for image matching. Set GEMINI_API_KEY environment variable to enable AI features.');
+        return false;
+    }
+    
     const model = 'gemini-2.5-flash';
     
     const promptText = `You are an AI photo curator. The user wants to find photos that match a specific theme. Based on the user's request, does this image fit? Respond with only a boolean in JSON format. User Request: "${userPrompt}"`;
@@ -152,6 +160,16 @@ export async function doesImageMatchPrompt(
 
 
 export async function generateAlbumStory(photos: Photo[]): Promise<AlbumStory> {
+  // Return mock data if AI is not available
+  if (!isAIAvailable()) {
+    console.warn('Gemini API not available - returning mock album story. Set GEMINI_API_KEY environment variable to enable AI features.');
+    return {
+      title: 'Mock Album Story',
+      description: 'This is a mock album story. The collection appears to contain interesting photographs with diverse subjects and compositions. To get real AI-generated album stories, please set your GEMINI_API_KEY environment variable.',
+      keywords: ['mock', 'development', 'placeholder', 'collection']
+    };
+  }
+  
   const model = 'gemini-2.5-flash';
 
   const promptText = `You are a professional photo curator and storyteller for the SmugMug platform. Your task is to analyze a collection of images from a single album and create a cohesive narrative and marketing copy for it.

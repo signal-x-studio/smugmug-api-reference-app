@@ -65,15 +65,19 @@ This application serves dual purposes as both a **functional SmugMug integration
 
 1. **Clone and Install**
    ```bash
-   git clone [repository-url]
+   git clone https://github.com/signal-x-studio/smugmug-api-reference-app.git
    cd smugmug-api-reference-app
    npm install
    ```
 
-2. **Environment Setup**
+2. **Environment Setup (Optional)**
    ```bash
-   # Create .env file
-   echo "GEMINI_API_KEY=your_gemini_api_key" > .env
+   # Copy the example environment file
+   cp .env.example .env
+   
+   # Edit .env and add your Gemini API key (optional)
+   # Get free API key from: https://makersuite.google.com/app/apikey
+   # The app works without this - AI features will use mock data
    ```
 
 3. **Run Development Server**
@@ -82,9 +86,9 @@ This application serves dual purposes as both a **functional SmugMug integration
    ```
 
 4. **Explore the Application**
-   - Visit `http://localhost:5173`
-   - Use the mock authentication (development mode)
-   - Try AI photo analysis features
+   - Visit `http://localhost:3000`
+   - Use mock authentication (click "Connect to SmugMug")
+   - Try AI photo analysis features (works with or without API key)
    - Explore batch processing workflows
 
 ---
