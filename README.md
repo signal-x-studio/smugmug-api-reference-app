@@ -61,7 +61,15 @@ This application serves dual purposes as both a **functional SmugMug integration
 
 ## 🚀 Quick Start
 
-**Prerequisites:** Node.js 18+
+**Prerequisites:** 
+- **Node.js 18+** (tested with Node.js 20+, current LTS recommended)
+- **npm** (comes with Node.js)
+- **Git** (for cloning the repository)
+
+**System Requirements:**
+- **Operating System:** macOS, Linux, or Windows with WSL2
+- **Memory:** 4GB+ RAM (for development server and build process)
+- **Storage:** 500MB+ free space (for node_modules and build artifacts)
 
 1. **Clone and Install**
    ```bash
@@ -69,6 +77,13 @@ This application serves dual purposes as both a **functional SmugMug integration
    cd smugmug-api-reference-app
    npm install
    ```
+   
+   *⏱️ Installation takes 1-2 minutes and downloads ~30 packages including:*
+   - React 19.1.1 & React DOM 19.1.1
+   - Vite 5.4.10 (build tool & dev server)
+   - Tailwind CSS 3.4.15 (styling framework)
+   - Google Gemini AI 1.21.0 (optional AI features)
+   - TypeScript 5.8+ (type safety)
 
 2. **Environment Setup (Optional)**
    ```bash
@@ -84,12 +99,32 @@ This application serves dual purposes as both a **functional SmugMug integration
    ```bash
    npm run dev
    ```
+   
+   *🚀 Server starts in ~2-3 seconds. Look for:*
+   ```
+   VITE v5.4.20  ready in 109 ms
+   ➜  Local:   http://localhost:3000/
+   ➜  Network: http://192.168.x.x:3000/
+   ```
 
 4. **Explore the Application**
    - Visit `http://localhost:3000`
    - Use mock authentication (click "Connect to SmugMug")
    - Try AI photo analysis features (works with or without API key)
    - Explore batch processing workflows
+
+### 🔧 **Build for Production**
+```bash
+npm run build
+```
+*Creates optimized production build in `dist/` folder (~300KB total)*
+
+### ⚠️ **Having Issues?**
+See **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** for common problems and solutions including:
+- Port conflicts and build errors
+- Styling issues and Tailwind problems  
+- Node.js version compatibility
+- Performance optimization tips
 
 ---
 
