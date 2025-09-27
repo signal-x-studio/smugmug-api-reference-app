@@ -187,23 +187,10 @@ The comprehensive documentation provides both practical guidance and strategic i
 
 This application serves as both a functional tool and educational resource. See individual documentation files for specific usage guidance and implementation patterns suitable for your development context.
 
----
+## 📚 AI Development Case Study
 
-**🔗 Links:**
-- [Live Demo](https://ai.studio/apps/drive/1_gr1HQgQk6D-KF327X8y70Whc3JEDCu7) | [Technical Deep Dive](./TECHNICAL-DECISIONS.md) | [AI Collaboration Guide](./AI-COLLABORATION.md)
+This repository serves as both a **functional SmugMug integration tool** and a **comprehensive case study** in modern AI-assisted software development. The documentation showcases both the technical sophistication of the final product and the collaborative methodology used to build it.
 
----
+This approach provides deep insights for **developers integrating with SmugMug's API** and **technical leaders evaluating AI-assisted development workflows.**
 
-## AI Development Case Study
-
-This repository is more than a functional application; it's a comprehensive case study in modern, AI-assisted software development. The documentation is designed to showcase both the technical sophistication of the final product and the collaborative methodology used to build it.
-
-This approach is intended to provide deep insights for **developers integrating with SmugMug's API** and **technical leaders evaluating AI-assisted development workflows.**
-
-Explore the detailed documentation to learn more:
-
-*   **[TECHNICAL-DECISIONS.md](./TECHNICAL-DECISIONS.md)**: An overview of the architectural choices and AI-driven patterns that shaped the project.
-*   **[AI-COLLABORATION.md](./AI-COLLABORATION.md)**: A detailed look at the multi-agent workflow, including the roles of different AI tools and effective prompting strategies.
-*   **[DEVELOPMENT-PHASES.md](./DEVELOPMENT-PHASES.md)**: A narrative tracing the project's evolution from a basic API client to a sophisticated AI-powered tool.
-*   **[CODE-QUALITY.md](./CODE-QUALITY.md)**: A summary of the standards and practices that ensure the code is robust, maintainable, and enterprise-ready.
-*   **[PROMPTING-STRATEGIES.md](./PROMPTING-STRATEGIES.md)**: An actionable guide with proven, reusable prompts for generating high-quality code and AI-driven analysis.
+**Explore the comprehensive documentation through the [Documentation Index](./docs/README.md) for organized access to all guides, methodologies, and technical showcases.**
