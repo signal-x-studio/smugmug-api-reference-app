@@ -1,0 +1,103 @@
+# Project Context Template
+# Copy this file and customize for any project requiring dual-purpose documentation
+
+project:
+  name: "Your Project Name"
+  type: "web_app" # Options: web_app, mobile_app, api, library, platform, desktop_app
+  repository_url: "https://github.com/username/project"
+  
+tech_stack:
+  primary: 
+    - "React"      # Primary framework/language
+    - "TypeScript" # Type system/language features  
+    - "Next.js"    # Additional frameworks
+  
+  ai_integration:
+    - "OpenAI GPT-4"     # AI APIs used
+    - "Anthropic Claude" # AI development tools
+    - "Google Gemini"    # AI services integrated
+  
+  infrastructure:
+    - "Vercel"      # Hosting/deployment
+    - "PostgreSQL"  # Database
+    - "Redis"       # Caching/session storage
+
+theme:
+  metaphor: "intelligent_curation" # Options: surgical_precision, market_dynamics, space_exploration, intelligent_curation, digital_craftmanship
+  description: "Every decision measured, validated, and optimized through AI-human collaboration"
+  visual_language: "precision, efficiency, intelligence, collaboration"
+  
+audience:
+  primary: "API developers"           # Main target audience
+  secondary: "technical educators"    # Secondary audience  
+  tertiary: "AI development teams"    # Tertiary audience
+  
+  # Audience-specific priorities
+  primary_priorities: ["immediate implementation", "clear examples", "best practices"]
+  secondary_priorities: ["educational value", "teaching materials", "step-by-step guidance"] 
+  tertiary_priorities: ["ROI demonstration", "collaboration patterns", "enterprise scalability"]
+
+development_stats:
+  lines_of_code: 4100              # Total estimated lines
+  ai_generated_percent: 75         # Percentage of AI-generated code
+  development_weeks: 6             # Total development timeline
+  team_size: 1                     # Number of human developers
+  
+  # Key quantifiable achievements
+  performance_improvements:
+    - "75% API call reduction through intelligent batching"
+    - "67% faster development through AI collaboration"
+    - "100% type safety with zero runtime errors"
+    - "Sub-200ms average response times"
+  
+  technical_achievements:
+    - "Complete OAuth 1.0a reference implementation"
+    - "Multi-agent AI coordination with structured responses"
+    - "Enterprise-grade error handling and recovery"
+    - "Production-ready security patterns"
+
+business_value:
+  primary_value_prop: "Complete SmugMug API integration reference with AI-powered metadata generation"
+  
+  cost_savings:
+    - "45% infrastructure cost reduction through optimization"
+    - "60% faster developer onboarding"
+    - "75% reduction in integration support tickets"
+  
+  revenue_impact:
+    - "3x faster client project delivery"
+    - "50% increase in project success rate"
+    - "Enterprise-grade positioning for higher-value contracts"
+
+documentation_goals:
+  showcase_objectives:
+    - "Demonstrate enterprise-grade AI development capabilities"
+    - "Showcase sophisticated technical decision-making"
+    - "Prove measurable ROI from AI-human collaboration"
+    - "Position for technical leadership evaluation"
+  
+  practical_objectives:
+    - "Enable developers to implement similar integrations"
+    - "Provide reusable patterns and best practices"
+    - "Serve as educational reference for OAuth 1.0a"
+    - "Document proven AI development methodologies"
+
+compliance_requirements:
+  security_standards: ["OAuth 1.0a compliance", "API rate limiting", "credential security"]
+  quality_standards: ["100% TypeScript coverage", "comprehensive error handling", "audit logging"]
+  performance_standards: ["sub-200ms response times", "efficient API usage", "optimized caching"]
+
+# Customization flags for different project types
+project_flags:
+  has_ai_integration: true        # Project uses AI/ML significantly
+  has_complex_auth: true          # OAuth, SAML, or complex authentication
+  has_api_integration: true       # Significant external API usage  
+  has_real_time_features: false   # WebSocket, SSE, real-time updates
+  has_enterprise_features: true   # Audit logging, compliance, security
+  is_open_source: true           # Public repository and community
+  
+  # Documentation emphasis areas based on project type
+  emphasize_security: true        # Highlight security patterns and compliance
+  emphasize_performance: true     # Focus on optimization and benchmarks
+  emphasize_scalability: true     # Enterprise scaling and architecture
+  emphasize_ai_innovation: true   # AI development methodology and ROI
