@@ -1,0 +1,29 @@
+{
+  "id": "implementation/react-patterns",
+  "title": "React Component Patterns",
+  "description": "This project demonstrates modern React patterns with TypeScript, showcasing how to build maintainable, type-safe applications with proper state management and component architecture.",
+  "source": "@site/docs/implementation/react-patterns.md",
+  "sourceDirName": "implementation",
+  "slug": "/implementation/react-patterns",
+  "permalink": "/smugmug-api-reference-app/implementation/react-patterns",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/implementation/react-patterns.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "AI Integration Patterns",
+    "permalink": "/smugmug-api-reference-app/implementation/ai-integration"
+  },
+  "next": {
+    "title": "Service Layer Architecture",
+    "permalink": "/smugmug-api-reference-app/implementation/service-layer"
+  }
+}

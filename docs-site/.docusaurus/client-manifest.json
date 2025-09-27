@@ -1,0 +1,225 @@
+{
+  "entrypoints": [
+    "main"
+  ],
+  "origins": {
+    "237": [
+      237
+    ],
+    "17896441": [
+      869,
+      401
+    ],
+    "main": [
+      354,
+      869,
+      792
+    ],
+    "runtime~main": [
+      792,
+      869,
+      354
+    ],
+    "4678edba": [
+      408
+    ],
+    "54f44165": [
+      924
+    ],
+    "588bd741": [
+      324
+    ],
+    "5e95c892": [
+      647
+    ],
+    "696fa4ea": [
+      461
+    ],
+    "905d91c8": [
+      260
+    ],
+    "a7bd4aaa": [
+      98
+    ],
+    "a94703ab": [
+      869,
+      48
+    ],
+    "aba21aa0": [
+      742
+    ],
+    "c377a04b": [
+      869,
+      361
+    ],
+    "cb8f334b": [
+      638
+    ],
+    "d71ad919": [
+      33
+    ],
+    "styles": [
+      48,
+      354,
+      361,
+      401,
+      792,
+      869
+    ]
+  },
+  "assets": {
+    "33": {
+      "js": [
+        {
+          "file": "assets/js/d71ad919.7149ed12.js",
+          "hash": "3a6d781a155944dc",
+          "publicPath": "/smugmug-api-reference-app/assets/js/d71ad919.7149ed12.js"
+        }
+      ]
+    },
+    "48": {
+      "js": [
+        {
+          "file": "assets/js/a94703ab.11fb87ab.js",
+          "hash": "878f5734fb078791",
+          "publicPath": "/smugmug-api-reference-app/assets/js/a94703ab.11fb87ab.js"
+        }
+      ]
+    },
+    "98": {
+      "js": [
+        {
+          "file": "assets/js/a7bd4aaa.f6193d64.js",
+          "hash": "97b6957c36fd689d",
+          "publicPath": "/smugmug-api-reference-app/assets/js/a7bd4aaa.f6193d64.js"
+        }
+      ]
+    },
+    "237": {
+      "js": [
+        {
+          "file": "assets/js/237.ee182926.js",
+          "hash": "11e5c3f1cc57c824",
+          "publicPath": "/smugmug-api-reference-app/assets/js/237.ee182926.js"
+        }
+      ]
+    },
+    "260": {
+      "js": [
+        {
+          "file": "assets/js/905d91c8.2c1ece28.js",
+          "hash": "57f14804ac5119cd",
+          "publicPath": "/smugmug-api-reference-app/assets/js/905d91c8.2c1ece28.js"
+        }
+      ]
+    },
+    "324": {
+      "js": [
+        {
+          "file": "assets/js/588bd741.ac205c0c.js",
+          "hash": "c0881e7891ce5bd9",
+          "publicPath": "/smugmug-api-reference-app/assets/js/588bd741.ac205c0c.js"
+        }
+      ]
+    },
+    "354": {
+      "js": [
+        {
+          "file": "assets/js/runtime~main.81554fe2.js",
+          "hash": "f76ca07927257b35",
+          "publicPath": "/smugmug-api-reference-app/assets/js/runtime~main.81554fe2.js"
+        }
+      ]
+    },
+    "361": {
+      "js": [
+        {
+          "file": "assets/js/c377a04b.51a71cf5.js",
+          "hash": "17ad2aac65267ac0",
+          "publicPath": "/smugmug-api-reference-app/assets/js/c377a04b.51a71cf5.js"
+        }
+      ]
+    },
+    "401": {
+      "js": [
+        {
+          "file": "assets/js/17896441.c9bb5ace.js",
+          "hash": "eb4d36c2e7edf8f0",
+          "publicPath": "/smugmug-api-reference-app/assets/js/17896441.c9bb5ace.js"
+        }
+      ]
+    },
+    "408": {
+      "js": [
+        {
+          "file": "assets/js/4678edba.9f674086.js",
+          "hash": "8fa85d7e83918a9d",
+          "publicPath": "/smugmug-api-reference-app/assets/js/4678edba.9f674086.js"
+        }
+      ]
+    },
+    "461": {
+      "js": [
+        {
+          "file": "assets/js/696fa4ea.5ed75db4.js",
+          "hash": "54c413e9f4848c88",
+          "publicPath": "/smugmug-api-reference-app/assets/js/696fa4ea.5ed75db4.js"
+        }
+      ]
+    },
+    "638": {
+      "js": [
+        {
+          "file": "assets/js/cb8f334b.40f24a4f.js",
+          "hash": "d5f24ef10c16fa91",
+          "publicPath": "/smugmug-api-reference-app/assets/js/cb8f334b.40f24a4f.js"
+        }
+      ]
+    },
+    "647": {
+      "js": [
+        {
+          "file": "assets/js/5e95c892.da76c2bd.js",
+          "hash": "e1c0512b6c77a38f",
+          "publicPath": "/smugmug-api-reference-app/assets/js/5e95c892.da76c2bd.js"
+        }
+      ]
+    },
+    "742": {
+      "js": [
+        {
+          "file": "assets/js/aba21aa0.095b18e1.js",
+          "hash": "054c580ff8ecf29f",
+          "publicPath": "/smugmug-api-reference-app/assets/js/aba21aa0.095b18e1.js"
+        }
+      ]
+    },
+    "792": {
+      "js": [
+        {
+          "file": "assets/js/main.e514b157.js",
+          "hash": "e641e9468660898e",
+          "publicPath": "/smugmug-api-reference-app/assets/js/main.e514b157.js"
+        }
+      ]
+    },
+    "869": {
+      "css": [
+        {
+          "file": "assets/css/styles.9a5247cf.css",
+          "hash": "0466ab9e6274aa8e",
+          "publicPath": "/smugmug-api-reference-app/assets/css/styles.9a5247cf.css"
+        }
+      ]
+    },
+    "924": {
+      "js": [
+        {
+          "file": "assets/js/54f44165.3f479d57.js",
+          "hash": "00e6049be6672f2f",
+          "publicPath": "/smugmug-api-reference-app/assets/js/54f44165.3f479d57.js"
+        }
+      ]
+    }
+  }
+}

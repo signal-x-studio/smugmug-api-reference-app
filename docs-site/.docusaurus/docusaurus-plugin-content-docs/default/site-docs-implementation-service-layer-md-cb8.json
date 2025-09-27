@@ -1,0 +1,25 @@
+{
+  "id": "implementation/service-layer",
+  "title": "Service Layer Architecture",
+  "description": "The service layer provides clean abstractions for external APIs, making the application maintainable and testable. This pattern separates business logic from UI concerns and enables easy mocking during development.",
+  "source": "@site/docs/implementation/service-layer.md",
+  "sourceDirName": "implementation",
+  "slug": "/implementation/service-layer",
+  "permalink": "/smugmug-api-reference-app/implementation/service-layer",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/implementation/service-layer.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "sidebar_position": 3
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "React Component Patterns",
+    "permalink": "/smugmug-api-reference-app/implementation/react-patterns"
+  }
+}

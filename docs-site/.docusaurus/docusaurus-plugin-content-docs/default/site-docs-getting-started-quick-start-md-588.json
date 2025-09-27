@@ -1,0 +1,29 @@
+{
+  "id": "getting-started/quick-start",
+  "title": "Quick Start",
+  "description": "Get the AI-powered photo metadata application running in 5 minutes. This project showcases advanced AI-assisted development patterns and multi-agent collaboration workflows.",
+  "source": "@site/docs/getting-started/quick-start.md",
+  "sourceDirName": "getting-started",
+  "slug": "/getting-started/quick-start",
+  "permalink": "/smugmug-api-reference-app/getting-started/quick-start",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/getting-started/quick-start.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "AI-Powered Development Showcase",
+    "permalink": "/smugmug-api-reference-app/"
+  },
+  "next": {
+    "title": "Installation & Setup",
+    "permalink": "/smugmug-api-reference-app/getting-started/installation"
+  }
+}

@@ -5,8 +5,8 @@ const {themes: prismThemes} = require('prism-react-renderer');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'SmugMug API Reference',
-  tagline: 'Complete OAuth 1.0a & AI Integration Guide for Developers',
+  title: 'AI-Powered Development Showcase',
+  tagline: 'Multi-Agent Development & Structured AI Integration Patterns',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -21,7 +21,12 @@ const config = {
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
 
   i18n: {
     defaultLocale: 'en',
@@ -52,7 +57,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'SmugMug API Reference',
+        title: 'AI Development Showcase',
         items: [
           {
             type: 'docSidebar',
@@ -74,6 +79,12 @@ const config = {
             title: 'Documentation',
             items: [
               {
+                label: 'Home',
+                to: '/',
+              },
+              // Links will be activated as content is created
+              /*
+              {
                 label: 'Quick Start',
                 to: '/getting-started/quick-start',
               },
@@ -85,11 +96,16 @@ const config = {
                 label: 'AI Integration',
                 to: '/ai-integration/ai-overview',
               },
+              */
             ],
           },
           {
             title: 'Community',
             items: [
+              {
+                label: 'GitHub Repository',
+                href: 'https://github.com/signal-x-studio/smugmug-api-reference-app',
+              },
               {
                 label: 'GitHub Discussions',
                 href: 'https://github.com/signal-x-studio/smugmug-api-reference-app/discussions',

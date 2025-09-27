@@ -1,0 +1,29 @@
+{
+  "id": "ai-development/multi-agent-workflow",
+  "title": "Multi-Agent Development Workflow",
+  "description": "This application was built using a sophisticated multi-agent development approach, treating different AI tools as specialized team members. This document details the actual workflow used and provides patterns you can adapt for your own projects.",
+  "source": "@site/docs/ai-development/multi-agent-workflow.md",
+  "sourceDirName": "ai-development",
+  "slug": "/ai-development/multi-agent-workflow",
+  "permalink": "/smugmug-api-reference-app/ai-development/multi-agent-workflow",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/ai-development/multi-agent-workflow.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Installation & Setup",
+    "permalink": "/smugmug-api-reference-app/getting-started/installation"
+  },
+  "next": {
+    "title": "AI Integration Patterns",
+    "permalink": "/smugmug-api-reference-app/implementation/ai-integration"
+  }
+}

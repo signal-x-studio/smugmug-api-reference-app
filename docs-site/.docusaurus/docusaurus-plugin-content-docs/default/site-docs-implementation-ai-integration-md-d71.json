@@ -1,0 +1,29 @@
+{
+  "id": "implementation/ai-integration",
+  "title": "AI Integration Patterns",
+  "description": "This guide demonstrates the structured approach to AI integration used in this project. The key insight: treat AI APIs like any other external service with proper abstractions, error handling, and predictable responses.",
+  "source": "@site/docs/implementation/ai-integration.md",
+  "sourceDirName": "implementation",
+  "slug": "/implementation/ai-integration",
+  "permalink": "/smugmug-api-reference-app/implementation/ai-integration",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/implementation/ai-integration.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Multi-Agent Development Workflow",
+    "permalink": "/smugmug-api-reference-app/ai-development/multi-agent-workflow"
+  },
+  "next": {
+    "title": "React Component Patterns",
+    "permalink": "/smugmug-api-reference-app/implementation/react-patterns"
+  }
+}

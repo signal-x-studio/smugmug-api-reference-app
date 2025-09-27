@@ -21,61 +21,36 @@ const sidebars = {
       items: [
         'getting-started/quick-start',
         'getting-started/installation',
-        'getting-started/first-integration',
       ],
     },
     {
       type: 'category', 
-      label: 'OAuth Implementation',
+      label: 'AI Development',
       items: [
-        'oauth-implementation/oauth-overview',
-        'oauth-implementation/client-side-demo',
-        'oauth-implementation/server-side-proxy',
-        'oauth-implementation/security-best-practices',
+        'ai-development/multi-agent-workflow',
       ],
     },
     {
       type: 'category',
-      label: 'AI Integration',
+      label: 'Implementation',
       items: [
-        'ai-integration/ai-overview',
-        'ai-integration/gemini-setup',
-        'ai-integration/metadata-generation',
-        'ai-integration/batch-processing',
-        'ai-integration/prompt-engineering',
+        'implementation/ai-integration',
+        'implementation/react-patterns',
+        'implementation/service-layer',
       ],
     },
-    {
-      type: 'category',
-      label: 'API Reference',
-      items: [
-        'api-reference/authentication',
-        'api-reference/albums-api',
-        'api-reference/photos-api',
-        'api-reference/batch-operations',
-        'api-reference/error-handling',
-      ],
-    },
+    // Sections to be added as content is created
+    /*
     {
       type: 'category',
       label: 'Examples',
       items: [
-        'examples/complete-integration',
         'examples/react-components',
-        'examples/node-backend',
-        'examples/python-backend',
+        'examples/service-patterns',
+        'examples/ai-prompts',
       ],
     },
-    {
-      type: 'category',
-      label: 'Advanced',
-      items: [
-        'advanced/performance-optimization',
-        'advanced/production-deployment',
-        'advanced/monitoring-logging',
-        'advanced/troubleshooting',
-      ],
-    },
+    */
   ],
 };
 

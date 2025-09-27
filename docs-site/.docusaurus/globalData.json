@@ -1,0 +1,63 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/smugmug-api-reference-app/",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/smugmug-api-reference-app/",
+          "mainDocId": "index",
+          "docs": [
+            {
+              "id": "ai-development/multi-agent-workflow",
+              "path": "/smugmug-api-reference-app/ai-development/multi-agent-workflow",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started/installation",
+              "path": "/smugmug-api-reference-app/getting-started/installation",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "getting-started/quick-start",
+              "path": "/smugmug-api-reference-app/getting-started/quick-start",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "implementation/ai-integration",
+              "path": "/smugmug-api-reference-app/implementation/ai-integration",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "implementation/react-patterns",
+              "path": "/smugmug-api-reference-app/implementation/react-patterns",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "implementation/service-layer",
+              "path": "/smugmug-api-reference-app/implementation/service-layer",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "index",
+              "path": "/smugmug-api-reference-app/",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/smugmug-api-reference-app/",
+                "label": "index"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  }
+}
