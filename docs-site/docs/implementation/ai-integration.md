@@ -6,6 +6,13 @@ sidebar_position: 1
 
 This guide demonstrates the structured approach to AI integration used in this project. The key insight: treat AI APIs like any other external service with proper abstractions, error handling, and predictable responses.
 
+import ApiDemo from '@site/src/components/ApiDemo';
+
+<ApiDemo 
+  title="🔬 Interactive Schema Demo" 
+  description="Try modifying the input data and see how schema enforcement ensures consistent AI responses"
+/>
+
 ## The Schema-First Approach
 
 The most critical decision for reliable AI integration is using **structured JSON responses** with schema enforcement. This transforms the probabilistic nature of LLMs into deterministic, API-like behavior.

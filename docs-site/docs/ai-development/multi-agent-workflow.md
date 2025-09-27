@@ -6,6 +6,10 @@ sidebar_position: 1
 
 This application was built using a sophisticated multi-agent development approach, treating different AI tools as specialized team members. This document details the actual workflow used and provides patterns you can adapt for your own projects.
 
+import WorkflowDemo from '@site/src/components/WorkflowDemo';
+
+<WorkflowDemo />
+
 ## The Multi-Agent Team
 
 We structured AI collaboration around the strengths of each tool, creating a development "team" with clear roles:

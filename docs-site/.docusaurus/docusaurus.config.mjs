@@ -4,8 +4,8 @@
  * Modify the docusaurus.config.js file at your site's root instead.
  */
 export default {
-  "title": "SmugMug API Reference",
-  "tagline": "Complete OAuth 1.0a & AI Integration Guide for Developers",
+  "title": "AI-Powered Development Showcase",
+  "tagline": "Multi-Agent Development & Structured AI Integration Patterns",
   "favicon": "img/favicon.ico",
   "url": "https://signal-x-studio.github.io",
   "baseUrl": "/smugmug-api-reference-app/",
@@ -59,7 +59,7 @@ export default {
   ],
   "themeConfig": {
     "navbar": {
-      "title": "SmugMug API Reference",
+      "title": "AI Development Showcase",
       "items": [
         {
           "type": "docSidebar",

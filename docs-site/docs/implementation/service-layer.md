@@ -6,15 +6,20 @@ sidebar_position: 3
 
 The service layer provides clean abstractions for external APIs, making the application maintainable and testable. This pattern separates business logic from UI concerns and enables easy mocking during development.
 
-## Architecture Overview
+import InteractiveCode from '@site/src/components/InteractiveCode';
 
-```typescript
-// Service layer structure
+<InteractiveCode 
+  code={`// Service layer structure
 services/
 ├── geminiService.ts      # AI/Gemini Vision integration
 ├── mockSmugMugService.ts # Development mock service (active)
-└── smugmugService.ts     # OAuth reference implementation
-```
+└── smugmugService.ts     # OAuth reference implementation`}
+  language="bash"
+  title="📁 Service Architecture"
+  description="Clean separation of concerns with dedicated service files"
+/>
+
+## Architecture Overview
 
 ## Mock Service Pattern
 

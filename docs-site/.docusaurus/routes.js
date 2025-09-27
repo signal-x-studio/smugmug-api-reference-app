@@ -4,55 +4,55 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 export default [
   {
     path: '/smugmug-api-reference-app/',
-    component: ComponentCreator('/smugmug-api-reference-app/', 'acd'),
+    component: ComponentCreator('/smugmug-api-reference-app/', 'aec'),
     routes: [
       {
         path: '/smugmug-api-reference-app/',
-        component: ComponentCreator('/smugmug-api-reference-app/', '090'),
+        component: ComponentCreator('/smugmug-api-reference-app/', 'cba'),
         routes: [
           {
             path: '/smugmug-api-reference-app/',
-            component: ComponentCreator('/smugmug-api-reference-app/', 'c10'),
+            component: ComponentCreator('/smugmug-api-reference-app/', '35b'),
             routes: [
               {
                 path: '/smugmug-api-reference-app/ai-development/multi-agent-workflow',
-                component: ComponentCreator('/smugmug-api-reference-app/ai-development/multi-agent-workflow', '3d7'),
+                component: ComponentCreator('/smugmug-api-reference-app/ai-development/multi-agent-workflow', '1b8'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
                 path: '/smugmug-api-reference-app/getting-started/installation',
-                component: ComponentCreator('/smugmug-api-reference-app/getting-started/installation', 'ac8'),
+                component: ComponentCreator('/smugmug-api-reference-app/getting-started/installation', 'c7e'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
                 path: '/smugmug-api-reference-app/getting-started/quick-start',
-                component: ComponentCreator('/smugmug-api-reference-app/getting-started/quick-start', 'bd6'),
+                component: ComponentCreator('/smugmug-api-reference-app/getting-started/quick-start', '317'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
                 path: '/smugmug-api-reference-app/implementation/ai-integration',
-                component: ComponentCreator('/smugmug-api-reference-app/implementation/ai-integration', '281'),
+                component: ComponentCreator('/smugmug-api-reference-app/implementation/ai-integration', '40e'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
                 path: '/smugmug-api-reference-app/implementation/react-patterns',
-                component: ComponentCreator('/smugmug-api-reference-app/implementation/react-patterns', '418'),
+                component: ComponentCreator('/smugmug-api-reference-app/implementation/react-patterns', 'b6d'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
                 path: '/smugmug-api-reference-app/implementation/service-layer',
-                component: ComponentCreator('/smugmug-api-reference-app/implementation/service-layer', 'aaf'),
+                component: ComponentCreator('/smugmug-api-reference-app/implementation/service-layer', '7b8'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               },
               {
                 path: '/smugmug-api-reference-app/',
-                component: ComponentCreator('/smugmug-api-reference-app/', 'e42'),
+                component: ComponentCreator('/smugmug-api-reference-app/', '70e'),
                 exact: true,
                 sidebar: "tutorialSidebar"
               }
