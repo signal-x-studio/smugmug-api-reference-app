@@ -47,12 +47,12 @@ These are the tasks to be completed for the spec detailed in @.agent-os/specs/20
   - [x] 4.7 Implement programmatic search query execution
   - [x] 4.8 Verify all tests pass
 
-- [ ] 5. Bulk Selection & Operations
-  - [ ] 5.1 Write tests for bulk operation components
-  - [ ] 5.2 Implement multi-select functionality
-  - [ ] 5.3 Create bulk operation interface
-  - [ ] 5.4 Add agent-coordinated bulk commands
-  - [ ] 5.5 Implement operation confirmation workflows
-  - [ ] 5.6 Add error handling and rollback capabilities
-  - [ ] 5.7 Create natural language command processing for bulk operations
-  - [ ] 5.8 Verify all tests pass
+- [x] 5. Bulk Selection & Operations
+  - [x] 5.1 Write tests for bulk operation components
+  - [x] 5.2 Implement multi-select functionality
+  - [x] 5.3 Create bulk operation interface
+  - [x] 5.4 Add agent-coordinated bulk commands
+  - [x] 5.5 Implement operation confirmation workflows
+  - [x] 5.6 Add error handling and rollback capabilities
+  - [x] 5.7 Create natural language command processing for bulk operations
+  - [x] 5.8 Verify all tests pass
