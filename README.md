@@ -1,53 +1,187 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
 # SmugMug API Reference Application
 
-> **A pioneering React-based reference implementation showcasing agent-native architecture - the first application designed for seamless interaction with both humans and AI agents. Features OAuth 1.0a authentication, AI-powered photo management, and revolutionary dual-interface design patterns.**
+> **A modern React/TypeScript application showcasing agent-native architecture for seamless human and AI agent interaction. Features OAuth 1.0a authentication, AI-powered photo discovery, and comprehensive bulk operations.**
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18.x-61dafb)](https://reactjs.org/)
+[![React](https://img.shields.io/badge/React-19.1-61dafb)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646cff)](https://vitejs.dev/)
 [![Agent-Native](https://img.shields.io/badge/Agent--Native-Architecture-green)]()
 [![Gemini AI](https://img.shields.io/badge/Gemini-AI_Integration-orange)](https://ai.google.dev/)
-[![Lines of Code](https://img.shields.io/badge/Lines_of_Code-4100+-green)]()
+[![Live Demo](https://img.shields.io/badge/Live-Demo-blue)](https://signal-x-studio.github.io/smugmug-api-reference-app/)
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/signal-x-studio/smugmug-api-reference-app.git
+cd smugmug-api-reference-app
+
+# Install dependencies
+npm install
+
+# Copy environment template and configure
+cp .env.example .env
+
+# Start development server
+npm run dev
+```
+
+**Live Demo**: https://signal-x-studio.github.io/smugmug-api-reference-app/
+
+## ✨ Features
+
+### **🔍 Advanced Photo Discovery**
+- **Natural Language Search** - "Find sunset beach photos from last summer"
+- **Semantic Search Engine** - AI-powered content understanding with sub-3-second responses
+- **Advanced Filtering** - Dynamic filters with real-time updates and mobile responsiveness
+- **Bulk Operations** - Multi-select interface supporting 1000+ photos with batch processing
+
+### **🤖 Agent-Native Architecture**
+- **Browser Agent Integration** - Schema.org structured data for AI discovery
+- **Programmatic APIs** - RESTful endpoints designed for AI agent interaction
+- **Natural Language Commands** - "Download selected photos as zip", "Create album Summer 2023"
+- **Real-time State Management** - Live updates via `window.agentState` for browser agents
+
+### **🔐 Enterprise Authentication**
+- **OAuth 1.0a Implementation** - Complete SmugMug API integration
+- **Secure Token Management** - Production-ready authentication flow
+- **Error Handling** - Comprehensive error boundaries and user feedback
+
+### **⚡ Performance & Quality**
+- **Sub-3-Second Search** - Optimized indexing and fuzzy matching
+- **Mobile Responsive** - Touch gestures and adaptive layouts
+- **TypeScript Strict Mode** - 100% type safety with comprehensive interfaces
+- **71+ Test Cases** - Comprehensive test coverage with Vitest
+
+## 📁 Project Structure
+
+```
+src/
+├── components/          # React components (<200 lines each)
+│   ├── FilterPanel.tsx  # Advanced filtering interface
+│   ├── BulkOperations.tsx # Multi-select and bulk operations
+│   └── __tests__/       # Component tests
+├── utils/
+│   └── agent-native/    # Agent integration layer
+│       ├── semantic-search-engine.ts
+│       ├── photo-discovery-search.ts
+│       └── agent-integration.ts
+├── hooks/               # Custom React hooks
+├── types/              # TypeScript type definitions
+└── services/           # Business logic services
+```
+
+## 🛠️ Development
+
+### **Available Scripts**
+```bash
+npm run dev      # Start development server (localhost:3000)
+npm run build    # Build for production
+npm run preview  # Preview production build
+npm run test     # Run test suite
+npm run test:run # Run tests once (CI)
+```
+
+### **Tech Stack**
+- **Frontend**: React 19.1, TypeScript 5.8, Vite 5.4
+- **Styling**: TailwindCSS 3.4, responsive design
+- **AI Integration**: Google Gemini AI 1.21.0
+- **Search**: Fuse.js for fuzzy matching
+- **Testing**: Vitest, React Testing Library
+- **Build**: Vite with TypeScript strict mode
+
+### **Code Quality Standards**
+- Components <200 lines with single responsibility
+- useEffect ≤3 dependencies with proper cleanup
+- 100% TypeScript coverage (no `any` types)
+- Memoization for expensive operations (useMemo/useCallback)
+- Comprehensive error handling with Result<T,E> pattern
+
+## 📖 Documentation
+
+### **For Developers**
+- **[Documentation Index](./docs/README.md)** - Complete documentation guide
+- **[Getting Started](./docs/development/getting-started.md)** - Detailed setup instructions
+- **[Development Workflow](./docs/development/workflow.md)** - Git flow and CI/CD
+- **[Code Quality Standards](./docs/development/code-quality.md)** - TypeScript and testing best practices
+
+### **For Architecture**
+- **[Technical Architecture](./docs/architecture/technical-architecture.md)** - System design and patterns
+- **[Agent-Native Design](./docs/architecture/agent-native-design.md)** - Dual-interface architecture
+- **[API Design](./docs/architecture/api-design.md)** - REST API structure
+
+### **For AI Development**
+- **[Agent Instructions](./agents.md)** - AI agent development guidelines
+- **[AI Development Process](./docs/development/ai-development-process.md)** - AI-assisted methodology
+
+## 🤖 Agent Integration
+
+### **Browser Agent Support**
+```javascript
+// Available on window.agentState for browser agents
+{
+  photoSearch: {
+    totalPhotos: number,
+    currentResults: Photo[],
+    lastQuery: string,
+    appliedFilters: FilterState
+  },
+  bulkOperations: {
+    selectedCount: number,
+    availableOperations: string[],
+    execute: (operation: string, params: any) => Promise<Result>
+  }
+}
+```
+
+### **Natural Language Commands**
+```typescript
+// Supported agent commands
+"download all selected photos as zip"
+"add tags vacation and beach to selected photos"  
+"create album Summer 2023 with these photos"
+"find photos taken in Hawaii last year"
+```
+
+### **Programmatic API**
+```typescript
+const searchInterface = new AgentSearchInterface(searchEngine, queryParser);
+const results = await searchInterface.search({
+  semantic_query: "sunset beach photos",
+  limit: 50
+});
+```
+
+## 🚀 Deployment
+
+### **GitHub Pages (Current)**
+- **Live URL**: https://signal-x-studio.github.io/smugmug-api-reference-app/
+- **Auto-deployment** via GitHub Actions
+- **SSL enabled** with responsive design
+
+### **Production Deployment**
+See [Deployment Guide](./docs/deployment/deployment-guide.md) for production setup instructions.
+
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+1. Read [Development Workflow](./docs/development/workflow.md)
+2. Check [Code Quality Standards](./docs/development/code-quality.md)
+3. Review [Agent Instructions](./agents.md) for AI development
+4. Follow the established patterns and test coverage requirements
+
+## 📞 Support
+
+- **Documentation**: [docs/README.md](./docs/README.md)
+- **Issues**: [GitHub Issues](https://github.com/signal-x-studio/smugmug-api-reference-app/issues)
+- **Troubleshooting**: [Common Issues](./docs/troubleshooting/common-issues.md)
 
 ---
 
-## 📚 Documentation Navigation
-
-Choose your path based on your role and needs:
-
-### 🚀 **For Developers** (Getting Started & Learning)
-- **[Quick Start Guide](#quick-start)** - Get running in 5 minutes
-- **[Technical Decisions](./docs/architecture/TECHNICAL-DECISIONS.md)** - Core architectural choices and rationale
-- **[AI Collaboration Patterns](./docs/development/AI-COLLABORATION.md)** - How we worked with AI agents
-- **[Code Quality Standards](./docs/development/CODE-QUALITY.md)** - TypeScript, testing, and best practices
-- **[Prompting Strategies](./docs/guides/PROMPTING-STRATEGIES.md)** - Proven techniques for AI-assisted development
-
-### 🏢 **For Technical Leaders** (Enterprise Evaluation)
-- **[Executive Overview](#executive-overview)** - Business value and technical achievements
-- **[Enterprise Architecture](./docs/enterprise/TECHNICAL-ARCHITECTURE.md)** - Production-ready patterns and scalability
-- **[AI Development Showcase](./docs/enterprise/AI-DEVELOPMENT-SHOWCASE.md)** *(planned)* - Quantified outcomes and ROI
-- **[Production Readiness](./docs/enterprise/PRODUCTION-READINESS.md)** *(planned)* - Security, compliance, and deployment
-
-### 📖 **For Educators** (Teaching & Training)
-- **[Development Phases](./docs/development/DEVELOPMENT-PHASES.md)** - Step-by-step evolution from basic to sophisticated
-- **[OAuth 1.0a Reference](./docs/reference/OAUTH-IMPLEMENTATION.md)** *(planned)* - Complete authentication patterns
-- **[AI Integration Patterns](./docs/reference/AI-PATTERNS.md)** *(planned)* - Reusable AI workflow implementations
-
-### 📖 **Complete Documentation** 
-- **[Documentation Index](./docs/README.md)** - Comprehensive organized documentation with clear navigation
-
----
-
-## 🎯 Executive Overview
-
-This application serves triple purposes as a **functional SmugMug integration tool**, a **comprehensive case study in AI-assisted enterprise development**, and **the first demonstration of agent-native architecture** - a revolutionary approach to building applications that work seamlessly for both human users and AI agents.
-
-### 🚀 Revolutionary Agent-Native Architecture
-- **World's first agent-native photo management application** - designed from the ground up for AI agent interaction
-- **Dual interfaces** - Beautiful human UI + programmatic agent API in a single application  
+**Built with ❤️ using AI-assisted development practices**  
 - **Ready for Gemini-in-Chrome** - Browser agents can navigate, understand, and control the application naturally
 - **Natural language processing** - Voice assistants can manage photos through conversational commands
 - **Structured data exposure** - Schema.org markup makes all content discoverable and actionable by AI agents
