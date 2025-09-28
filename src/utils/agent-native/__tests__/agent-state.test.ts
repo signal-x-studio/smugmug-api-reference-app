@@ -2,6 +2,7 @@
  * Tests for Agent State Registry System
  */
 
+import { vi } from 'vitest';
 import { 
   AgentStateRegistry,
   AgentStateManager,
@@ -29,8 +30,8 @@ describe('Agent State Registry System', () => {
     test('should register component state', () => {
       const mockState = { photos: [], selectedIds: [] };
       const mockActions = {
-        selectPhoto: jest.fn(),
-        clearSelection: jest.fn()
+        selectPhoto: vi.fn(),
+        clearSelection: vi.fn()
       };
 
       AgentStateRegistry.register('photoGrid', mockState, mockActions);
@@ -51,7 +52,7 @@ describe('Agent State Registry System', () => {
     });
 
     test('should emit state change events', () => {
-      const eventListener = jest.fn();
+      const eventListener = vi.fn();
       window.agentStateEvents.addEventListener('stateChange', eventListener);
 
       const newState = { photos: [] };
@@ -142,7 +143,7 @@ describe('Agent State Registry System', () => {
 
   describe('createAgentStateHook', () => {
     test('should create hook that registers component state', () => {
-      const mockSetState = jest.fn();
+      const mockSetState = vi.fn();
       const mockState = { photos: [], selectedIds: [] };
       
       // Mock React.useState
@@ -162,7 +163,7 @@ describe('Agent State Registry System', () => {
     });
 
     test('should provide agent-compatible setState wrapper', () => {
-      const mockSetState = jest.fn();
+      const mockSetState = vi.fn();
       const initialState = { photos: [], selectedIds: [] };
       
       const useAgentState = createAgentStateHook('photoGrid', {
@@ -180,7 +181,7 @@ describe('Agent State Registry System', () => {
     });
 
     test('should handle state validation in hook', () => {
-      const mockSetState = jest.fn();
+      const mockSetState = vi.fn();
       const initialState = { photos: [] }; // missing selectedIds, but not required
       
       const useAgentState = createAgentStateHook('photoGrid', {
@@ -270,7 +271,7 @@ describe('Agent State Registry System', () => {
     });
 
     test('should handle state synchronization across components', () => {
-      const stateChangeListener = jest.fn();
+      const stateChangeListener = vi.fn();
       window.agentStateEvents.addEventListener('stateChange', stateChangeListener);
 
       // Register multiple components

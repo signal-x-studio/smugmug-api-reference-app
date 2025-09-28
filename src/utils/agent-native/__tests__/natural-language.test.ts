@@ -2,6 +2,7 @@
  * Tests for Natural Language API Development
  */
 
+import { vi } from 'vitest';
 import { 
   NaturalLanguageProcessor,
   CommandParser,
@@ -237,7 +238,7 @@ describe('Natural Language API Development', () => {
           ]
         },
         actions: {
-          selectPhoto: jest.fn()
+          selectPhoto: vi.fn()
         }
       };
 
@@ -272,7 +273,7 @@ describe('Natural Language API Development', () => {
     test('should handle confirmation dialogs for destructive actions', async () => {
       const mockAlbumState = {
         current: { albums: [{ id: 'album-123', name: 'Test Album' }] },
-        actions: { deleteAlbum: jest.fn() }
+        actions: { deleteAlbum: vi.fn() }
       };
 
       global.window = { agentState: { albumList: mockAlbumState } };
@@ -293,7 +294,7 @@ describe('Natural Language API Development', () => {
           photos: [{ id: 'photo-123', filename: 'test.jpg' }],
           selectedIds: ['photo-123']
         },
-        actions: { selectPhoto: jest.fn() }
+        actions: { selectPhoto: vi.fn() }
       };
 
       global.window = { agentState: { photoGrid: mockState } };
@@ -313,7 +314,7 @@ describe('Natural Language API Development', () => {
             { id: 'photo-3', uploadDate: '2025-01-03' }
           ]
         },
-        actions: { selectPhoto: jest.fn() }
+        actions: { selectPhoto: vi.fn() }
       };
 
       global.window = { agentState: { photoGrid: mockState } };
@@ -356,7 +357,7 @@ describe('Natural Language API Development', () => {
     });
 
     test('should provide progress updates for long operations', async () => {
-      const progressCallback = jest.fn();
+      const progressCallback = vi.fn();
       
       const result = await nlProcessor.processCommand(
         'analyze all photos in album Vacation',
@@ -378,14 +379,14 @@ describe('Natural Language API Development', () => {
         photoGrid: {
           current: { photos: [], selectedIds: [] },
           actions: { 
-            filterByKeywords: jest.fn(),
-            selectMultiple: jest.fn(),
-            batchAnalyze: jest.fn()
+            filterByKeywords: vi.fn(),
+            selectMultiple: vi.fn(),
+            batchAnalyze: vi.fn()
           }
         },
         albumList: {
           current: { albums: [] },
-          actions: { createAlbum: jest.fn() }
+          actions: { createAlbum: vi.fn() }
         }
       };
 

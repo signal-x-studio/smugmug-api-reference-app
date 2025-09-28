@@ -2,6 +2,7 @@
  * Tests for Agent Action Registry Infrastructure
  */
 
+import { vi } from 'vitest';
 import { 
   AgentActionRegistry,
   AgentActionExecutor,
@@ -34,7 +35,7 @@ describe('Agent Action Registry Infrastructure', () => {
         parameters: {
           photoId: { type: 'string', required: true, description: 'Photo identifier' }
         },
-        execute: jest.fn(),
+        execute: vi.fn(),
         humanEquivalent: 'Click on photo card'
       };
 
@@ -53,7 +54,7 @@ describe('Agent Action Registry Infrastructure', () => {
           photoId: { type: 'string', required: true },
           customInstructions: { type: 'string', required: false }
         },
-        jest.fn()
+        vi.fn()
       );
 
       AgentActionRegistry.register('photo.analyze', action);
@@ -66,7 +67,7 @@ describe('Agent Action Registry Infrastructure', () => {
     });
 
     test('should execute action with parameter validation', async () => {
-      const mockExecute = jest.fn().mockResolvedValue({ success: true, result: 'executed' });
+      const mockExecute = vi.fn().mockResolvedValue({ success: true, result: 'executed' });
       
       const action = createAgentAction(
         'album.create',
@@ -88,7 +89,7 @@ describe('Agent Action Registry Infrastructure', () => {
     });
 
     test('should reject execution with invalid parameters', async () => {
-      const mockExecute = jest.fn();
+      const mockExecute = vi.fn();
       
       const action = createAgentAction(
         'photo.delete',
@@ -108,8 +109,8 @@ describe('Agent Action Registry Infrastructure', () => {
 
     test('should get all available actions', () => {
       const actions = [
-        createAgentAction('photo.select', 'Select photo', { photoId: { type: 'string', required: true } }, jest.fn()),
-        createAgentAction('album.create', 'Create album', { name: { type: 'string', required: true } }, jest.fn())
+        createAgentAction('photo.select', 'Select photo', { photoId: { type: 'string', required: true } }, vi.fn()),
+        createAgentAction('album.create', 'Create album', { name: { type: 'string', required: true } }, vi.fn())
       ];
 
       actions.forEach(action => AgentActionRegistry.register(action.name, action));
@@ -122,7 +123,7 @@ describe('Agent Action Registry Infrastructure', () => {
     });
 
     test('should unregister actions', () => {
-      const action = createAgentAction('temp.action', 'Temporary action', {}, jest.fn());
+      const action = createAgentAction('temp.action', 'Temporary action', {}, vi.fn());
       
       AgentActionRegistry.register('temp.action', action);
       expect(window.agentActions['temp.action']).toBeDefined();
@@ -134,14 +135,14 @@ describe('Agent Action Registry Infrastructure', () => {
 
   describe('AgentActionExecutor', () => {
     test('should execute action with progress tracking', async () => {
-      const mockAction = jest.fn()
+      const mockAction = vi.fn()
         .mockImplementation(async (params) => {
           // Simulate async work
           await new Promise(resolve => setTimeout(resolve, 10));
           return { success: true, data: 'completed' };
         });
 
-      const progressCallback = jest.fn();
+      const progressCallback = vi.fn();
       const executor = new AgentActionExecutor();
 
       const result = await executor.executeWithProgress(
@@ -159,7 +160,7 @@ describe('Agent Action Registry Infrastructure', () => {
     });
 
     test('should handle action execution errors', async () => {
-      const mockAction = jest.fn().mockRejectedValue(new Error('Action failed'));
+      const mockAction = vi.fn().mockRejectedValue(new Error('Action failed'));
       const executor = new AgentActionExecutor();
 
       const result = await executor.executeWithProgress('test.action', mockAction, {});
@@ -169,7 +170,7 @@ describe('Agent Action Registry Infrastructure', () => {
     });
 
     test('should track execution history', async () => {
-      const mockAction = jest.fn().mockResolvedValue({ success: true });
+      const mockAction = vi.fn().mockResolvedValue({ success: true });
       const executor = new AgentActionExecutor();
 
       await executor.executeWithProgress('test.action', mockAction, { param: 'value' });
@@ -184,7 +185,7 @@ describe('Agent Action Registry Infrastructure', () => {
     });
 
     test('should limit execution history size', async () => {
-      const mockAction = jest.fn().mockResolvedValue({ success: true });
+      const mockAction = vi.fn().mockResolvedValue({ success: true });
       const executor = new AgentActionExecutor({ maxHistorySize: 2 });
 
       // Execute 3 actions
@@ -201,7 +202,7 @@ describe('Agent Action Registry Infrastructure', () => {
 
   describe('createAgentAction', () => {
     test('should create action with all required properties', () => {
-      const mockExecute = jest.fn();
+      const mockExecute = vi.fn();
       const action = createAgentAction(
         'photo.share',
         'Share a photo',
@@ -226,7 +227,7 @@ describe('Agent Action Registry Infrastructure', () => {
         'photo.analyze',
         'Analyze photo',
         { photoId: { type: 'string', required: true } },
-        jest.fn()
+        vi.fn()
       );
 
       expect(action.humanEquivalent).toContain('photo.analyze');
@@ -291,7 +292,7 @@ describe('Agent Action Registry Infrastructure', () => {
         'photo.select',
         'Select a photo',
         { photoId: { type: 'string', required: true } },
-        jest.fn().mockResolvedValue({ success: true, selectedId: 'photo-123' })
+        vi.fn().mockResolvedValue({ success: true, selectedId: 'photo-123' })
       );
 
       const analyzeAction = createAgentAction(
@@ -301,7 +302,7 @@ describe('Agent Action Registry Infrastructure', () => {
           photoId: { type: 'string', required: true },
           options: { type: 'object', required: false }
         },
-        jest.fn().mockResolvedValue({ success: true, metadata: { keywords: ['sunset'] } })
+        vi.fn().mockResolvedValue({ success: true, metadata: { keywords: ['sunset'] } })
       );
 
       AgentActionRegistry.register('photo.select', selectAction);
@@ -324,7 +325,7 @@ describe('Agent Action Registry Infrastructure', () => {
         'photos.batchAnalyze',
         'Analyze multiple photos',
         { photoIds: { type: 'array', required: true } },
-        jest.fn().mockImplementation(async (params) => {
+        vi.fn().mockImplementation(async (params) => {
           const results = params.photoIds.map((id: string) => ({
             id,
             status: 'analyzed',
@@ -348,10 +349,10 @@ describe('Agent Action Registry Infrastructure', () => {
     test('should handle agent discovery workflow', () => {
       // Register various actions
       const actions = [
-        createAgentAction('photo.select', 'Select photo', { photoId: { type: 'string', required: true } }, jest.fn()),
-        createAgentAction('photo.analyze', 'Analyze photo', { photoId: { type: 'string', required: true } }, jest.fn()),
-        createAgentAction('album.create', 'Create album', { name: { type: 'string', required: true } }, jest.fn()),
-        createAgentAction('search.photos', 'Search photos', { query: { type: 'string', required: true } }, jest.fn())
+        createAgentAction('photo.select', 'Select photo', { photoId: { type: 'string', required: true } }, vi.fn()),
+        createAgentAction('photo.analyze', 'Analyze photo', { photoId: { type: 'string', required: true } }, vi.fn()),
+        createAgentAction('album.create', 'Create album', { name: { type: 'string', required: true } }, vi.fn()),
+        createAgentAction('search.photos', 'Search photos', { query: { type: 'string', required: true } }, vi.fn())
       ];
 
       actions.forEach(action => AgentActionRegistry.register(action.name, action));

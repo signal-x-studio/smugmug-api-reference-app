@@ -2,6 +2,7 @@
  * Tests for Agent-Native Structured Data Utilities
  */
 
+import { vi } from 'vitest';
 import { 
   generatePhotographSchema,
   generateImageGallerySchema, 

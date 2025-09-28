@@ -1,0 +1,3 @@
+# Spec Summary (Lite)
+
+Implement semantic search and natural language query processing for photo collections to enable browser agents and users to discover photos through conversational commands. Users can search using queries like "sunset photos from Europe trip" while agents can programmatically execute searches and bulk operations through structured data interfaces. The system combines AI-generated metadata with traditional filters to provide comprehensive photo discovery capabilities optimized for both human and agent interaction.
