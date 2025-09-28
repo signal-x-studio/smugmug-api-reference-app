@@ -11,6 +11,36 @@
           "mainDocId": "index",
           "docs": [
             {
+              "id": "agent-native/action-registry",
+              "path": "/smugmug-api-reference-app/agent-native/action-registry",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "agent-native/implementation-guide",
+              "path": "/smugmug-api-reference-app/agent-native/implementation-guide",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "agent-native/interactive-examples",
+              "path": "/smugmug-api-reference-app/agent-native/interactive-examples",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "agent-native/natural-language-api",
+              "path": "/smugmug-api-reference-app/agent-native/natural-language-api",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "agent-native/overview",
+              "path": "/smugmug-api-reference-app/agent-native/overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "agent-native/structured-data",
+              "path": "/smugmug-api-reference-app/agent-native/structured-data",
+              "sidebar": "tutorialSidebar"
+            },
+            {
               "id": "ai-development/multi-agent-workflow",
               "path": "/smugmug-api-reference-app/ai-development/multi-agent-workflow",
               "sidebar": "tutorialSidebar"

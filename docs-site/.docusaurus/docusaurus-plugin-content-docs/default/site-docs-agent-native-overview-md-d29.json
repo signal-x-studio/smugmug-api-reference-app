@@ -1,0 +1,26 @@
+{
+  "id": "agent-native/overview",
+  "title": "Agent-Native Architecture Overview",
+  "description": "The Agent-Native Architecture represents the third pillar of our AI development methodology - building applications that are designed from the ground up for seamless interaction with AI agents like browser agents, voice assistants, and other automated systems.",
+  "source": "@site/docs/agent-native/overview.md",
+  "sourceDirName": "agent-native",
+  "slug": "/agent-native/overview",
+  "permalink": "/smugmug-api-reference-app/agent-native/overview",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/agent-native/overview.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Multi-Agent Development Workflow",
+    "permalink": "/smugmug-api-reference-app/ai-development/multi-agent-workflow"
+  },
+  "next": {
+    "title": "Structured Data Guide",
+    "permalink": "/smugmug-api-reference-app/agent-native/structured-data"
+  }
+}

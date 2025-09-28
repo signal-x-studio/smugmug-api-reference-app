@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Album, SmugMugNode } from '../types';
 import { IconAlbum, IconAdd, IconFolder, IconChevronRight, IconChevronDown, IconSync, IconWand } from './Icons';
+import { generateImageGallerySchema, generateAgentEntityData, generateJsonLD } from '../src/utils/agent-native/structured-data';
 
 interface AlbumListProps {
   nodes: SmugMugNode[];
@@ -20,22 +21,44 @@ const NodeItem: React.FC<{
     const [isExpanded, setIsExpanded] = useState(true);
 
     if (node.type === 'Album') {
+        // Generate Schema.org structured data for album
+        const imageGallerySchema = generateImageGallerySchema(node as Album);
+        const jsonLD = generateJsonLD(imageGallerySchema);
+        const agentEntityData = generateAgentEntityData('album', node.id, ['view', 'search', 'batch-process']);
+        
         return (
-             <button
-                onClick={() => onSelectAlbum(node)}
-                style={{ paddingLeft: `${level * 1.5 + 0.5}rem` }}
-                className={`w-full flex items-center gap-3 text-left p-2 rounded-lg transition ${
-                selectedAlbum?.id === node.id
-                    ? 'bg-cyan-500 text-white shadow'
-                    : 'text-slate-300 hover:bg-slate-700'
-                }`}
+            <article
+                itemScope
+                itemType="https://schema.org/ImageGallery"
+                {...agentEntityData}
             >
-                <IconAlbum className="w-5 h-5 flex-shrink-0" />
-                <div className="flex-1 truncate">
-                    <p className="font-semibold">{node.name}</p>
-                    <p className={`text-xs ${selectedAlbum?.id === node.id ? 'text-cyan-100' : 'text-slate-400'}`}>{node.imageCount} photos</p>
-                </div>
-            </button>
+                {/* JSON-LD Structured Data */}
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLD }} />
+                
+                {/* Schema.org microdata */}
+                <meta itemProp="identifier" content={node.id} />
+                <meta itemProp="name" content={node.name} />
+                <meta itemProp="numberOfItems" content={node.imageCount.toString()} />
+                {node.description && <meta itemProp="description" content={node.description} />}
+                
+                <button
+                    onClick={() => onSelectAlbum(node)}
+                    style={{ paddingLeft: `${level * 1.5 + 0.5}rem` }}
+                    className={`w-full flex items-center gap-3 text-left p-2 rounded-lg transition ${
+                    selectedAlbum?.id === node.id
+                        ? 'bg-cyan-500 text-white shadow'
+                        : 'text-slate-300 hover:bg-slate-700'
+                    }`}
+                >
+                    <IconAlbum className="w-5 h-5 flex-shrink-0" />
+                    <div className="flex-1 truncate">
+                        <p className="font-semibold" itemProp="name">{node.name}</p>
+                        <p className={`text-xs ${selectedAlbum?.id === node.id ? 'text-cyan-100' : 'text-slate-400'}`}>
+                            <span itemProp="numberOfItems">{node.imageCount}</span> photos
+                        </p>
+                    </div>
+                </button>
+            </article>
         );
     }
     

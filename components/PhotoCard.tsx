@@ -1,6 +1,7 @@
 import React from 'react';
 import { Photo, PhotoStatus } from '../types';
 import { IconSync, IconError, IconEye, IconCheck } from './Icons';
+import { generatePhotographSchema, generateAgentEntityData, generateJsonLD } from '../src/utils/agent-native/structured-data';
 
 interface PhotoCardProps {
   photo: Photo;
@@ -16,6 +17,17 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({ photo, onSelect, isSelecti
   const isUploading = photo.status === PhotoStatus.UPLOADING;
   const hasError = photo.status === PhotoStatus.ERROR;
   const needsReview = photo.status === PhotoStatus.ANALYZED && photo.isAutoProcessed;
+
+  // Generate Schema.org structured data
+  const photographSchema = generatePhotographSchema(photo);
+  const jsonLD = generateJsonLD(photographSchema);
+  
+  // Generate agent entity data attributes
+  const agentActions = ['view', 'share'];
+  if (!isUploading) {
+    agentActions.push('analyze', 'edit');
+  }
+  const agentEntityData = generateAgentEntityData('photo', photo.id, agentActions);
 
   const baseClasses = "bg-slate-800 rounded-lg overflow-hidden shadow-lg border flex flex-col transition-all duration-300";
   let stateClasses = 'border-slate-700 group';
@@ -43,13 +55,35 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({ photo, onSelect, isSelecti
   }
 
   return (
-    <div 
+    <article 
+        itemScope
+        itemType="https://schema.org/Photograph"
+        {...agentEntityData}
         className={`${baseClasses} ${stateClasses}`}
         onClick={handleClick}
         title={hasError ? photo.error || 'An error occurred' : needsReview ? 'This photo needs your review.' : undefined}
     >
+      {/* JSON-LD Structured Data */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLD }} />
+      
+      {/* Schema.org microdata attributes */}
+      <meta itemProp="identifier" content={photo.id} />
+      <meta itemProp="name" content={photo.title || photo.filename} />
+      <meta itemProp="contentUrl" content={photo.url} />
+      {photo.thumbnailUrl && <meta itemProp="thumbnailUrl" content={photo.thumbnailUrl} />}
+      {photo.description && <meta itemProp="description" content={photo.description} />}
+      {photo.keywords && <meta itemProp="keywords" content={photo.keywords.join(', ')} />}
+      {photo.creator && <meta itemProp="creator" content={photo.creator} />}
+      {photo.uploadDate && <meta itemProp="dateCreated" content={photo.uploadDate} />}
+      {photo.width && <meta itemProp="width" content={photo.width.toString()} />}
+      {photo.height && <meta itemProp="height" content={photo.height.toString()} />}
       <div className="relative">
-        <img src={photo.imageUrl} alt={photo.aiData.title || "User upload"} className="w-full h-48 object-cover" />
+        <img 
+          src={photo.imageUrl} 
+          alt={photo.aiData?.title || photo.title || photo.filename || "User upload"} 
+          className="w-full h-48 object-cover"
+          itemProp="contentUrl"
+        />
         
         {isUploading ? (
             <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center p-2 text-center">

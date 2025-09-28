@@ -1,0 +1,26 @@
+{
+  "id": "agent-native/structured-data",
+  "title": "Structured Data Guide",
+  "description": "Structured data is the foundation of agent-native applications. By embedding Schema.org markup in your components, you make your application's content and functionality discoverable and understandable to AI agents.",
+  "source": "@site/docs/agent-native/structured-data.md",
+  "sourceDirName": "agent-native",
+  "slug": "/agent-native/structured-data",
+  "permalink": "/smugmug-api-reference-app/agent-native/structured-data",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/agent-native/structured-data.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Agent-Native Architecture Overview",
+    "permalink": "/smugmug-api-reference-app/agent-native/overview"
+  },
+  "next": {
+    "title": "Agent Action Registry",
+    "permalink": "/smugmug-api-reference-app/agent-native/action-registry"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "id": "ai-development/multi-agent-workflow",
   "title": "Multi-Agent Development Workflow",
-  "description": "This application was built using a sophisticated multi-agent development approach, treating different AI tools as specialized team members. This document details the actual workflow used and provides patterns you can adapt for your own projects.",
+  "description": "This application was built using a sophisticated multi-agent development approach, treating different AI tools as specialized team members. As part of our comprehensive AI development methodology, this workflow represents one of three key pillars:",
   "source": "@site/docs/ai-development/multi-agent-workflow.md",
   "sourceDirName": "ai-development",
   "slug": "/ai-development/multi-agent-workflow",
@@ -23,7 +23,7 @@
     "permalink": "/smugmug-api-reference-app/getting-started/installation"
   },
   "next": {
-    "title": "AI Integration Patterns",
-    "permalink": "/smugmug-api-reference-app/implementation/ai-integration"
+    "title": "Agent-Native Architecture Overview",
+    "permalink": "/smugmug-api-reference-app/agent-native/overview"
   }
 }

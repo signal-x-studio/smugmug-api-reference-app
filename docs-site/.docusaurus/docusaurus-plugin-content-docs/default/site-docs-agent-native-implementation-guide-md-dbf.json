@@ -1,0 +1,26 @@
+{
+  "id": "agent-native/implementation-guide",
+  "title": "Implementation Guide",
+  "description": "Transform your application into an agent-native experience with this comprehensive implementation guide. Learn how to add dual interfaces that work seamlessly for both human users and AI agents.",
+  "source": "@site/docs/agent-native/implementation-guide.md",
+  "sourceDirName": "agent-native",
+  "slug": "/agent-native/implementation-guide",
+  "permalink": "/smugmug-api-reference-app/agent-native/implementation-guide",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/agent-native/implementation-guide.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Interactive Examples",
+    "permalink": "/smugmug-api-reference-app/agent-native/interactive-examples"
+  },
+  "next": {
+    "title": "AI Integration Patterns",
+    "permalink": "/smugmug-api-reference-app/implementation/ai-integration"
+  }
+}

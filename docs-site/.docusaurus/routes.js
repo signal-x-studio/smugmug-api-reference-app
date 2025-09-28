@@ -4,16 +4,52 @@ import ComponentCreator from '@docusaurus/ComponentCreator';
 export default [
   {
     path: '/smugmug-api-reference-app/',
-    component: ComponentCreator('/smugmug-api-reference-app/', '58c'),
+    component: ComponentCreator('/smugmug-api-reference-app/', '663'),
     routes: [
       {
         path: '/smugmug-api-reference-app/',
-        component: ComponentCreator('/smugmug-api-reference-app/', 'ce8'),
+        component: ComponentCreator('/smugmug-api-reference-app/', '3c6'),
         routes: [
           {
             path: '/smugmug-api-reference-app/',
-            component: ComponentCreator('/smugmug-api-reference-app/', 'af0'),
+            component: ComponentCreator('/smugmug-api-reference-app/', 'c5b'),
             routes: [
+              {
+                path: '/smugmug-api-reference-app/agent-native/action-registry',
+                component: ComponentCreator('/smugmug-api-reference-app/agent-native/action-registry', '3ed'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/smugmug-api-reference-app/agent-native/implementation-guide',
+                component: ComponentCreator('/smugmug-api-reference-app/agent-native/implementation-guide', '36d'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/smugmug-api-reference-app/agent-native/interactive-examples',
+                component: ComponentCreator('/smugmug-api-reference-app/agent-native/interactive-examples', 'c20'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/smugmug-api-reference-app/agent-native/natural-language-api',
+                component: ComponentCreator('/smugmug-api-reference-app/agent-native/natural-language-api', '97a'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/smugmug-api-reference-app/agent-native/overview',
+                component: ComponentCreator('/smugmug-api-reference-app/agent-native/overview', 'c60'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
+              {
+                path: '/smugmug-api-reference-app/agent-native/structured-data',
+                component: ComponentCreator('/smugmug-api-reference-app/agent-native/structured-data', '582'),
+                exact: true,
+                sidebar: "tutorialSidebar"
+              },
               {
                 path: '/smugmug-api-reference-app/ai-development/multi-agent-workflow',
                 component: ComponentCreator('/smugmug-api-reference-app/ai-development/multi-agent-workflow', 'dc9'),

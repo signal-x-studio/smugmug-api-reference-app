@@ -4,7 +4,15 @@ sidebar_position: 1
 
 # Multi-Agent Development Workflow
 
-This application was built using a sophisticated multi-agent development approach, treating different AI tools as specialized team members. This document details the actual workflow used and provides patterns you can adapt for your own projects.
+This application was built using a sophisticated multi-agent development approach, treating different AI tools as specialized team members. As part of our comprehensive AI development methodology, this workflow represents one of three key pillars:
+
+## The Three Pillars of AI Development
+
+1. **🔨 Building WITH AI** (This Document): Using AI agents during development to generate code and accelerate workflows
+2. **🧠 Building AI INTO Applications**: Integrating AI features like smart tagging and content generation  
+3. **🤖 Building FOR AI**: Creating [agent-native applications](../agent-native/overview) that AI agents can easily understand and interact with
+
+This document focuses on the first pillar - how to effectively collaborate with AI during development.
 
 import WorkflowDemo from '@site/src/components/WorkflowDemo';
 
