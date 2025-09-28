@@ -11,11 +11,11 @@ These are the tasks to be completed for the spec detailed in @.agent-os/specs/20
   - [x] 1.1 Write tests for query parsing components
   - [x] 1.2 Implement basic query tokenization and intent extraction
   - [x] 1.3 Add parameter extraction (dates, locations, objects, people)
-  - [ ] 1.4 Create query validation and error handling
-  - [ ] 1.5 Integrate with search engine interface
-  - [ ] 1.6 Add query refinement and suggestion features
-  - [ ] 1.7 Implement conversational query processing for agent commands
-  - [ ] 1.8 Verify all tests pass
+  - [x] 1.4 Create query validation and error handling
+  - [x] 1.5 Integrate with search engine interface
+  - [x] 1.6 Add query refinement and suggestion features
+  - [x] 1.7 Implement conversational query processing for agent commands
+  - [x] 1.8 Verify all tests pass
 
 - [ ] 2. Semantic Search Engine
   - [ ] 2.1 Write tests for search engine functionality
