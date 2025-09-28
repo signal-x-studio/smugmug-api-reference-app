@@ -1,181 +1,111 @@
 # Gemini Prompts for Practical Developer Documentation
 
-> **Use these prompts with Gemini to generate accessible, practical documentation that developers can immediately use and learn from.**
+> Use these prompts with Gemini to generate clear, direct, and practical documentation for developers.
 
-## 🎯 Core Strategy: Developer-Focused Practical Guidance
+## 🎯 Core Principle: Actionable Clarity
 
 These prompts are designed to generate documentation that:
-- Explains technical decisions clearly and accessibly
-- Provides immediate practical value to developers
-- Includes actionable guidance and real examples  
-- Focuses on learning and implementation over showcasing
+- Explains technical decisions and standards with precision.
+- Provides immediate, practical value to developers.
+- Includes actionable guidance and clear code examples.
+- Focuses on creating reusable reference material, not narratives.
 
 ## 📝 Prompt Templates
 
-### 1. TECHNICAL-DECISIONS.md (Practical Architecture)
+### 1. `TECHNICAL-DECISIONS.md`
 
 ```
-Create practical documentation explaining the core architectural choices for my [PROJECT_TYPE] built with [TECH_STACK].
+Create a document explaining the core architectural choices for my [PROJECT_TYPE] built with [TECH_STACK].
 
-Focus on helping developers understand and adapt these patterns:
+The goal is to create a reference for developers to understand the system's design principles.
 
 ARCHITECTURAL DECISIONS TO COVER:
-- [TECH_STACK]-specific patterns and why they were chosen
-- Service layer abstractions and their benefits
-- State management approach and trade-offs considered
-- Component organization and reusability patterns
-- Error handling strategies that emerged
+- [TECH_STACK]-specific patterns: Explain the pattern and the principle it follows.
+- Service layer abstractions: Describe the abstraction and its benefits for decoupling.
+- State management approach: Explain the chosen strategy and the trade-offs considered against alternatives.
+- Component organization: Describe the directory structure and component responsibility rules.
+- Error handling strategy: Outline the patterns for error propagation and user feedback.
 
 WRITING STYLE:
-- Clear explanations of "why" behind each decision
-- Include simple code examples showing key patterns
-- Mention alternatives considered and trade-offs made
-- Keep technical but accessible to intermediate developers
-- Length: 80-120 lines for readability
-
-Make this a reference developers can use when making similar architectural decisions.
+- Use a direct, analytical tone.
+- For each decision, explain the "why" and the trade-offs.
+- Include concise code snippets that demonstrate the pattern.
+- Keep it accessible to an intermediate developer.
 ```
 
-### 2. AI-COLLABORATION.md (Human-AI Partnership)
+### 2. `AI-WORKFLOW.md`
 
 ```
-Document the human-AI collaboration patterns used to build this [PROJECT_TYPE] with [TECH_STACK].
+Create a document named `AI-WORKFLOW.md` that describes the process and tools for AI-assisted development in this project.
 
-Help other developers understand effective AI-assisted development:
+The goal is to provide a practical guide for team members.
 
-COLLABORATION PATTERNS TO DOCUMENT:
-- Which AI tools were used for what types of tasks
-- Prompting strategies that worked vs. didn't work
-- How AI enhanced development speed and code quality
-- Integration between different AI tools (GitHub Copilot, Claude, etc.)
-- Quality validation methods for AI-generated code
+WORKFLOW AND TOOLS TO DOCUMENT:
+- **Tool Roles**: Specify which AI tool (e.g., GitHub Copilot, Claude) is used for which task (e.g., boilerplate, refactoring, documentation).
+- **Integration**: Describe how the different AI tools are integrated into the development workflow and IDE.
+- **Validation**: Outline the process for reviewing and validating AI-generated code to ensure it meets quality standards.
+- **Prompting Patterns**: Link to `PROMPTING-STRATEGIES.md` for detailed techniques.
 
-PRACTICAL INSIGHTS:
-- Specific examples of effective prompts
-- Common mistakes and how to avoid them
-- Workflow patterns that maximized AI effectiveness
-- How to maintain code quality with AI assistance
-- Team collaboration patterns with AI tools
-
-Focus on actionable insights other developers can immediately apply.
+Focus on creating a clear, actionable workflow that any developer on the team can follow.
 ```
 
-### 3. CODE-QUALITY.md (Standards & Practices)
+### 3. `CODE-QUALITY.md`
 
 ```
-Create documentation showcasing code quality standards and practices used in this [TECH_STACK] project.
+Create a document outlining the code quality standards, static analysis configuration, and testing strategy for this [TECH_STACK] project.
 
-Help developers understand and implement similar quality practices:
+The goal is to provide a clear specification that can be enforced automatically.
 
-QUALITY AREAS TO COVER:
-- TypeScript configuration and strict mode benefits
-- Testing strategies and patterns implemented
-- Error handling approaches and error boundaries
-- Performance optimization techniques used
-- Code organization and maintainability patterns
+QUALITY STANDARDS TO DOCUMENT:
+- **TypeScript Configuration**: Provide the `tsconfig.json` and explain the reasoning for key `compilerOptions` (e.g., `strict`, `noImplicitAny`).
+- **Linting**: Provide the linter configuration file (e.g., `.eslintrc.json`) and explain the most important rules.
+- **Formatting**: Specify the code formatter used (e.g., Prettier) and provide its configuration.
+- **Testing Strategy**: Describe the different types of tests (unit, integration), the testing framework used, and where they are located. Include a clear example of a standard unit test.
+- **Performance**: List any key performance optimization patterns that are enforced (e.g., memoization, virtualized lists).
 
-PRACTICAL IMPLEMENTATION:
-- Specific configuration examples (tsconfig.json, etc.)
-- Code examples showing quality patterns
-- Testing patterns with actual test examples
-- Performance optimization techniques with before/after
-- Linting and formatting setup that worked
-
-Emphasize practical, implementable practices developers can adopt.
+Emphasize concrete configurations and clear rules.
 ```
 
-### 4. DEVELOPMENT-PHASES.md (Evolution Story)
+### 4. `PROMPTING-STRATEGIES.md`
 
 ```
-Document the step-by-step evolution of this [PROJECT_TYPE] from basic implementation to sophisticated solution.
+Create a technical guide to the prompting patterns used for AI-assisted development in this project.
 
-Show other developers a systematic approach they can follow:
+The goal is to create a reference that helps developers write effective prompts.
 
-DEVELOPMENT PROGRESSION:
-- Phase 1: Basic foundation and core functionality
-- Phase 2: [Key enhancement phase]
-- Phase 3: [Advanced features phase]  
-- Phase 4: [Polish and optimization phase]
+PROMPT PATTERNS TO DOCUMENT:
+- **Component Generation**: A template for generating a new component with context.
+- **Code Refactoring**: A template for refactoring a piece of code to meet a specific standard.
+- **Architecture Analysis**: A prompt for asking the AI to analyze a code snippet for architectural violations.
+- **Debugging**: A pattern for providing error messages and context to get debugging help.
+- **Documentation Generation**: A prompt for generating documentation for a function or component.
 
-FOR EACH PHASE:
-- What was built and why
-- Technical decisions made at that stage
-- Challenges encountered and how they were solved
-- AI collaboration patterns that emerged
-- Lessons learned that inform the next phase
+For each pattern, provide:
+- A clear prompt template.
+- An explanation of its purpose.
+- A list of common failure modes or pitfalls to avoid (e.g., missing context, vague instructions).
 
-LEARNING FOCUS:
-- How complexity was managed incrementally
-- When to make certain technical decisions
-- How AI assistance evolved through the phases
-- Practical advice for similar development journeys
-
-Make this a roadmap others can adapt for their own projects.
+Make this a practical, actionable guide.
 ```
 
-### 5. PROMPTING-STRATEGIES.md (AI Development Techniques)
-
-```
-Create a guide to proven prompting techniques for AI-assisted [PROJECT_TYPE] development.
-
-Help developers new to AI collaboration become more effective:
-
-PROMPTING PATTERNS THAT WORKED:
-- Component generation prompts with proper context
-- Code review and improvement prompts
-- Architecture discussion prompts for decision-making
-- Debugging and problem-solving prompt patterns
-- Documentation generation and improvement prompts
-
-PRACTICAL TECHNIQUES:
-- How to provide effective context to AI tools
-- Prompt structures that generate better code
-- Quality validation techniques for AI responses
-- Iteration patterns for refining AI output
-- Integration workflows with IDE-based AI tools
-
-COMMON PITFALLS TO AVOID:
-- Vague prompts that generate generic code
-- Context missing that leads to inconsistent results
-- Over-reliance on AI without human judgment
-- Quality validation gaps that introduce bugs
-
-Make this immediately actionable for developers starting with AI-assisted development.
-```
-
-## 🎯 Output Guidelines for Practical Documentation
-
-When using these prompts:
+## 🎯 Output Guidelines
 
 ### ✅ DO:
-- Keep documents between 80-150 lines for readability
-- Include specific, practical code examples
-- Focus on actionable guidance developers can use immediately  
-- Explain the "why" behind decisions, not just the "what"
-- Write for developers who are learning and implementing
-- Use clear, accessible language without sacrificing technical accuracy
+- Keep documents concise and focused on a single topic.
+- Include specific, practical code examples and configurations.
+- Focus on actionable guidance developers can use immediately.
+- Explain the underlying principle behind a standard or decision.
+- Use a direct and technical tone.
 
 ### ❌ DON'T:
-- Create comprehensive showcases (that's Claude's role)
-- Include extensive business metrics or ROI analysis
-- Write for executive audiences or strategic decision-makers
-- Make documents overly long or comprehensive
-- Focus primarily on showcasing sophistication over practical value
+- Write long, narrative-style documents.
+- Include business metrics, ROI, or marketing language.
+- Create high-level showcases; focus on implementation details.
+- Assume prior knowledge; explain concepts clearly.
 
-## 🔄 Refinement Process
+## 🔄 Document Goals
 
-1. **Generate initial version** using the prompts above
-2. **Review for practical value** - Can a developer immediately use this?
-3. **Add missing code examples** - Are key patterns illustrated?
-4. **Check accessibility** - Is this clear to intermediate developers?
-5. **Verify actionability** - Can readers apply these insights to their projects?
-
-## 📊 Success Metrics for Practical Documentation
-
-- **Time to understanding** < 15 minutes per document
-- **Implementation readiness** - Developers can start applying patterns immediately
-- **Learning value** - Intermediate developers gain new insights and techniques
-- **Reference utility** - Teams bookmark and refer back to these documents
-- **Knowledge transfer** - New team members can onboard faster using these guides
-
-The goal is documentation that developers find immediately useful and refer back to regularly in their work.
+- **Clarity**: A developer can understand the standard or process in under 15 minutes.
+- **Actionability**: A developer can immediately apply the guidance to their work.
+- **Reference Value**: The document is useful as a go-to reference for project standards.
+- **Onboarding**: New team members can use these documents to quickly learn project-specific practices.
