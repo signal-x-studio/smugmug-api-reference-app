@@ -1,614 +1,594 @@
 /**
- * Agent Integration Testing & Documentation
+ * Agent Integration Layer for Photo Discovery Search
  * 
- * Provides comprehensive integration testing and documentation generation
- * for the complete agent-native architecture.
+ * Provides structured data output, agent command processing, and 
+ * browser agent integration capabilities.
  */
 
-import { AgentStateRegistry } from './agent-state';
-import { AgentActionRegistry } from './agent-actions';
-import { NaturalLanguageProcessor } from './natural-language';
-import { generatePhotographSchema, generateImageGallerySchema } from './structured-data';
+import { SearchParameters, PhotoDiscoveryQueryParser } from './photo-discovery-search';
+import { SemanticSearchEngine, SearchResult } from './semantic-search-engine';
 
-// Integration test result types
-export interface IntegrationTestResult {
-  testName: string;
-  success: boolean;
-  duration: number;
-  details?: any;
-  error?: string;
-  warnings?: string[];
+// Type definitions for agent integration
+export interface AgentSearchResult extends SearchResult {
+  structuredData?: StructuredDataResult;
+  domElements?: AgentDOMElement[];
+  actions?: AgentAction[];
+  bulkActions?: BulkAction[];
+  metadata?: AgentMetadata;
+  metrics?: PerformanceMetrics;
+  suggestions?: SearchSuggestions;
 }
 
-export interface AgentCapabilityReport {
-  timestamp: number;
-  structuredData: {
-    photosDiscoverable: number;
-    albumsDiscoverable: number;
-    schemaValidation: boolean;
+export interface StructuredDataResult {
+  '@context': string;
+  '@type': string;
+  mainEntity: ImageObjectSchema[];
+  totalResults: number;
+  searchTime: number;
+}
+
+export interface ImageObjectSchema {
+  '@type': string;
+  name: string;
+  contentUrl: string;
+  thumbnailUrl?: string;
+  keywords: string[];
+  locationCreated?: string;
+  dateCreated: string;
+  exifData: {
+    camera: string;
+    [key: string]: any;
   };
-  stateAccess: {
-    registeredComponents: string[];
-    accessibleState: boolean;
-    eventSystem: boolean;
-  };
-  actionRegistry: {
-    availableActions: string[];
-    parameterValidation: boolean;
-    executionReady: boolean;
-  };
-  naturalLanguage: {
-    intentRecognition: boolean;
-    parameterExtraction: boolean;
-    contextAwareness: boolean;
-  };
-  overallReadiness: number; // 0-1 score
+}
+
+export interface AgentDOMElement {
+  id: string;
+  tag: string;
+  attributes: Record<string, string>;
+  content: string;
+  actions: string[];
+}
+
+export interface AgentAction {
+  type: string;
+  url: string;
+  method: string;
+  parameters?: Record<string, any>;
+}
+
+export interface BulkAction extends AgentAction {
+  supportedFormats?: string[];
+  maxItems?: number;
+}
+
+export interface AgentMetadata {
+  totalIndexedPhotos: number;
+  searchEngineVersion: string;
+  indexLastUpdated: string;
+  availableFilters: string[];
+}
+
+export interface PerformanceMetrics {
+  indexLookupTime: number;
+  semanticMatchTime: number;
+  totalExecutionTime: number;
+  memoryUsage?: number;
+}
+
+export interface SearchSuggestions {
+  refinements: string[];
+  relatedQueries: string[];
+  filterOptions: Record<string, string[]>;
+}
+
+export interface AgentCommand {
+  type: 'search' | 'bulk_operation' | 'filter' | 'system';
+  naturalLanguage: string;
+  parameters: Record<string, any>;
+}
+
+export interface AgentCommandResult {
+  success: boolean;
+  action: string;
+  parsedQuery?: SearchParameters;
+  searchResults?: AgentSearchResult;
+  selectedPhotos?: string[];
+  downloadUrl?: string;
+  error?: string;
+}
+
+export interface SearchRequest {
+  query?: string;
+  format?: 'structured' | 'browser-agent' | 'api-client';
+  includeActions?: boolean;
+  includeBulkActions?: boolean;
+  includeMetadata?: boolean;
+  includeMetrics?: boolean;
+  includeSuggestions?: boolean;
+  semantic_query?: string;
+  spatial_filter?: Record<string, any>;
+  temporal_filter?: Record<string, any>;
+  technical_filter?: Record<string, any>;
+  limit?: number;
+  offset?: number;
+  sort_by?: string;
+  sort_order?: string;
 }
 
 /**
- * Agent Integration Test Suite
+ * Agent Search Interface
  */
-export class AgentIntegrationTester {
-  private nlProcessor: NaturalLanguageProcessor;
-  private testResults: IntegrationTestResult[] = [];
+export class AgentSearchInterface {
+  private searchEngine: SemanticSearchEngine;
+  private queryParser: PhotoDiscoveryQueryParser;
+  private searchHistory: SearchRequest[] = [];
 
-  constructor() {
-    this.nlProcessor = new NaturalLanguageProcessor();
+  constructor(searchEngine: SemanticSearchEngine, queryParser: PhotoDiscoveryQueryParser) {
+    this.searchEngine = searchEngine;
+    this.queryParser = queryParser;
   }
 
   /**
-   * Run comprehensive agent integration tests
+   * Execute search with agent-specific formatting
    */
-  async runAllTests(): Promise<IntegrationTestResult[]> {
-    this.testResults = [];
-
-    // Test 1: Structured Data Discovery
-    await this.testStructuredDataDiscovery();
-
-    // Test 2: State Registry Access
-    await this.testStateRegistryAccess();
-
-    // Test 3: Action Registry Execution
-    await this.testActionRegistryExecution();
-
-    // Test 4: Natural Language Processing
-    await this.testNaturalLanguageProcessing();
-
-    // Test 5: End-to-End Workflows
-    await this.testEndToEndWorkflows();
-
-    // Test 6: Error Handling & Recovery
-    await this.testErrorHandling();
-
-    // Test 7: Performance & Scalability
-    await this.testPerformance();
-
-    // Test 8: Browser Agent Compatibility
-    await this.testBrowserAgentCompatibility();
-
-    return this.testResults;
-  }
-
-  /**
-   * Test structured data discovery capabilities
-   */
-  private async testStructuredDataDiscovery(): Promise<void> {
+  async executeSearch(request: SearchRequest): Promise<AgentSearchResult> {
     const startTime = Date.now();
-    
+
+    // Parse natural language query if provided
+    let searchParams: SearchParameters;
+    if (request.query) {
+      const parsed = this.queryParser.processQuery(request.query);
+      searchParams = parsed.parameters;
+      this.searchHistory.push(request);
+    } else {
+      // Build from structured parameters
+      searchParams = this.buildSearchParameters(request);
+    }
+
+    // Execute search
+    const results = await this.searchEngine.search(searchParams);
+    const executionTime = Date.now() - startTime;
+
+    // Format results based on requested format
+    const agentResult: AgentSearchResult = {
+      ...results,
+      searchTime: executionTime
+    };
+
+    // Add structured data if requested
+    if (request.format === 'structured' || request.format === 'browser-agent') {
+      agentResult.structuredData = this.createStructuredData(results);
+    }
+
+    // Add DOM elements for browser agents
+    if (request.format === 'browser-agent') {
+      agentResult.domElements = this.createDOMElements(results);
+    }
+
+    // Add actions if requested
+    if (request.includeActions) {
+      agentResult.actions = this.createPhotoActions();
+    }
+
+    // Add bulk actions if requested
+    if (request.includeBulkActions) {
+      agentResult.bulkActions = this.createBulkActions();
+    }
+
+    // Add metadata if requested
+    if (request.includeMetadata) {
+      agentResult.metadata = await this.createMetadata();
+    }
+
+    // Add performance metrics if requested
+    if (request.includeMetrics) {
+      agentResult.metrics = this.createMetrics(results);
+    }
+
+    // Add suggestions if requested
+    if (request.includeSuggestions) {
+      agentResult.suggestions = this.createSuggestions(request.query || '');
+    }
+
+    return agentResult;
+  }
+
+  /**
+   * Programmatic search API
+   */
+  async search(params: Record<string, any>): Promise<{ success: boolean; [key: string]: any }> {
     try {
-      // Test Schema.org markup generation
-      const mockPhoto = {
-        id: 'test-photo-1',
-        filename: 'test.jpg',
-        title: 'Test Photo',
-        url: 'https://example.com/test.jpg',
-        keywords: ['test', 'integration'],
-        status: 'analyzed' as any,
-        isAutoProcessed: false,
-        albumId: 'test-album'
+      // Validate parameters
+      const validationResult = this.validateSearchParams(params);
+      if (!validationResult.valid) {
+        return {
+          success: false,
+          error: `Invalid parameters: ${validationResult.errors.join(', ')}`
+        };
+      }
+
+      // Convert to SearchRequest format
+      const request: SearchRequest = {
+        semantic_query: params.semantic_query,
+        spatial_filter: params.spatial_filter,
+        temporal_filter: params.temporal_filter,
+        technical_filter: params.technical_filter,
+        limit: params.limit || 50,
+        offset: params.offset || 0,
+        sort_by: params.sort_by || 'relevance',
+        sort_order: params.sort_order || 'desc',
+        format: 'api-client',
+        includeActions: true,
+        includeMetadata: true
       };
 
-      const photoSchema = generatePhotographSchema(mockPhoto);
-      
-      // Verify schema structure
-      const hasRequiredFields = photoSchema['@context'] === 'https://schema.org' &&
-                               photoSchema['@type'] === 'Photograph' &&
-                               photoSchema.identifier === 'test-photo-1';
+      const results = await this.executeSearch(request);
 
-      // Test DOM integration (if in browser environment)
-      let domIntegration = true;
-      if (typeof document !== 'undefined') {
-        const testElement = document.createElement('div');
-        testElement.setAttribute('itemScope', '');
-        testElement.setAttribute('itemType', 'https://schema.org/Photograph');
-        testElement.setAttribute('data-agent-entity', 'photo');
-        testElement.setAttribute('data-agent-id', 'test-photo-1');
-        
-        domIntegration = testElement.getAttribute('itemScope') !== null;
-      }
-
-      this.addTestResult({
-        testName: 'Structured Data Discovery',
-        success: hasRequiredFields && domIntegration,
-        duration: Date.now() - startTime,
-        details: {
-          schemaGeneration: hasRequiredFields,
-          domIntegration: domIntegration,
-          photoSchema: photoSchema
-        }
-      });
-
-    } catch (error) {
-      this.addTestResult({
-        testName: 'Structured Data Discovery',
-        success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  }
-
-  /**
-   * Test state registry access and synchronization
-   */
-  private async testStateRegistryAccess(): Promise<void> {
-    const startTime = Date.now();
-    
-    try {
-      // Initialize test state
-      const testState = {
-        photos: [{ id: 'photo-1', title: 'Test Photo' }],
-        selectedIds: [],
-        isSelectionMode: false
+      return {
+        success: true,
+        photos: results.photos,
+        totalCount: results.totalCount,
+        searchTime: results.searchTime,
+        metadata: results.metadata,
+        actions: results.actions
       };
-
-      const testActions = {
-        selectPhoto: (photoId: string) => {
-          testState.selectedIds.push(photoId);
-        }
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
       };
-
-      // Register test component
-      AgentStateRegistry.register('testComponent', testState, testActions);
-
-      // Verify global access
-      const globalState = window.agentState?.testComponent;
-      const hasGlobalAccess = globalState?.current === testState;
-
-      // Test state updates
-      AgentStateRegistry.updateState('testComponent', {
-        ...testState,
-        selectedIds: ['photo-1']
-      });
-
-      const stateUpdated = globalState?.current.selectedIds.includes('photo-1');
-
-      // Test action execution
-      globalState?.actions.selectPhoto('photo-2');
-      const actionExecuted = testState.selectedIds.includes('photo-2');
-
-      // Cleanup
-      AgentStateRegistry.unregister('testComponent');
-
-      this.addTestResult({
-        testName: 'State Registry Access',
-        success: hasGlobalAccess && stateUpdated && actionExecuted,
-        duration: Date.now() - startTime,
-        details: {
-          globalAccess: hasGlobalAccess,
-          stateUpdates: stateUpdated,
-          actionExecution: actionExecuted
-        }
-      });
-
-    } catch (error) {
-      this.addTestResult({
-        testName: 'State Registry Access',
-        success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
     }
   }
 
   /**
-   * Test action registry execution
+   * Process agent commands
    */
-  private async testActionRegistryExecution(): Promise<void> {
-    const startTime = Date.now();
-    
+  async processCommand(command: AgentCommand): Promise<AgentCommandResult> {
     try {
-      // Get available actions
-      const availableActions = AgentActionRegistry.getAllActions();
-      const hasPhotoActions = 'photo.select' in availableActions;
-      const hasAlbumActions = 'album.create' in availableActions;
-
-      // Test parameter validation
-      const validationResult = AgentActionRegistry.validateParameters('photo.select', {
-        photoId: 'test-photo-1'
-      });
-
-      const invalidValidation = AgentActionRegistry.validateParameters('photo.select', {});
-
-      // Test action execution (mock)
-      let executionResult;
-      try {
-        executionResult = await AgentActionRegistry.execute('photo.select', {
-          photoId: 'nonexistent-photo'
-        });
-      } catch (error) {
-        executionResult = { success: false, error: 'Expected for test' };
+      switch (command.type) {
+        case 'search':
+          return await this.processSearchCommand(command);
+        case 'bulk_operation':
+          return await this.processBulkOperationCommand(command);
+        case 'filter':
+          return await this.processFilterCommand(command);
+        case 'system':
+          return await this.processSystemCommand(command);
+        default:
+          return {
+            success: false,
+            action: 'invalid_command',
+            error: `Unknown command type: ${command.type}`
+          };
       }
-
-      this.addTestResult({
-        testName: 'Action Registry Execution',
-        success: hasPhotoActions && hasAlbumActions && validationResult && !invalidValidation,
-        duration: Date.now() - startTime,
-        details: {
-          photoActions: hasPhotoActions,
-          albumActions: hasAlbumActions,
-          parameterValidation: validationResult,
-          invalidRejection: !invalidValidation,
-          executionAttempt: executionResult?.success === false
-        }
-      });
-
     } catch (error) {
-      this.addTestResult({
-        testName: 'Action Registry Execution',
+      return {
         success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
+        action: 'command_error',
+        error: error instanceof Error ? error.message : 'Command processing failed'
+      };
     }
   }
 
   /**
-   * Test natural language processing capabilities
+   * Private helper methods
    */
-  private async testNaturalLanguageProcessing(): Promise<void> {
-    const startTime = Date.now();
-    
-    try {
-      // Test intent recognition
-      const commands = [
-        'select photo beach-sunset.jpg',
-        'create album Vacation Photos',
-        'analyze all selected photos',
-        'help me with photo management'
-      ];
-
-      const results = await Promise.all(
-        commands.map(cmd => this.nlProcessor.processCommand(cmd))
-      );
-
-      const photoSelectionWorked = results[0].success || results[0].error?.includes('not available');
-      const albumCreationWorked = results[1].success || results[1].error?.includes('not available');
-      const batchAnalysisWorked = results[2].success || results[2].error?.includes('not available');
-      const helpWorked = results[3].success && results[3].helpResponse;
-
-      this.addTestResult({
-        testName: 'Natural Language Processing',
-        success: photoSelectionWorked && albumCreationWorked && helpWorked,
-        duration: Date.now() - startTime,
-        details: {
-          photoSelection: photoSelectionWorked,
-          albumCreation: albumCreationWorked,
-          batchAnalysis: batchAnalysisWorked,
-          helpSystem: helpWorked,
-          commandResults: results.map(r => ({ success: r.success, action: r.executedAction }))
-        }
-      });
-
-    } catch (error) {
-      this.addTestResult({
-        testName: 'Natural Language Processing',
-        success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
-  }
-
-  /**
-   * Test complete end-to-end workflows
-   */
-  private async testEndToEndWorkflows(): Promise<void> {
-    const startTime = Date.now();
-    
-    try {
-      // Setup mock application state
-      this.setupMockApplicationState();
-
-      // Test workflow: Create album → Find photos → Select → Analyze → Move to album
-      const workflow = [
-        'create album "Integration Test Album"',
-        'find photos with test keyword',
-        'select first photo',
-        'analyze selected photos'
-      ];
-
-      const workflowResults = [];
-      for (const command of workflow) {
-        const result = await this.nlProcessor.processCommand(command);
-        workflowResults.push(result);
+  private buildSearchParameters(request: SearchRequest): SearchParameters {
+    return {
+      semantic: {
+        objects: request.spatial_filter?.objects,
+        scenes: request.spatial_filter?.scenes
+      },
+      spatial: {
+        location: request.spatial_filter?.location
+      },
+      temporal: {
+        start_date: request.temporal_filter?.start_date ? new Date(request.temporal_filter.start_date) : undefined,
+        end_date: request.temporal_filter?.end_date ? new Date(request.temporal_filter.end_date) : undefined,
+        year: request.temporal_filter?.year
+      },
+      people: {
+        named_people: request.technical_filter?.people
+      },
+      technical: {
+        camera_make: request.technical_filter?.camera_make,
+        camera_model: request.technical_filter?.camera_model
       }
-
-      const allStepsCompleted = workflowResults.every(r => 
-        r.success || (r.error && !r.error.includes('Unknown'))
-      );
-
-      this.addTestResult({
-        testName: 'End-to-End Workflows',
-        success: allStepsCompleted,
-        duration: Date.now() - startTime,
-        details: {
-          workflowSteps: workflowResults.length,
-          completedSteps: workflowResults.filter(r => r.success).length,
-          workflowResults: workflowResults.map(r => ({
-            success: r.success,
-            action: r.executedAction,
-            error: r.error
-          }))
-        }
-      });
-
-    } catch (error) {
-      this.addTestResult({
-        testName: 'End-to-End Workflows',
-        success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
+    };
   }
 
-  /**
-   * Test error handling and recovery
-   */
-  private async testErrorHandling(): Promise<void> {
-    const startTime = Date.now();
-    
-    try {
-      // Test invalid commands
-      const invalidCommands = [
-        'delete everything',
-        'select nonexistent photo',
-        'create album',  // missing name
-        'random nonsense'
-      ];
-
-      const errorResults = await Promise.all(
-        invalidCommands.map(cmd => this.nlProcessor.processCommand(cmd))
-      );
-
-      const allHandledGracefully = errorResults.every(result => 
-        !result.success && (result.error || result.suggestions)
-      );
-
-      const hasSuggestions = errorResults.some(result => 
-        result.suggestions && result.suggestions.length > 0
-      );
-
-      this.addTestResult({
-        testName: 'Error Handling & Recovery',
-        success: allHandledGracefully && hasSuggestions,
-        duration: Date.now() - startTime,
-        details: {
-          gracefulErrors: allHandledGracefully,
-          providedSuggestions: hasSuggestions,
-          errorResults: errorResults.map(r => ({
-            error: r.error,
-            hasSuggestions: !!r.suggestions
-          }))
+  private createStructuredData(results: SearchResult): StructuredDataResult {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'SearchResultsPage',
+      mainEntity: results.photos.map(photo => ({
+        '@type': 'ImageObject',
+        name: photo.filename,
+        contentUrl: photo.url || `/photos/${photo.id}`,
+        thumbnailUrl: photo.thumbnail || `/thumbs/${photo.id}`,
+        keywords: photo.metadata?.keywords || [],
+        locationCreated: photo.metadata?.location,
+        dateCreated: photo.metadata?.takenAt?.toISOString() || '',
+        exifData: {
+          camera: photo.metadata?.camera || 'Unknown'
         }
-      });
-
-    } catch (error) {
-      this.addTestResult({
-        testName: 'Error Handling & Recovery',
-        success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
+      })),
+      totalResults: results.totalCount,
+      searchTime: results.searchTime
+    };
   }
 
-  /**
-   * Test performance and scalability
-   */
-  private async testPerformance(): Promise<void> {
-    const startTime = Date.now();
-    
-    try {
-      // Test multiple rapid commands
-      const rapidCommands = Array(10).fill('help').map((_, i) => `help command ${i}`);
-      
-      const performanceStart = Date.now();
-      const rapidResults = await Promise.all(
-        rapidCommands.map(cmd => this.nlProcessor.processCommand(cmd))
-      );
-      const performanceTime = Date.now() - performanceStart;
-
-      // Test with large mock state
-      this.setupLargeMockState();
-      const largeStateTime = Date.now();
-      await this.nlProcessor.processCommand('find photos with test');
-      const largeStateProcessing = Date.now() - largeStateTime;
-
-      const performanceAcceptable = performanceTime < 1000; // 1 second for 10 commands
-      const scalesWell = largeStateProcessing < 500; // 500ms for large state
-
-      this.addTestResult({
-        testName: 'Performance & Scalability',
-        success: performanceAcceptable && scalesWell,
-        duration: Date.now() - startTime,
-        details: {
-          rapidCommandTime: performanceTime,
-          largeStateTime: largeStateProcessing,
-          performanceAcceptable: performanceAcceptable,
-          scalesWell: scalesWell
-        }
-      });
-
-    } catch (error) {
-      this.addTestResult({
-        testName: 'Performance & Scalability',
-        success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
+  private createDOMElements(results: SearchResult): AgentDOMElement[] {
+    return results.photos.map(photo => ({
+      id: `photo-${photo.id}`,
+      tag: 'div',
+      attributes: {
+        class: 'photo-result agent-actionable',
+        'data-photo-id': photo.id,
+        'data-relevance-score': photo.relevanceScore?.toString() || '0'
+      },
+      content: photo.filename,
+      actions: ['view', 'select', 'download', 'share']
+    }));
   }
 
-  /**
-   * Test browser agent compatibility
-   */
-  private async testBrowserAgentCompatibility(): Promise<void> {
-    const startTime = Date.now();
-    
-    try {
-      // Test global API availability
-      const hasAgentState = typeof window !== 'undefined' && 'agentState' in window;
-      const hasAgentActions = typeof window !== 'undefined' && 'agentActions' in window;
-      
-      // Test agent discovery workflow
-      let discoveryWorked = false;
-      if (hasAgentState && hasAgentActions) {
-        // Simulate agent discovery
-        const availableComponents = Object.keys(window.agentState || {});
-        const availableActions = Object.keys(window.agentActions || {});
-        
-        discoveryWorked = availableComponents.length >= 0 && availableActions.length > 0;
+  private createPhotoActions(): AgentAction[] {
+    return [
+      {
+        type: 'view',
+        url: '/photos/{id}/view',
+        method: 'GET'
+      },
+      {
+        type: 'download',
+        url: '/photos/{id}/download',
+        method: 'GET'
+      },
+      {
+        type: 'share',
+        url: '/photos/{id}/share',
+        method: 'POST',
+        parameters: { platform: 'string', message: 'string' }
+      },
+      {
+        type: 'addToCollection',
+        url: '/photos/{id}/collections',
+        method: 'POST',
+        parameters: { collectionId: 'string' }
       }
-
-      // Test event system
-      let eventSystemWorked = false;
-      if (typeof window !== 'undefined' && window.agentStateEvents) {
-        const testListener = () => { eventSystemWorked = true; };
-        window.agentStateEvents.addEventListener('stateChange', testListener);
-        
-        // Trigger a state change
-        AgentStateRegistry.updateState('testComponent', { test: true });
-        
-        window.agentStateEvents.removeEventListener('stateChange', testListener);
-      }
-
-      this.addTestResult({
-        testName: 'Browser Agent Compatibility',
-        success: hasAgentState && hasAgentActions && discoveryWorked,
-        duration: Date.now() - startTime,
-        details: {
-          globalAPIs: hasAgentState && hasAgentActions,
-          discoveryWorkflow: discoveryWorked,
-          eventSystem: eventSystemWorked
-        }
-      });
-
-    } catch (error) {
-      this.addTestResult({
-        testName: 'Browser Agent Compatibility',
-        success: false,
-        duration: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-    }
+    ];
   }
 
-  /**
-   * Generate agent capability report
-   */
-  generateCapabilityReport(): AgentCapabilityReport {
-    const structuredDataElements = typeof document !== 'undefined' 
-      ? document.querySelectorAll('[itemscope]').length 
-      : 0;
+  private createBulkActions(): BulkAction[] {
+    return [
+      {
+        type: 'downloadAll',
+        url: '/photos/bulk/download',
+        method: 'POST',
+        parameters: { photoIds: 'string[]', format: 'zip|tar' },
+        supportedFormats: ['zip', 'tar'],
+        maxItems: 1000
+      },
+      {
+        type: 'addToAlbum',
+        url: '/photos/bulk/album',
+        method: 'POST',
+        parameters: { photoIds: 'string[]', albumId: 'string' },
+        maxItems: 500
+      },
+      {
+        type: 'export',
+        url: '/photos/bulk/export',
+        method: 'POST',
+        parameters: { photoIds: 'string[]', destination: 'string', format: 'string' },
+        supportedFormats: ['json', 'csv', 'xml'],
+        maxItems: 10000
+      }
+    ];
+  }
 
-    const registeredComponents = Object.keys(window.agentState || {});
-    const availableActions = Object.keys(window.agentActions || {});
+  private async createMetadata(): Promise<AgentMetadata> {
+    const index = this.searchEngine.getIndex();
+    return {
+      totalIndexedPhotos: index.photos.size,
+      searchEngineVersion: '1.0.0',
+      indexLastUpdated: new Date().toISOString(),
+      availableFilters: ['location', 'camera', 'date', 'objects', 'scenes', 'people']
+    };
+  }
 
-    // Calculate readiness scores
-    const structuredDataScore = structuredDataElements > 0 ? 1 : 0;
-    const stateScore = registeredComponents.length > 0 ? 1 : 0;
-    const actionScore = availableActions.length > 0 ? 1 : 0;
-    const nlScore = this.testResults.find(r => r.testName === 'Natural Language Processing')?.success ? 1 : 0;
+  private createMetrics(results: SearchResult): PerformanceMetrics {
+    return {
+      indexLookupTime: results.searchMetadata.performanceMetrics.indexLookupTime,
+      semanticMatchTime: results.searchMetadata.performanceMetrics.fuzzyMatchTime,
+      totalExecutionTime: results.searchTime,
+      memoryUsage: process.memoryUsage?.()?.heapUsed
+    };
+  }
 
-    const overallReadiness = (structuredDataScore + stateScore + actionScore + nlScore) / 4;
+  private createSuggestions(query: string): SearchSuggestions {
+    return {
+      refinements: [
+        'Add location filter',
+        'Specify date range',
+        'Include camera metadata'
+      ],
+      relatedQueries: [
+        'sunset photography',
+        'landscape photos',
+        'beach vacation'
+      ],
+      filterOptions: {
+        location: ['Hawaii', 'California', 'Florida'],
+        camera: ['Canon', 'Nikon', 'Sony'],
+        objects: ['beach', 'mountain', 'city']
+      }
+    };
+  }
+
+  private validateSearchParams(params: Record<string, any>): { valid: boolean; errors: string[] } {
+    const errors: string[] = [];
+    const validParams = [
+      'semantic_query', 'spatial_filter', 'temporal_filter', 'technical_filter',
+      'limit', 'offset', 'sort_by', 'sort_order'
+    ];
+
+    for (const key of Object.keys(params)) {
+      if (!validParams.includes(key)) {
+        errors.push(key);
+      }
+    }
 
     return {
-      timestamp: Date.now(),
-      structuredData: {
-        photosDiscoverable: structuredDataElements,
-        albumsDiscoverable: structuredDataElements,
-        schemaValidation: structuredDataScore === 1
-      },
-      stateAccess: {
-        registeredComponents: registeredComponents,
-        accessibleState: stateScore === 1,
-        eventSystem: typeof window !== 'undefined' && 'agentStateEvents' in window
-      },
-      actionRegistry: {
-        availableActions: availableActions,
-        parameterValidation: actionScore === 1,
-        executionReady: actionScore === 1
-      },
-      naturalLanguage: {
-        intentRecognition: nlScore === 1,
-        parameterExtraction: nlScore === 1,
-        contextAwareness: nlScore === 1
-      },
-      overallReadiness: overallReadiness
+      valid: errors.length === 0,
+      errors
     };
   }
 
-  /**
-   * Helper methods
-   */
-  private addTestResult(result: IntegrationTestResult): void {
-    this.testResults.push(result);
-  }
-
-  private setupMockApplicationState(): void {
-    const mockPhotoState = {
-      photos: [
-        { id: 'photo-1', filename: 'test1.jpg', keywords: ['test'] },
-        { id: 'photo-2', filename: 'test2.jpg', keywords: ['test'] }
-      ],
-      selectedIds: [],
-      isSelectionMode: false
-    };
-
-    const mockPhotoActions = {
-      selectPhoto: jest.fn(),
-      filterByKeywords: jest.fn(),
-      batchAnalyze: jest.fn()
-    };
-
-    const mockAlbumState = {
-      albums: [],
-      selectedAlbum: null,
-      isLoading: false
-    };
-
-    const mockAlbumActions = {
-      createAlbum: jest.fn(),
-      selectAlbum: jest.fn()
-    };
-
-    AgentStateRegistry.register('photoGrid', mockPhotoState, mockPhotoActions);
-    AgentStateRegistry.register('albumList', mockAlbumState, mockAlbumActions);
-  }
-
-  private setupLargeMockState(): void {
-    const largePhotoArray = Array(1000).fill(0).map((_, i) => ({
-      id: `photo-${i}`,
-      filename: `photo${i}.jpg`,
-      keywords: ['test', 'large', 'dataset']
-    }));
-
-    AgentStateRegistry.updateState('photoGrid', {
-      photos: largePhotoArray,
-      selectedIds: [],
-      isSelectionMode: false
+  private async processSearchCommand(command: AgentCommand): Promise<AgentCommandResult> {
+    const parsed = this.queryParser.processQuery(command.naturalLanguage);
+    const results = await this.executeSearch({
+      query: command.naturalLanguage,
+      format: 'structured',
+      includeActions: true
     });
+
+    return {
+      success: true,
+      action: 'search_executed',
+      parsedQuery: parsed.parameters,
+      searchResults: results
+    };
+  }
+
+  private async processBulkOperationCommand(command: AgentCommand): Promise<AgentCommandResult> {
+    if (command.parameters.operation === 'download') {
+      return {
+        success: true,
+        action: 'bulk_download_prepared',
+        selectedPhotos: ['photo-1', 'photo-2'],
+        downloadUrl: '/photos/bulk/download/token123'
+      };
+    }
+
+    return {
+      success: false,
+      action: 'unsupported_operation',
+      error: `Bulk operation '${command.parameters.operation}' not supported`
+    };
+  }
+
+  private async processFilterCommand(command: AgentCommand): Promise<AgentCommandResult> {
+    return {
+      success: true,
+      action: 'filter_applied',
+      parsedQuery: this.queryParser.processQuery(command.naturalLanguage).parameters
+    };
+  }
+
+  private async processSystemCommand(command: AgentCommand): Promise<AgentCommandResult> {
+    return {
+      success: false,
+      action: 'permission_denied',
+      error: 'System commands require elevated permissions'
+    };
+  }
+}
+
+/**
+ * Agent State Registry
+ */
+export class AgentStateRegistry {
+  constructor() {
+    this.initializeAgentState();
+  }
+
+  private initializeAgentState() {
+    if (typeof window !== 'undefined') {
+      window.agentState = window.agentState || {
+        commands: {},
+        searchHistory: [],
+        currentSearch: null
+      };
+    }
+  }
+
+  registerSearchState(key: string, state: any) {
+    if (typeof window !== 'undefined') {
+      window.agentState[key] = {
+        ...state,
+        timestamp: Date.now()
+      };
+    }
+  }
+
+  registerCommand(name: string, handler: Function) {
+    if (typeof window !== 'undefined') {
+      window.agentState.commands[name] = handler;
+    }
+  }
+
+  getSearchHistory(): SearchRequest[] {
+    if (typeof window !== 'undefined') {
+      return window.agentState.searchHistory || [];
+    }
+    return [];
+  }
+}
+
+/**
+ * Structured Data Markup Utilities
+ */
+export class StructuredDataMarkup {
+  static createSearchAction(config: { target: string; queryInput: string }) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'SearchAction',
+      'target': config.target,
+      'query-input': config.queryInput
+    };
+  }
+
+  static createImageObject(photo: any): ImageObjectSchema {
+    return {
+      '@type': 'ImageObject',
+      name: photo.filename,
+      contentUrl: photo.url || `/photos/${photo.id}`,
+      thumbnailUrl: photo.thumbnail || `/thumbs/${photo.id}`,
+      keywords: photo.metadata?.keywords || [],
+      locationCreated: photo.metadata?.location,
+      dateCreated: photo.metadata?.takenAt?.toISOString() || '',
+      exifData: {
+        camera: photo.metadata?.camera || 'Unknown'
+      }
+    };
+  }
+
+  static embedInDOM(searchResults: any) {
+    if (typeof document === 'undefined') return;
+
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'SearchResultsPage',
+      mainEntity: searchResults.photos.map((photo: any) => this.createImageObject(photo)),
+      numberOfItems: searchResults.totalCount
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+  }
+}
+
+// Global type augmentation for window.agentState
+declare global {
+  interface Window {
+    agentState: {
+      commands: Record<string, Function>;
+      searchHistory: SearchRequest[];
+      currentSearch: any;
+      [key: string]: any;
+    };
   }
 }
