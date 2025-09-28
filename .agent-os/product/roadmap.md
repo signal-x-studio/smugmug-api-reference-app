@@ -48,26 +48,26 @@ We are establishing **first-mover advantage** in agent-native web application de
 ### Phase 2.1: Core Agent-Ready Infrastructure (2-3 weeks)
 
 #### **🏗️ Structured Data Foundation**
-- [ ] **Schema.org Integration** - Add structured data to all components `M`
+- [x] **Schema.org Integration** - Add structured data to all components `M`
   - Photo entities with complete metadata exposure
   - Album/Gallery collections with semantic relationships  
   - User actions and potential actions for agent discovery
   - Breadcrumb navigation with structured hierarchy
 
-- [ ] **Agent State Exposure** - Make React state accessible to browser agents `L`  
+- [x] **Agent State Exposure** - Make React state accessible to browser agents `L`  
   - Global `window.agentState` registry for component state
   - Read/write interfaces for agent interaction
   - State change notification system for real-time updates
   - Component lifecycle hooks for agent synchronization
 
 #### **🤖 Agent Interaction Layer**
-- [ ] **Agent Action Registry** - Standardized action definitions `L`
+- [x] **Agent Action Registry** - Standardized action definitions `L`
   - Complete inventory of all possible user actions
   - Programmatic equivalents for UI interactions
   - Parameter schemas and validation rules
   - Success/error response patterns
 
-- [ ] **Natural Language API** - Intent parsing and action execution `XL`
+- [x] **Natural Language API** - Intent parsing and action execution `XL`
   - Query parsing: "Find sunset photos from Europe trip"
   - Intent classification and confidence scoring
   - Action parameter extraction and validation
