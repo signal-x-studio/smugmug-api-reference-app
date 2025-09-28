@@ -37,15 +37,15 @@ These are the tasks to be completed for the spec detailed in @.agent-os/specs/20
   - [x] 3.7 Add comprehensive metadata field filtering
   - [x] 3.8 Verify all tests pass
 
-- [ ] 4. Agent-Ready Search Results
-  - [ ] 4.1 Write tests for structured data output
-  - [ ] 4.2 Design agent-readable result format
-  - [ ] 4.3 Add structured data markup for browser agents
-  - [ ] 4.4 Implement actionable result elements
-  - [ ] 4.5 Create agent command interface
-  - [ ] 4.6 Add result metadata exposure
-  - [ ] 4.7 Implement programmatic search query execution
-  - [ ] 4.8 Verify all tests pass
+- [x] 4. Agent-Ready Search Results
+  - [x] 4.1 Write tests for structured data output
+  - [x] 4.2 Design agent-readable result format
+  - [x] 4.3 Add structured data markup for browser agents
+  - [x] 4.4 Implement actionable result elements
+  - [x] 4.5 Create agent command interface
+  - [x] 4.6 Add result metadata exposure
+  - [x] 4.7 Implement programmatic search query execution
+  - [x] 4.8 Verify all tests pass
 
 - [ ] 5. Bulk Selection & Operations
   - [ ] 5.1 Write tests for bulk operation components
