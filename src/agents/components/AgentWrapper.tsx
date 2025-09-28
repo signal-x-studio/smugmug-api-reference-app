@@ -174,7 +174,7 @@ export const AgentWrapper: React.FC<AgentWrapperProps> = ({
       <script
         ref={structuredDataRef}
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: structuredDataJson }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData, null, 2) }}
       />
       
       {/* Debug information (only in development) */}
