@@ -267,7 +267,7 @@ export function useDualInterface(config: DualInterfaceConfig): DualInterfaceRetu
           lastMeasurement: Date.now(),
           // In a real implementation, these would be actual measurements
           memoryUsage: (performance as any).memory?.usedJSHeapSize || 0,
-          cpuUsage: Math.random() * 10, // Placeholder
+          cpuUsage: 0, // TODO: Replace with actual CPU usage measurement
         }));
       }, 5000);
       
