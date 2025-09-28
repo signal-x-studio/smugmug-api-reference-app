@@ -58,30 +58,9 @@ export class IntentRecognizer {
 
   constructor() {
     this.patterns = [
-      // Photo selection patterns
-      {
-        action: 'photo.select',
-        patterns: [
-          /(?:select|choose|pick|click)\s+(?:photo|image|picture)\s+(.+)/i,
-          /(?:select|choose|pick)\s+(.+\.(?:jpg|jpeg|png|gif))/i,
-          /(?:click\s+on|tap)\s+(?:the\s+)?(.+)/i
-        ],
-        category: 'photo',
-        confidence: 0.9
-      },
-      // Photo analysis patterns
-      {
-        action: 'photo.analyze',
-        patterns: [
-          /(?:analyze|process)\s+(?:photo|image|picture)\s+(.+)/i,
-          /(?:generate|create)\s+(?:metadata|keywords|tags)\s+for\s+(.+)/i,
-          /(?:add\s+(?:keywords|tags|metadata)|process\s+with\s+ai)\s+(.+)/i,
-          /(?:ai\s+analysis|smart\s+tagging)\s+(.+)/i
-        ],
-        category: 'photo',
-        confidence: 0.85
-      },
-      // Album creation patterns
+      // Most specific patterns first
+      
+      // Album creation patterns (most specific first to avoid confusion with album.select)
       {
         action: 'album.create',
         patterns: [
@@ -92,18 +71,38 @@ export class IntentRecognizer {
         category: 'album',
         confidence: 0.9
       },
-      // Search and filter patterns
+      
+      // Photo selection patterns (specific file extensions first)
       {
-        action: 'photo.search',
+        action: 'photo.select',
         patterns: [
-          /(?:find|search\s+for|show\s+me|filter\s+by)\s+(.+)/i,
-          /(?:photos|images|pictures)\s+(?:with|containing|tagged)\s+(.+)/i,
-          /(?:filter|search)\s+(.+)/i
+          /(?:select|choose|pick)\s+(.+\.(?:jpg|jpeg|png|gif))/i,
+          /(?:select|choose|pick|click)\s+(?:photo|image|picture)\s+(.+)/i,
+          /(?:click\s+on|tap)\s+(?:the\s+)?(.+)\s+(?:photo|image|picture)/i,
+          /(?:click\s+on|tap)\s+(?:the\s+)?photo\s+(.+)/i,
+          /(?:select|choose|pick)\s+(?:the\s+)?first\s+photo/i,
+          /(?:select|choose|pick)\s+(?:photo\s+)?(?:with\s+id\s+)?([^\s"']+)/i
         ],
-        category: 'search',
-        confidence: 0.8
+        category: 'photo',
+        confidence: 0.9
       },
-      // Batch operations
+      
+      // Photo analysis patterns
+      {
+        action: 'photo.analyze',
+        patterns: [
+          /(?:analyze|process)\s+(?:photo|image|picture)\s+(.+)/i,
+          /(?:generate|create)\s+(?:metadata|keywords|tags)\s+for\s+(.+)/i,
+          /(?:add\s+(?:keywords|tags|metadata))\s+(?:to\s+)?(.+)/i,
+          /process\s+(.+)\s+(?:image|photo|picture)\s+with\s+ai/i,
+          /process\s+(?:this|the)\s+(?:image|photo|picture)\s+with\s+ai/i,
+          /(?:ai\s+analysis|smart\s+tagging)\s+(.+)/i
+        ],
+        category: 'photo',
+        confidence: 0.85
+      },
+      
+      // Batch operations (more specific than general search)
       {
         action: 'photo.batchAnalyze',
         patterns: [
@@ -114,16 +113,30 @@ export class IntentRecognizer {
         category: 'batch',
         confidence: 0.85
       },
-      // Album selection
+      
+      // Album selection patterns (less specific patterns at end)
       {
         action: 'album.select',
         patterns: [
           /(?:select|open|view)\s+album\s+(.+)/i,
           /(?:go\s+to|switch\s+to)\s+album\s+(.+)/i,
-          /album\s+(.+)/i
+          /(?:open|view)\s+(.+)\s+album/i
         ],
         category: 'album',
         confidence: 0.8
+      },
+      
+      // Search and filter patterns (most general, should be last)
+      {
+        action: 'photo.search',
+        patterns: [
+          /(?:find|search\s+for|show\s+me)\s+(?:photos|images|pictures)\s+(?:with|containing|tagged)\s+(.+)/i,
+          /(?:find|search\s+for|show\s+me)\s+(.+)\s+(?:photos|images|pictures)/i,
+          /(?:filter\s+by)\s+(.+)/i,
+          /(?:find|search\s+for)\s+(.+)/i
+        ],
+        category: 'search',
+        confidence: 0.75
       }
     ];
   }
@@ -142,7 +155,8 @@ export class IntentRecognizer {
       for (const regex of pattern.patterns) {
         const match = command.match(regex);
         if (match) {
-          const confidence = pattern.confidence * this.calculateMatchQuality(command, match);
+          const matchQuality = this.calculateMatchQuality(command, match);
+          const confidence = pattern.confidence * matchQuality;
           
           if (confidence > bestMatch.confidence) {
             bestMatch = {
@@ -167,15 +181,22 @@ export class IntentRecognizer {
    * Calculate match quality based on command structure
    */
   private calculateMatchQuality(command: string, match: RegExpMatchArray): number {
-    const commandLength = command.length;
-    const matchLength = match[0].length;
-    const coverage = matchLength / commandLength;
+    // Base quality starts high for any successful match
+    let quality = 0.9;
     
     // Bonus for specific identifiers (filenames, IDs, etc.)
     const hasSpecificId = /\.(jpg|jpeg|png|gif)|photo-\d+|img_\d+/i.test(command);
-    const specificBonus = hasSpecificId ? 0.1 : 0;
+    if (hasSpecificId) {
+      quality = Math.min(quality + 0.1, 1.0);
+    }
     
-    return Math.min(coverage + specificBonus, 1.0);
+    // Bonus for quoted parameters
+    const hasQuotedParam = /["'][^"']+["']/.test(command);
+    if (hasQuotedParam) {
+      quality = Math.min(quality + 0.05, 1.0);
+    }
+    
+    return quality;
   }
 
   /**
@@ -224,6 +245,7 @@ export class ParameterExtractor {
         return this.extractAnalysisParams(command);
       
       case 'photo.batchAnalyze':
+      case 'photo.batch': // Add support for generic batch operations
         return this.extractBatchParams(command);
       
       default:
@@ -239,7 +261,8 @@ export class ParameterExtractor {
     const patterns = [
       /(?:photo|image|picture)\s+([^\s"']+\.(?:jpg|jpeg|png|gif))/i,
       /(?:photo|image)\s+(?:with\s+id\s+)?([^\s"']+)/i,
-      /(?:id|ID)\s+([^\s"']+)/i,
+      /(?:with\s+id|id|ID)\s+([^\s"']+)/i,
+      /([^\s"']+\.(?:jpg|jpeg|png|gif))/i, // Bare filename match
       /"([^"]+)"/,
       /'([^']+)'/
     ];
@@ -286,8 +309,10 @@ export class ParameterExtractor {
 
     // Extract description
     const descPatterns = [
+      /with\s+description\s+["']([^"']+)["']/i,
       /description\s+["']([^"']+)["']/i,
       /with\s+description\s+([^"'\n]+)/i,
+      /description\s+([^"'\n]+?)(?:\s*$|\s+with|\s+and)/i, // Non-quoted description
       /described?\s+as\s+["']([^"']+)["']/i
     ];
 
@@ -320,16 +345,23 @@ export class ParameterExtractor {
       if (match) {
         const keywordString = match[1].trim();
         
-        // Split by common delimiters
+        // Split by common delimiters including "and"
         const keywords = keywordString
-          .split(/[,;]\s*/)
+          .split(/[,;]\s*|\s+and\s+/i)
           .map(k => k.trim())
           .filter(k => k.length > 0);
         
         if (keywords.length > 1) {
           params.keywords = keywords;
         } else {
-          params.query = keywordString;
+          // Single term or phrase - determine if it should be keywords or query
+          if (keywordString.includes(' ')) {
+            // Multi-word phrase - use as query unless it has multiple clear keywords
+            params.query = keywordString;
+          } else {
+            // Single word - could be either, default to query for flexibility
+            params.query = keywordString;
+          }
         }
         break;
       }
@@ -373,20 +405,44 @@ export class ParameterExtractor {
   private extractBatchParams(command: string): { [key: string]: any } {
     const params: { [key: string]: any } = {};
     
-    // Determine target
-    if (/(?:all|every)\s+(?:photos?|images?)/i.test(command)) {
-      params.target = 'all';
-    } else if (/(?:selected|chosen)\s+(?:photos?|images?)/i.test(command)) {
-      params.target = 'selected';
-    } else if (/(?:them|these)/i.test(command)) {
-      params.target = 'contextual';
+    // Extract count and position (first/last N items) - prioritize this
+    const countMatch = command.match(/(?:the\s+)?(first|last)\s+(\d+)/i);
+    if (countMatch) {
+      params.count = parseInt(countMatch[2]);
+      params.position = countMatch[1].toLowerCase();
     }
 
-    // Extract count if specified
-    const countMatch = command.match(/(?:first|last)\s+(\d+)/i);
-    if (countMatch) {
-      params.count = parseInt(countMatch[1]);
-      params.position = countMatch[0].toLowerCase().includes('first') ? 'first' : 'last';
+    // Extract page number
+    const pageMatch = command.match(/page\s+(\d+)/i);
+    if (pageMatch) {
+      params.page = parseInt(pageMatch[1]);
+    }
+    
+    // Determine target (only if no count/page already found)
+    if (!params.count && !params.page) {
+      if (/(?:all|every)\s+(?:photos?|images?)/i.test(command)) {
+        params.target = 'all';
+      } else if (/(?:selected|chosen)\s+(?:photos?|images?)/i.test(command)) {
+        params.target = 'selected';
+      } else if (/(?:them|these)/i.test(command)) {
+        params.target = 'contextual';
+      }
+    }
+
+    // If no specific patterns matched, fall back to generic extraction
+    if (Object.keys(params).length === 0) {
+      // Generic number extraction as fallback
+      const numbers = command.match(/\d+/g);
+      if (numbers) {
+        params.numbers = numbers.map(n => parseInt(n));
+      }
+
+      // Generic position extraction
+      if (/first/i.test(command)) {
+        params.position = 'first';
+      } else if (/last/i.test(command)) {
+        params.position = 'last';
+      }
     }
 
     return params;

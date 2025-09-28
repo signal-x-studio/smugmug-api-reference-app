@@ -5,6 +5,7 @@ import { AlbumSettingsModal } from './components/AlbumSettingsModal';
 import { PhotoDetailModal } from './components/PhotoDetailModal';
 import { LoginScreen } from './components/LoginScreen';
 import { smugmugService } from './services/mockSmugMugService'; // Use mock service for development
+import './src/utils/agent-actions-init'; // Initialize agent actions
 import { Photo, Album, SmugMugCredentials, PhotoStatus, SmugMugNode, AutomationMode, AppNotification, AiSettings, ActivityLogEntry, AiData, SmartAlbumProcessState, AlbumStoryState, AlbumStory } from './types';
 import { IconCamera, IconSettings, IconFileText } from './components/Icons';
 import { AlbumList } from './components/AlbumList';
