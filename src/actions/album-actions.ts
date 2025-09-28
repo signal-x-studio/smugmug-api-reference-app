@@ -90,9 +90,10 @@ export const albumCreateAction = createAgentAction(
 
       const { name, description, selectAfterCreate = true } = params;
 
-      // Check if album with same name already exists
+      // Check if album with same name already exists (case-insensitive)
+      const nameLower = name.toLowerCase();
       const existingAlbum = albumState.current.albums.find((a: Album) => 
-        a.name.toLowerCase() === name.toLowerCase()
+        a.name.toLowerCase() === nameLower
       );
       
       if (existingAlbum) {
