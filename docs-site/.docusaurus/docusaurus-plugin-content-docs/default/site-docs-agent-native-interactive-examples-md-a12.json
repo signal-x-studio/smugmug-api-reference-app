@@ -1,0 +1,26 @@
+{
+  "id": "agent-native/interactive-examples",
+  "title": "Interactive Examples",
+  "description": "Experience agent-native architecture in action with these interactive examples. See how AI agents can seamlessly interact with photo management applications through natural language commands and programmatic actions.",
+  "source": "@site/docs/agent-native/interactive-examples.md",
+  "sourceDirName": "agent-native",
+  "slug": "/agent-native/interactive-examples",
+  "permalink": "/smugmug-api-reference-app/agent-native/interactive-examples",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/agent-native/interactive-examples.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Natural Language API",
+    "permalink": "/smugmug-api-reference-app/agent-native/natural-language-api"
+  },
+  "next": {
+    "title": "Implementation Guide",
+    "permalink": "/smugmug-api-reference-app/agent-native/implementation-guide"
+  }
+}

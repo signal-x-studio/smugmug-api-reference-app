@@ -1,0 +1,3 @@
+# Spec Summary (Lite)
+
+Implement agent-ready architecture patterns that enable seamless interaction between human users and AI agents (browser agents like Gemini-in-Chrome) through dual-interface design. Add structured data exposure, agent action registries, and natural language APIs to transform the photo management application into a pioneering example of agent-native web development. Update comprehensive documentation (Docusaurus site, README, related docs) to position agent-native architecture as the third pillar of our AI development methodology alongside building WITH AI and USING AI. This establishes first-mover advantage in the emerging agent-web interaction paradigm while maintaining excellent human user experience.

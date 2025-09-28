@@ -1,0 +1,26 @@
+{
+  "id": "agent-native/natural-language-api",
+  "title": "Natural Language API",
+  "description": "The Natural Language API enables AI agents to interact with your photo management application using natural language commands. This API processes text input, classifies user intent, extracts parameters, and translates queries into executable actions.",
+  "source": "@site/docs/agent-native/natural-language-api.md",
+  "sourceDirName": "agent-native",
+  "slug": "/agent-native/natural-language-api",
+  "permalink": "/smugmug-api-reference-app/agent-native/natural-language-api",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/agent-native/natural-language-api.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Agent Action Registry",
+    "permalink": "/smugmug-api-reference-app/agent-native/action-registry"
+  },
+  "next": {
+    "title": "Interactive Examples",
+    "permalink": "/smugmug-api-reference-app/agent-native/interactive-examples"
+  }
+}

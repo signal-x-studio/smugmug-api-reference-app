@@ -9,11 +9,18 @@ Welcome to a comprehensive demonstration of **multi-agent AI development** and *
 
 ## What This Project Demonstrates
 
-🤖 **Multi-Agent Development** - Coordinated use of GitHub Copilot, Claude, and Gemini CLI  
-🔧 **Structured AI Integration** - Schema-enforced JSON responses for reliable AI services  
-⚛️ **Modern React Patterns** - TypeScript, hooks, and service layer architecture  
-📸 **AI-Powered Photo Analysis** - Real-world Gemini Vision integration  
-🏗️ **Engineering Excellence** - Professional patterns you can adapt to your projects  
+This project showcases three pillars of modern AI development:
+
+### 1. 🔨 Building WITH AI 
+**Multi-Agent Development** - Coordinated use of GitHub Copilot, Claude, and Gemini CLI for accelerated development
+
+### 2. 🧠 Building AI INTO Applications
+**Structured AI Integration** - Schema-enforced JSON responses for reliable AI services like photo analysis and smart tagging
+
+### 3. 🤖 Building FOR AI
+**[Agent-Native Architecture](./agent-native/overview)** - Dual interfaces designed for both human users and AI agents (like Gemini-in-Chrome) to interact seamlessly
+
+This comprehensive approach demonstrates how AI can be integrated at every level of application development.  
 
 ## What You're Actually Building
 
@@ -70,6 +77,7 @@ import DocCardList from '@theme/DocCardList';
 | **Multi-Agent Workflow** | ✅ Complete | Documented patterns for AI-assisted development |
 | **AI Photo Analysis** | ✅ Working | Google Gemini Vision integration with schema enforcement |
 | **React Architecture** | ✅ Production-Ready | TypeScript, hooks, service layer, Tailwind CSS |
+| **Agent-Native Architecture** | ✅ Complete | Dual interfaces for humans and AI agents with interactive examples |
 | **Mock Service Layer** | ✅ Complete | Development patterns without external API dependencies |
 | **Batch Processing** | ✅ Working | Rate-limited AI processing with progress tracking |
 | **Error Handling** | ✅ Robust | Graceful degradation and retry logic |

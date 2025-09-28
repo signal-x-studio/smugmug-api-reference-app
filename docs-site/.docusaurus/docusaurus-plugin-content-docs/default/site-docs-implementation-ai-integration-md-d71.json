@@ -19,8 +19,8 @@
   },
   "sidebar": "tutorialSidebar",
   "previous": {
-    "title": "Multi-Agent Development Workflow",
-    "permalink": "/smugmug-api-reference-app/ai-development/multi-agent-workflow"
+    "title": "Implementation Guide",
+    "permalink": "/smugmug-api-reference-app/agent-native/implementation-guide"
   },
   "next": {
     "title": "React Component Patterns",

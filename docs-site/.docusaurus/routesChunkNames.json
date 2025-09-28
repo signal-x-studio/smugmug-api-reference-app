@@ -1,16 +1,40 @@
 {
-  "/smugmug-api-reference-app/-58c": {
+  "/smugmug-api-reference-app/-663": {
     "__comp": "5e95c892",
     "__context": {
       "plugin": "aba21aa0"
     }
   },
-  "/smugmug-api-reference-app/-ce8": {
+  "/smugmug-api-reference-app/-3c6": {
     "__comp": "a7bd4aaa",
     "__props": "905d91c8"
   },
-  "/smugmug-api-reference-app/-af0": {
+  "/smugmug-api-reference-app/-c5b": {
     "__comp": "a94703ab"
+  },
+  "/smugmug-api-reference-app/agent-native/action-registry-3ed": {
+    "__comp": "17896441",
+    "content": "0ca4bb3c"
+  },
+  "/smugmug-api-reference-app/agent-native/implementation-guide-36d": {
+    "__comp": "17896441",
+    "content": "dbf4cda5"
+  },
+  "/smugmug-api-reference-app/agent-native/interactive-examples-c20": {
+    "__comp": "17896441",
+    "content": "a1248ac2"
+  },
+  "/smugmug-api-reference-app/agent-native/natural-language-api-97a": {
+    "__comp": "17896441",
+    "content": "e8de62db"
+  },
+  "/smugmug-api-reference-app/agent-native/overview-c60": {
+    "__comp": "17896441",
+    "content": "d29f628c"
+  },
+  "/smugmug-api-reference-app/agent-native/structured-data-582": {
+    "__comp": "17896441",
+    "content": "1a2ff573"
   },
   "/smugmug-api-reference-app/ai-development/multi-agent-workflow-dc9": {
     "__comp": "17896441",

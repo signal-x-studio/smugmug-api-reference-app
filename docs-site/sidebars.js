@@ -32,6 +32,18 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Agent-Native Architecture',
+      items: [
+        'agent-native/overview',
+        'agent-native/structured-data',
+        'agent-native/action-registry',
+        'agent-native/natural-language-api',
+        'agent-native/interactive-examples',
+        'agent-native/implementation-guide',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Implementation',
       items: [
         'implementation/ai-integration',

@@ -1,0 +1,26 @@
+{
+  "id": "agent-native/action-registry",
+  "title": "Agent Action Registry",
+  "description": "The Agent Action Registry provides programmatic access to all application functionality through a standardized JavaScript API. This allows AI agents to perform any action a human user could perform through the UI.",
+  "source": "@site/docs/agent-native/action-registry.md",
+  "sourceDirName": "agent-native",
+  "slug": "/agent-native/action-registry",
+  "permalink": "/smugmug-api-reference-app/agent-native/action-registry",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/docs/agent-native/action-registry.md",
+  "tags": [],
+  "version": "current",
+  "lastUpdatedBy": null,
+  "lastUpdatedAt": null,
+  "frontMatter": {},
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Structured Data Guide",
+    "permalink": "/smugmug-api-reference-app/agent-native/structured-data"
+  },
+  "next": {
+    "title": "Natural Language API",
+    "permalink": "/smugmug-api-reference-app/agent-native/natural-language-api"
+  }
+}
