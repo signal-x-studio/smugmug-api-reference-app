@@ -17,15 +17,15 @@ These are the tasks to be completed for the spec detailed in @.agent-os/specs/20
   - [x] 1.7 Implement conversational query processing for agent commands
   - [x] 1.8 Verify all tests pass
 
-- [ ] 2. Semantic Search Engine
-  - [ ] 2.1 Write tests for search engine functionality
-  - [ ] 2.2 Design search result data structures
-  - [ ] 2.3 Implement AI metadata integration for photo indexing
-  - [ ] 2.4 Create semantic matching algorithms
-  - [ ] 2.5 Add search ranking and relevance scoring
-  - [ ] 2.6 Implement search performance optimization (sub-3-second response)
-  - [ ] 2.7 Add visual content analysis integration
-  - [ ] 2.8 Verify all tests pass
+- [x] 2. Semantic Search Engine
+  - [x] 2.1 Write tests for search engine functionality
+  - [x] 2.2 Design search result data structures
+  - [x] 2.3 Implement AI metadata integration for photo indexing
+  - [x] 2.4 Create semantic matching algorithms
+  - [x] 2.5 Add search ranking and relevance scoring
+  - [x] 2.6 Implement search performance optimization (sub-3-second response)
+  - [x] 2.7 Add visual content analysis integration
+  - [x] 2.8 Verify all tests pass
 
 - [ ] 3. Advanced Filter Interface
   - [ ] 3.1 Write tests for filter components
