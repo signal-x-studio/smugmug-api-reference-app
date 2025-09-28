@@ -7,10 +7,10 @@ These are the tasks to be completed for the spec detailed in @.agent-os/specs/20
 
 ## Tasks
 
-- [ ] 1. Natural Language Query Parser
-  - [ ] 1.1 Write tests for query parsing components
-  - [ ] 1.2 Implement basic query tokenization and intent extraction
-  - [ ] 1.3 Add parameter extraction (dates, locations, objects, people)
+- [x] 1. Natural Language Query Parser
+  - [x] 1.1 Write tests for query parsing components
+  - [x] 1.2 Implement basic query tokenization and intent extraction
+  - [x] 1.3 Add parameter extraction (dates, locations, objects, people)
   - [ ] 1.4 Create query validation and error handling
   - [ ] 1.5 Integrate with search engine interface
   - [ ] 1.6 Add query refinement and suggestion features
