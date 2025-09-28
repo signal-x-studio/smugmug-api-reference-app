@@ -126,6 +126,6 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({ photo, onSelect, isSelecti
         <p className="text-white font-semibold truncate" title={photo.aiData.title || "Untitled"}>{photo.aiData.title || "Untitled"}</p>
         <p className="text-xs text-slate-400">{photo.id.startsWith('upload-') ? 'New Upload' : photo.id}</p>
       </div>
-    </div>
+    </article>
   );
 };
