@@ -1,0 +1,242 @@
+{
+  "subagent": {
+    "name": "SmugMugPhotoDiscoveryCodeGuardian",
+    "version": "1.0.0",
+    "description": "Architecture compliance enforcer and code quality guardian for SmugMug Photo Discovery app",
+    "compatibility": [
+      "github-copilot",
+      "claude-dev", 
+      "gemini",
+      "cursor",
+      "codeium",
+      "tabnine"
+    ],
+    "activation_keywords": [
+      "@SmugMugPhotoDiscoverySubagent",
+      "@PhotoDiscoveryGuardian",
+      "@ArchitectureEnforcer"
+    ]
+  },
+  "project_context": {
+    "name": "smugmug-api-reference-app",
+    "type": "react-typescript-agent-native",
+    "tech_stack": {
+      "frontend": "React 19.1 + TypeScript 5.8",
+      "build": "Vite 5.4",
+      "styling": "TailwindCSS 3.4",
+      "testing": "Vitest + React Testing Library",
+      "ai_integration": "Google Gemini AI 1.21.0",
+      "search": "Fuse.js 7.1.0"
+    },
+    "architecture_patterns": [
+      "agent-native-design",
+      "dual-interface-architecture",
+      "container-presentation-pattern",
+      "custom-hook-extraction",
+      "result-error-handling"
+    ]
+  },
+  "critical_architecture_rules": {
+    "component_limits": {
+      "max_lines": 200,
+      "max_props": 5,
+      "max_state_hooks": 3,
+      "single_responsibility": true
+    },
+    "hook_constraints": {
+      "max_useeffect_dependencies": 3,
+      "require_cleanup": true,
+      "extract_complex_logic": true,
+      "use_abort_controller": true
+    },
+    "type_safety": {
+      "no_any_types": true,
+      "explicit_interfaces": true,
+      "strict_mode": true,
+      "result_pattern": true
+    },
+    "performance": {
+      "memoize_expensive_operations": true,
+      "react_memo_for_heavy_components": true,
+      "virtualize_large_lists": true,
+      "debounce_user_input": true
+    },
+    "memory_management": {
+      "cleanup_side_effects": true,
+      "abort_async_operations": true,
+      "remove_event_listeners": true,
+      "clear_timeouts_intervals": true
+    }
+  },
+  "agent_native_requirements": {
+    "structured_data": {
+      "schema_org_markup": true,
+      "agent_state_exposure": true,
+      "global_window_interface": true
+    },
+    "programmatic_api": {
+      "action_registry": true,
+      "dual_interface": true,
+      "natural_language_support": true
+    },
+    "security": {
+      "data_sanitization": true,
+      "permission_based_access": true,
+      "audit_logging": true
+    }
+  },
+  "file_structure_patterns": {
+    "src/components/": {
+      "pattern": "single-responsibility components <200 lines",
+      "required_files": ["Component.tsx", "__tests__/Component.test.tsx"]
+    },
+    "src/hooks/": {
+      "pattern": "custom hooks for complex logic >10 lines",
+      "naming": "use[FeatureName].ts"
+    },
+    "src/utils/agent-native/": {
+      "pattern": "agent integration utilities",
+      "required_exports": ["agentInterface", "schemaData", "nlpSupport"]
+    },
+    "src/types/": {
+      "pattern": "TypeScript definitions",
+      "no_any_types": true
+    }
+  },
+  "quality_gates": {
+    "pre_commit": [
+      "npm run type-check",
+      "npm run test",
+      "npm run lint",
+      "npm run build"
+    ],
+    "performance_requirements": {
+      "initial_render": "<100ms",
+      "search_response": "<3s",
+      "memory_growth": "<5MB per session",
+      "bundle_size": "<500KB gzipped"
+    },
+    "test_coverage": {
+      "minimum": "90%",
+      "focus": "behavior-driven",
+      "required": ["component tests", "hook tests", "agent integration tests"]
+    }
+  },
+  "error_handling_patterns": {
+    "async_operations": {
+      "pattern": "Result<T, E>",
+      "example": "Promise<Result<Data[], Error>>"
+    },
+    "react_components": {
+      "pattern": "ErrorBoundary",
+      "required": true
+    },
+    "cleanup": {
+      "pattern": "AbortController + cleanup functions",
+      "required": true
+    }
+  },
+  "prohibited_patterns": {
+    "god_components": {
+      "description": "Components >200 lines with multiple responsibilities",
+      "action": "immediate_rejection"
+    },
+    "complex_hooks": {
+      "description": "useEffect with >3 dependencies",
+      "action": "extract_custom_hook"
+    },
+    "any_types": {
+      "description": "TypeScript any type in production code",
+      "action": "require_explicit_typing"
+    },
+    "missing_cleanup": {
+      "description": "Side effects without cleanup functions",
+      "action": "add_cleanup_logic"
+    },
+    "unmemoized_expensive_ops": {
+      "description": "Expensive operations without memoization",
+      "action": "add_usememo_usecallback"
+    }
+  },
+  "refactoring_priorities": [
+    {
+      "level": "critical",
+      "color": "red",
+      "issues": ["memory_leaks", "performance_bottlenecks", "security_vulnerabilities"]
+    },
+    {
+      "level": "high", 
+      "color": "orange",
+      "issues": ["god_components", "type_safety_violations", "missing_error_handling"]
+    },
+    {
+      "level": "medium",
+      "color": "yellow", 
+      "issues": ["missing_memoization", "complex_hooks", "test_coverage_gaps"]
+    },
+    {
+      "level": "low",
+      "color": "green",
+      "issues": ["documentation_updates", "code_style_improvements"]
+    }
+  ],
+  "validation_commands": {
+    "component_validation": "validateAgentWrapper(agentInterface)",
+    "architecture_check": "checkArchitectureCompliance(component)",
+    "performance_audit": "auditComponentPerformance(component)",
+    "type_safety_check": "validateTypeScript(code)",
+    "memory_leak_scan": "scanForMemoryLeaks(component)"
+  },
+  "examples": {
+    "compliant_component": {
+      "file": "src/components/PhotoGrid.tsx",
+      "lines": 150,
+      "features": ["single_responsibility", "memoized_operations", "agent_ready", "proper_cleanup"]
+    },
+    "compliant_hook": {
+      "file": "src/hooks/usePhotoSearch.ts", 
+      "dependencies": 2,
+      "features": ["abort_controller", "cleanup_function", "result_pattern"]
+    },
+    "agent_integration": {
+      "file": "src/utils/agent-native/photo-discovery-search.ts",
+      "features": ["dual_interface", "nlp_support", "schema_org_data"]
+    }
+  },
+  "success_metrics": {
+    "architecture_compliance": "100% (zero violations)",
+    "agent_compatibility": "100% (all components agent-ready)",
+    "performance_targets": "met (<100ms render, <3s search, <5MB memory)",
+    "test_coverage": ">90% (behavior-focused)",
+    "production_errors": "0 (comprehensive error handling)"
+  },
+  "emergency_protocols": {
+    "architecture_violation": [
+      "immediate_stop",
+      "surface_violation", 
+      "provide_fix_example",
+      "educate_on_standards",
+      "validate_compliance"
+    ],
+    "legacy_code_conflict": [
+      "assess_impact",
+      "incremental_improvement", 
+      "document_changes",
+      "validate_integration"
+    ]
+  },
+  "integration_hooks": {
+    "github_copilot": {
+      "trigger": "component creation, refactoring",
+      "validation": "architecture_compliance_check"
+    },
+    "claude_dev": {
+      "trigger": "feature implementation, code review", 
+      "validation": "agent_native_requirements_check"
+    },
+    "cursor_ide": {
+      "trigger": "real-time code analysis",
+      "validation": "continuous_quality_monitoring"
+    }
+  }
+}

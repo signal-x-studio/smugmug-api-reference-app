@@ -1,18 +1,43 @@
 ---
-description: Code Quality Gates and Architecture Smell Prevention for AI Agents
+description: Code Quality Gates and Architecture Smell Prevention for AI Agents - Enhanced with SmugMug Photo Discovery Subagent
 globs:
 alwaysApply: true
-version: 1.0
+version: 1.1
 encoding: UTF-8
 ---
 
 # Code Quality Gates for AI Agents
 
+## 🤖 SmugMug Photo Discovery Subagent Integration
+
+**MANDATORY**: This project uses a specialized architecture compliance subagent that MUST be activated for ALL code generation tasks.
+
+### Subagent Activation Commands
+```bash
+# Real-time validation
+node activate-subagent.cjs test
+
+# Integration in prompts
+@SmugMugPhotoDiscoverySubagent validate this component for architecture compliance
+
+# Programmatic validation
+const result = require('./activate-subagent.cjs').inspect(code, { verbose: true });
+```
+
+### Subagent Enforcement Rules
+The subagent automatically enforces these standards and will **REJECT** non-compliant code:
+
+1. **God Component Detection**: Automatic rejection of components >200 lines
+2. **Hook Complexity Limits**: Automatic rejection of useEffect with >3 dependencies  
+3. **Type Safety Enforcement**: Zero tolerance for `any` types in production code
+4. **Memory Leak Prevention**: Required cleanup functions for all side effects
+5. **Performance Optimization**: Mandatory memoization for expensive operations
+
 ## Pre-Generation Checklist
 
 Before generating any React/TypeScript code, AI agents MUST verify compliance with these quality gates:
 
-### **🚨 CRITICAL CHECKS - MUST PASS**
+### **🚨 CRITICAL CHECKS - MUST PASS (ENFORCED BY SUBAGENT)**
 
 <quality_gate name="component_complexity">
   <check>Component length ≤ 200 lines including JSX</check>
@@ -54,6 +79,14 @@ Before generating any React/TypeScript code, AI agents MUST verify compliance wi
   <action>STANDARDIZE: Implement proper error handling patterns</action>
 </quality_gate>
 
+<quality_gate name="agent_native_compliance">
+  <check>Component exposes agent state via useDualInterface</check>
+  <check>Schema.org markup included for agent discovery</check>
+  <check>Natural language command support implemented</check>
+  <check>Global action registry integration added</check>
+  <action>INTEGRATE: Add agent-native capabilities using subagent patterns</action>
+</quality_gate>
+
 ### **⚠️ WARNING CHECKS - SHOULD PASS**
 
 <quality_gate name="architecture">
@@ -74,13 +107,14 @@ Before generating any React/TypeScript code, AI agents MUST verify compliance wi
 
 ## Code Generation Templates
 
-### **Component Generation Pattern**
+### **Component Generation Pattern (SUBAGENT COMPLIANT)**
 
 ```typescript
-// TEMPLATE: Use this structure for all React components
+// TEMPLATE: Use this structure for all React components (ENFORCED BY SUBAGENT)
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { useDualInterface, AgentWrapper } from '../agents'; // REQUIRED: Agent integration
 
-// 1. TYPES: Define explicit interfaces first
+// 1. TYPES: Define explicit interfaces first (SUBAGENT ENFORCED)
 interface ComponentNameProps {
   requiredProp: string;
   optionalProp?: number;
@@ -93,33 +127,42 @@ interface ComponentNameState {
   data: DataType[];
 }
 
-// 2. COMPONENT: Keep under 200 lines
+// 2. COMPONENT: Keep under 200 lines (SUBAGENT ENFORCED)
 export const ComponentName: React.FC<ComponentNameProps> = ({
   requiredProp,
   optionalProp = 0,
   onAction
 }) => {
-  // 3. STATE: Minimize useState calls (≤5)
+  // 3. STATE: Minimize useState calls (≤5) (SUBAGENT ENFORCED)
   const [state, setState] = useState<ComponentNameState>({
     loading: false,
     error: null,
     data: []
   });
 
-  // 4. MEMOIZED VALUES: Use useMemo for expensive calculations
+  // 4. AGENT INTEGRATION: REQUIRED for all components
+  const { agentInterface } = useDualInterface({
+    componentId: 'component-name',
+    data: state.data,
+    state: state,
+    setState: setState,
+    exposeGlobally: true
+  });
+
+  // 5. MEMOIZED VALUES: Use useMemo for expensive calculations (SUBAGENT ENFORCED)
   const processedData = useMemo(() => 
     state.data.filter(item => item.isValid),
     [state.data]
   );
 
-  // 5. CALLBACKS: Use useCallback for event handlers
+  // 6. CALLBACKS: Use useCallback for event handlers (SUBAGENT ENFORCED)
   const handleAction = useCallback((actionData: ActionData) => {
     onAction(actionData);
   }, [onAction]);
 
-  // 6. EFFECTS: Keep simple with cleanup (≤3 effects, ≤3 deps each)
+  // 7. EFFECTS: Keep simple with cleanup (≤3 effects, ≤3 deps each) (SUBAGENT ENFORCED)
   useEffect(() => {
-    const controller = new AbortController();
+    const controller = new AbortController(); // REQUIRED: Cleanup
     
     const fetchData = async () => {
       setState(prev => ({ ...prev, loading: true }));
@@ -139,24 +182,26 @@ export const ComponentName: React.FC<ComponentNameProps> = ({
 
     fetchData();
     
-    return () => controller.abort(); // CLEANUP REQUIRED
-  }, [requiredProp]);
+    return () => controller.abort(); // CLEANUP REQUIRED (SUBAGENT ENFORCED)
+  }, [requiredProp]); // ≤3 dependencies (SUBAGENT ENFORCED)
 
-  // 7. RENDER: Keep JSX clean and readable
+  // 8. RENDER: Keep JSX clean and readable
   if (state.loading) return <LoadingSpinner />;
   if (state.error) return <ErrorMessage error={state.error} />;
 
   return (
-    <div className="component-container">
-      <ProcessedDataDisplay 
-        data={processedData} 
-        onAction={handleAction}
-      />
-    </div>
+    <AgentWrapper agentInterface={agentInterface} schemaType="WebApplication">
+      <div className="component-container" data-agent-component="component-name">
+        <ProcessedDataDisplay 
+          data={processedData} 
+          onAction={handleAction}
+        />
+      </div>
+    </AgentWrapper>
   );
 };
 
-// 8. MEMOIZATION: Wrap heavy components
+// 9. MEMOIZATION: Wrap heavy components (SUBAGENT ENFORCED)
 export default React.memo(ComponentName);
 ```
 
@@ -285,99 +330,165 @@ export const PhotoList = () => {
 };
 ```
 
-## Automated Quality Checks
+## Automated Quality Checks (ENHANCED WITH SUBAGENT)
 
-### **Pre-Commit Validation Script**
+### **SmugMug Photo Discovery Subagent Validation**
 
 ```bash
 #!/bin/bash
-# .agent-os/scripts/quality-check.sh
+# Primary validation using project subagent
+echo "🤖 Running SmugMug Photo Discovery Subagent validation..."
 
-echo "🔍 Running Architecture Smell Detection..."
+# Comprehensive architecture compliance check
+node activate-subagent.cjs test
+
+# Configuration verification
+node activate-subagent.cjs config | grep -q "SmugMugPhotoDiscoveryCodeGuardian" && echo "✅ Subagent loaded" || echo "❌ Subagent failed to load"
+
+echo "✅ Subagent validation complete"
+```
+
+### **Pre-Commit Validation Script (SUBAGENT INTEGRATED)**
+
+```bash
+#!/bin/bash
+# .agent-os/scripts/quality-check.sh (ENHANCED WITH SUBAGENT)
+
+echo "🔍 Running Architecture Smell Detection with SmugMug Subagent..."
+
+# Primary check: Use subagent for comprehensive validation
+node activate-subagent.cjs test
+SUBAGENT_EXIT_CODE=$?
+
+if [ $SUBAGENT_EXIT_CODE -ne 0 ]; then
+  echo "❌ SUBAGENT VALIDATION FAILED - Architecture violations detected"
+  echo "   Run: node activate-subagent.cjs test --verbose for details"
+  exit 1
+fi
+
+# Secondary checks: Legacy validation (backup)
+echo "🔍 Running supplementary checks..."
 
 # Check component complexity
 find src -name "*.tsx" -exec wc -l {} + | awk '$1 > 200 { print "❌ Component too large:", $2, "(" $1 " lines)" }'
 
 # Check hook complexity  
-grep -r "useEffect" src --include="*.tsx" | wc -l | awk '$1 > 3 { print "❌ Too many useEffects in file" }'
+grep -r "useEffect" src --include="*.tsx" -A 5 | grep -c "\[.*,.*,.*," | awk '$1 > 0 { print "❌ Complex useEffect with >3 dependencies found" }'
 
 # Check for missing types
-grep -r ": any" src --include="*.ts" --include="*.tsx" && echo "❌ Found 'any' types"
+if grep -r ": any" src --include="*.ts" --include="*.tsx" >/dev/null 2>&1; then
+  echo "❌ Found 'any' types in production code"
+  exit 1
+fi
 
-# Check for missing memoization
-grep -rn "\.map\|\.filter\|\.reduce" src --include="*.tsx" | grep -v "useMemo\|useCallback" && echo "⚠️ Potential missing memoization"
+# Check for agent integration
+grep -r "useDualInterface\|AgentWrapper" src --include="*.tsx" >/dev/null 2>&1 || echo "⚠️ No agent-native components detected"
 
-# Check for missing cleanup
-grep -A5 -B5 "useEffect" src --include="*.tsx" | grep -L "return.*cleanup\|return.*abort" && echo "❌ Missing cleanup in useEffect"
-
-echo "✅ Quality check complete"
+echo "✅ Quality check complete - All validations passed"
 ```
 
 ## Agent Instruction Integration
 
-### **In System Prompt**
+### **In System Prompt (SUBAGENT ENHANCED)**
 
 ```markdown
-ARCHITECTURE QUALITY REQUIREMENTS:
-- NEVER generate components > 200 lines
-- ALWAYS add TypeScript interfaces for props/state  
-- ALWAYS wrap expensive operations in useMemo/useCallback
-- ALWAYS add cleanup functions to useEffect
+ARCHITECTURE QUALITY REQUIREMENTS (ENFORCED BY SMUGMUG SUBAGENT):
+- MANDATORY: Activate @SmugMugPhotoDiscoverySubagent for ALL code generation
+- NEVER generate components > 200 lines (SUBAGENT ENFORCED)
+- ALWAYS add TypeScript interfaces for props/state (SUBAGENT ENFORCED)
+- ALWAYS wrap expensive operations in useMemo/useCallback (SUBAGENT ENFORCED)
+- ALWAYS add cleanup functions to useEffect (SUBAGENT ENFORCED)
 - ALWAYS use Result<T,E> pattern for error-prone operations
-- NEVER use 'any' types in production code
+- NEVER use 'any' types in production code (SUBAGENT ENFORCED)
+- ALWAYS include agent-native capabilities (useDualInterface, AgentWrapper)
 
-Before generating code, verify against quality gates in @.agent-os/standards/architecture-smells.md
+SUBAGENT ACTIVATION:
+Before generating code: "@SmugMugPhotoDiscoverySubagent validate planned architecture"
+During development: Use subagent patterns and templates
+After generation: Verify with "node activate-subagent.cjs test"
+
+Before generating code, verify against quality gates and subagent requirements.
 ```
 
-### **In Task Instructions**
+### **In Task Instructions (SUBAGENT INTEGRATED)**
 
 ```markdown
 <code_quality_verification>
   BEFORE implementing features:
-  1. READ @.agent-os/standards/architecture-smells.md
-  2. APPLY quality gate checklist to planned implementation
-  3. REFACTOR if any critical smells detected
-  4. DOCUMENT any approved exceptions with TODO comments
+  1. ACTIVATE @SmugMugPhotoDiscoverySubagent
+  2. READ @.agent-os/standards/architecture-smells.md  
+  3. VALIDATE planned architecture against subagent rules
+  4. APPLY quality gate checklist to planned implementation
+  5. ENSURE agent-native compliance (useDualInterface, AgentWrapper)
+  6. REFACTOR if any critical smells detected
+  7. DOCUMENT any approved exceptions with TODO comments
+  
+  DURING implementation:
+  - Monitor component size and complexity
+  - Apply subagent-compliant patterns
+  - Include agent integration features
+  
+  AFTER implementation:
+  - Run: node activate-subagent.cjs test
+  - Verify zero architecture violations
+  - Confirm agent interface registration
 </code_quality_verification>
 ```
 
-### **In Code Review Prompt**
+### **In Code Review Prompt (SUBAGENT ENHANCED)**
 
 ```markdown
-Review this code for architecture smells:
+Review this code for architecture smells using SmugMug Photo Discovery Subagent standards:
 
 <code>
 {CODE_TO_REVIEW}
 </code>
 
-Check against:
-1. Component complexity (lines, hooks, props)
-2. Performance (memoization, re-renders)  
-3. Type safety (explicit interfaces, no 'any')
+SUBAGENT VALIDATION CHECKLIST:
+1. Component complexity (≤200 lines, ≤3 useEffect deps, ≤5 useState)
+2. Performance optimization (memoization, React.memo for heavy components)  
+3. Type safety (explicit interfaces, no 'any' types)
 4. Error handling (try-catch, cleanup, Result pattern)
 5. Architecture compliance (SRP, DRY, SOLID)
+6. Agent-native features (useDualInterface, AgentWrapper, Schema.org markup)
+7. Memory management (cleanup functions, AbortController)
 
-Rate: CRITICAL/WARNING/INFO and provide refactoring suggestions.
+VALIDATION COMMANDS:
+- Run: @SmugMugPhotoDiscoverySubagent inspect this code
+- Automated: node activate-subagent.cjs validate --code="[CODE_SNIPPET]"
+
+Rate: CRITICAL/WARNING/INFO and provide refactoring suggestions with subagent-compliant examples.
 ```
 
-## Success Metrics
+## Success Metrics (SUBAGENT ENHANCED)
 
-### **Quantitative Measures**
-- 0 components > 200 lines
-- 0 useEffect with > 3 dependencies
-- 0 'any' types in production code
+### **Quantitative Measures (ENFORCED BY SUBAGENT)**
+- 0 components > 200 lines (SUBAGENT ENFORCED)
+- 0 useEffect with > 3 dependencies (SUBAGENT ENFORCED)
+- 0 'any' types in production code (SUBAGENT ENFORCED)
+- 100% agent-native component coverage (SUBAGENT VALIDATED)
 - <100ms average component render time
 - >90% test coverage
 - <5MB memory growth per operation
+- 0 architecture violations in subagent reports
 
-### **Qualitative Measures**
-- Code reviews consistently positive
-- New developers onboard quickly
-- Features delivered without performance issues
+### **Qualitative Measures (SUBAGENT SUPPORTED)**
+- Code reviews consistently positive with subagent validation
+- New developers onboard quickly using subagent guidance
+- Features delivered without performance issues (subagent optimizations)
 - Minimal bug reports related to architecture
-- Agent integration works seamlessly
+- Agent integration works seamlessly (subagent compliance)
+- AI assistants generate compliant code automatically
+
+### **Subagent-Specific Metrics**
+- Subagent activation rate: 100% of code generation tasks
+- Architecture violation detection: Real-time during development
+- Compliance score: All components pass subagent validation
+- Agent integration coverage: 100% of interactive components
+- Performance optimization: Automatic memoization compliance
 
 ---
 
 **Usage**: Include this file reference in all agent system prompts and task instructions
 **Integration**: Link to from agents.md and development workflow documentation
+**Subagent**: Activate @SmugMugPhotoDiscoverySubagent for all code quality validation

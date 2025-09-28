@@ -1,22 +1,39 @@
 ---
-description: Architecture Smells Detection and Prevention Rubric
+description: Architecture Smells Detection and Prevention Rubric - Enhanced with SmugMug Photo Discovery Subagent
 globs:
 alwaysApply: true
-version: 1.0
+version: 1.1
 encoding: UTF-8
 ---
 
-# Architecture Smells Rubric
+# Architecture Smells Rubric (SUBAGENT ENHANCED)
 
 ## Overview
 
-This rubric defines code and architecture smells that MUST be avoided when working with React/TypeScript applications. Use this as a checklist during development and code review.
+This rubric defines code and architecture smells that MUST be avoided when working with React/TypeScript applications. This project includes a **SmugMug Photo Discovery Subagent** that automatically detects and prevents these smells.
+
+## 🤖 Subagent Integration
+
+**MANDATORY**: Use the SmugMug Photo Discovery Subagent for all code validation:
+
+```bash
+# Activate subagent before coding
+node activate-subagent.cjs test
+
+# AI agent activation
+@SmugMugPhotoDiscoverySubagent validate architecture compliance
+
+# Real-time validation  
+const result = require('./activate-subagent.cjs').inspect(code, { verbose: true });
+```
+
+The subagent **AUTOMATICALLY REJECTS** code that violates these architecture standards.
 
 ## Smell Categories
 
-### 🔴 **CRITICAL SMELLS - IMMEDIATE FIX REQUIRED**
+### 🔴 **CRITICAL SMELLS - IMMEDIATE FIX REQUIRED (SUBAGENT ENFORCED)**
 
-#### **CS001: God Component**
+#### **CS001: God Component (AUTOMATIC REJECTION BY SUBAGENT)**
 **Detection**: Component > 200 lines OR > 5 useState calls OR > 3 useEffect calls
 ```typescript
 // SMELL: Too many responsibilities
@@ -34,9 +51,9 @@ const MegaComponent = ({ photos, filters, operations, commands, analytics }) => 
   // 300+ lines of component logic
 };
 ```
-**Fix**: Extract sub-components, custom hooks, or service classes
+**Fix**: Extract sub-components, custom hooks, or service classes (Subagent provides examples)
 
-#### **CS002: Complex useEffect**
+#### **CS002: Complex useEffect (AUTOMATIC REJECTION BY SUBAGENT)**
 **Detection**: useEffect with > 3 dependencies OR > 20 lines of code
 ```typescript
 // SMELL: Complex effect with many dependencies  
@@ -50,9 +67,9 @@ useEffect(() => {
   }
 }, [condition1, condition2, condition3, dep1, dep2, updateState1, updateState2]); // TOO MANY!
 ```
-**Fix**: Extract custom hooks or break into multiple focused effects
+**Fix**: Extract custom hooks or break into multiple focused effects (Subagent provides patterns)
 
-#### **CS003: Missing Memoization**
+#### **CS003: Missing Memoization (AUTOMATIC REJECTION BY SUBAGENT)**
 **Detection**: Expensive calculations in render OR missing React.memo on heavy components
 ```typescript
 // SMELL: Expensive operation every render
@@ -66,9 +83,9 @@ const Component = ({ items, filters }) => {
   );
 };
 ```
-**Fix**: Add useMemo for calculations, React.memo for components
+**Fix**: Add useMemo for calculations, React.memo for components (Subagent enforces)
 
-#### **CS004: Memory Leaks**
+#### **CS004: Memory Leaks (AUTOMATIC REJECTION BY SUBAGENT)**
 **Detection**: useEffect without cleanup OR missing AbortController
 ```typescript
 // SMELL: No cleanup
@@ -79,9 +96,9 @@ useEffect(() => {
   // MISSING CLEANUP!
 }, []);
 ```
-**Fix**: Always return cleanup function and use AbortController
+**Fix**: Always return cleanup function and use AbortController (Subagent enforces)
 
-#### **CS005: Type Unsafety**
+#### **CS005: Type Unsafety (AUTOMATIC REJECTION BY SUBAGENT)**
 **Detection**: `any` types OR `Record<string, any>` OR missing interfaces
 ```typescript
 // SMELL: Weak typing
@@ -92,7 +109,18 @@ const processData = (input: any) => { // NO TYPE SAFETY!
   }));
 };
 ```
-**Fix**: Create explicit TypeScript interfaces
+**Fix**: Create explicit TypeScript interfaces (Subagent provides examples)
+
+#### **CS006: Missing Agent Integration (SUBAGENT DETECTED)**
+**Detection**: Interactive components without useDualInterface OR missing AgentWrapper
+```typescript
+// SMELL: Component without agent integration
+export const PhotoGrid = ({ photos }) => {
+  // Missing agent-native capabilities!
+  return <div>{/* No agent interface */}</div>;
+};
+```
+**Fix**: Add agent-native capabilities for dual-interface architecture
 
 ### 🟡 **WARNING SMELLS - SHOULD FIX**
 
@@ -147,9 +175,33 @@ if (items.length > 50) { // WHY 50?
 ```
 **Fix**: Extract to named constants
 
-## Automated Detection
+## Automated Detection (SUBAGENT ENHANCED)
 
-### **ESLint Rules**
+### **SmugMug Photo Discovery Subagent**
+```bash
+# Primary validation tool
+node activate-subagent.cjs test
+
+# Real-time code inspection
+node -e "
+const subagent = require('./activate-subagent.cjs');
+const agent = new subagent();
+const result = agent.inspect(codeString, { verbose: true, generateFixes: true });
+console.log(result);
+"
+
+# Integration with AI tools
+@SmugMugPhotoDiscoverySubagent validate this component architecture
+```
+
+### **Subagent Detection Capabilities**
+- **Real-time Analysis**: Detects violations as code is written
+- **Automatic Rejection**: Stops generation of non-compliant code
+- **Fix Suggestions**: Provides specific refactoring examples
+- **Compliance Scoring**: Measures architecture health metrics
+- **Agent Integration**: Ensures dual-interface requirements
+
+### **ESLint Rules (Secondary Validation)**
 ```json
 {
   "rules": {
@@ -162,21 +214,29 @@ if (items.length > 50) { // WHY 50?
 }
 ```
 
-### **Custom Hooks Detection**
+### **Custom Hooks Detection (SUBAGENT INTEGRATED)**
 ```bash
+# Primary: Use subagent for comprehensive analysis
+node activate-subagent.cjs test --component-analysis
+
+# Backup: Legacy detection methods
 # Detect god components
 grep -r "useState" src/ | wc -l  # Should be < 5 per file
 grep -r "useEffect" src/ | wc -l # Should be < 3 per file
 
-# Detect missing memoization
+# Detect missing memoization (subagent provides better analysis)
 grep -rn "\.map\|\.filter\|\.reduce" src/ --include="*.tsx" 
+
+# Detect agent integration
+grep -r "useDualInterface\|AgentWrapper" src/ --include="*.tsx" || echo "⚠️ Missing agent integration"
 ```
 
-### **Performance Metrics**
-- Component render time < 16ms (60fps)
-- Bundle size < 1MB per route
-- Memory growth < 5MB per operation
-- Search response < 3 seconds
+### **Performance Metrics (SUBAGENT MONITORED)**
+- Component render time < 16ms (60fps) - Subagent validates memoization
+- Bundle size < 1MB per route - Subagent checks imports
+- Memory growth < 5MB per operation - Subagent enforces cleanup
+- Search response < 3 seconds - Subagent optimizes algorithms
+- Agent interface response < 100ms - Subagent ensures efficiency
 
 ## Refactoring Strategies
 
@@ -241,26 +301,29 @@ const processItems = (items: Item[]): number[] => {
 };
 ```
 
-## Quality Gates
+## Quality Gates (SUBAGENT ENFORCED)
 
-### **Pre-Commit Checklist**
-- [ ] No components > 200 lines
-- [ ] No useEffect > 3 dependencies  
-- [ ] All expensive operations memoized
-- [ ] All side effects have cleanup
-- [ ] No `any` types in production code
-- [ ] All public APIs have TypeScript interfaces
+### **Pre-Commit Checklist (MANDATORY SUBAGENT VALIDATION)**
+- [ ] Subagent validation passed (node activate-subagent.cjs test)
+- [ ] No components > 200 lines (SUBAGENT ENFORCED)
+- [ ] No useEffect > 3 dependencies (SUBAGENT ENFORCED)
+- [ ] All expensive operations memoized (SUBAGENT ENFORCED)
+- [ ] All side effects have cleanup (SUBAGENT ENFORCED)
+- [ ] No `any` types in production code (SUBAGENT ENFORCED)
+- [ ] All public APIs have TypeScript interfaces (SUBAGENT ENFORCED)
+- [ ] Agent integration included (useDualInterface + AgentWrapper) (SUBAGENT ENFORCED)
 - [ ] Tests cover critical workflows
 - [ ] Performance benchmarks met
 
-### **Code Review Checklist**
-- [ ] Single Responsibility Principle followed
+### **Code Review Checklist (SUBAGENT SUPPORTED)**
+- [ ] Single Responsibility Principle followed (SUBAGENT VALIDATES)
 - [ ] DRY principle applied (no code duplication)
 - [ ] SOLID principles respected
-- [ ] Error handling consistent
-- [ ] Performance considerations addressed
+- [ ] Error handling consistent (Result<T,E> pattern)
+- [ ] Performance considerations addressed (SUBAGENT OPTIMIZES)
 - [ ] Accessibility requirements met
 - [ ] Security best practices followed
+- [ ] Agent-native capabilities included (SUBAGENT ENSURES)
 
 ## Exceptions & Context
 
@@ -281,25 +344,30 @@ const LegacyMegaComponent = () => {
 };
 ```
 
-## Measurement & Monitoring
+## Measurement & Monitoring (SUBAGENT ENHANCED)
 
-### **Metrics to Track**
-- Average component size (lines of code)
-- Number of useEffect per component
-- Bundle size growth over time  
-- Memory usage patterns
-- Test coverage percentage
-- TypeScript strict mode compliance
+### **Metrics to Track (SUBAGENT AUTOMATED)**
+- Average component size (lines of code) - Real-time monitoring
+- Number of useEffect per component - Automatic detection  
+- Bundle size growth over time - Continuous tracking
+- Memory usage patterns - Leak detection
+- Test coverage percentage - Integration with test runners
+- TypeScript strict mode compliance - Zero tolerance enforcement
+- Agent integration coverage - Dual-interface metrics
+- Architecture violation frequency - Trend analysis
 
-### **Tools & Integration**
-- **SonarQube**: Code complexity and maintainability
-- **Bundle Analyzer**: Size and dependency analysis  
-- **React DevTools**: Performance profiling
-- **TypeScript**: Strict mode enforcement
-- **ESLint**: Automated smell detection
+### **Tools & Integration (SUBAGENT POWERED)**
+- **SmugMug Photo Discovery Subagent**: Primary validation and enforcement
+- **SonarQube**: Code complexity and maintainability  
+- **Bundle Analyzer**: Size and dependency analysis (subagent integrated)
+- **React DevTools**: Performance profiling (subagent recommendations)
+- **TypeScript**: Strict mode enforcement (subagent ensures compliance)
+- **ESLint**: Automated smell detection (subagent enhanced rules)
+- **Agent State Registry**: Real-time agent interface monitoring
 
 ---
 
 **Last Updated**: 2025-01-27
-**Version**: 1.0.0
-**Applies To**: All React/TypeScript projects
+**Version**: 1.1.0 (Subagent Enhanced)  
+**Applies To**: All React/TypeScript projects with SmugMug Photo Discovery Subagent
+**Subagent**: Activate with @SmugMugPhotoDiscoverySubagent for all code validation

@@ -68,9 +68,54 @@ Search and extract relevant sections from technical-spec.md to understand the te
 
 </step>
 
-<step number="3" subagent="context-fetcher" name="best_practices_review">
+<step number="3" subagent="SmugMugPhotoDiscoverySubagent" name="architecture_compliance_check">
 
-### Step 3: Best Practices Review
+### Step 3: Architecture Compliance Pre-Check
+
+Use the SmugMug Photo Discovery Subagent to validate the planned implementation approach against project architecture standards BEFORE starting development.
+
+<architecture_validation>
+  <pre_implementation_check>
+    ANALYZE: Planned component structure and complexity
+    VALIDATE: Against subagent architecture rules
+    ENSURE: Agent-native compliance requirements
+    VERIFY: Performance and type safety standards
+  </pre_implementation_check>
+</architecture_validation>
+
+<compliance_requirements>
+  <critical_limits>
+    - Component size: ≤200 lines including JSX
+    - Hook complexity: ≤3 dependencies per useEffect
+    - Type safety: Zero `any` types in production code
+    - Memory management: Required cleanup for all side effects
+    - Performance: Memoization for operations >10ms
+  </critical_limits>
+  <agent_native_features>
+    - Dual interface architecture (human + programmatic)
+    - Structured data exposure (Schema.org markup)
+    - Natural language command support
+    - Global action registry integration
+  </agent_native_features>
+</compliance_requirements>
+
+<instructions>
+  ACTION: Activate @SmugMugPhotoDiscoverySubagent
+  REQUEST: "Validate planned implementation approach for task: [TASK_NAME]
+           - Component architecture: [PLANNED_COMPONENTS]
+           - Hook usage: [PLANNED_HOOKS]
+           - Type definitions: [PLANNED_INTERFACES]
+           - Agent integration: [PLANNED_AGENT_FEATURES]"
+  PROCESS: Subagent validation results
+  REFACTOR: Implementation plan if violations detected
+  PROCEED: Only after achieving 100% compliance
+</instructions>
+
+</step>
+
+<step number="4" subagent="context-fetcher" name="best_practices_review">
+
+### Step 4: Best Practices Review
 
 Use the context-fetcher subagent to retrieve relevant sections from @.agent-os/standards/best-practices.md that apply to the current task's technology stack and feature type.
 
@@ -97,9 +142,9 @@ Use the context-fetcher subagent to retrieve relevant sections from @.agent-os/s
 
 </step>
 
-<step number="4" subagent="context-fetcher" name="code_style_review">
+<step number="5" subagent="context-fetcher" name="code_style_review">
 
-### Step 4: Code Style Review
+### Step 5: Code Style Review
 
 Use the context-fetcher subagent to retrieve relevant code style rules from @.agent-os/standards/code-style.md for the languages and file types being used in this task.
 
@@ -126,11 +171,29 @@ Use the context-fetcher subagent to retrieve relevant code style rules from @.ag
 
 </step>
 
-<step number="5" name="task_execution">
+<step number="6" name="task_execution">
 
-### Step 5: Task and Sub-task Execution
+### Step 6: Task and Sub-task Execution
 
-Execute the parent task and all sub-tasks in order using test-driven development (TDD) approach.
+Execute the parent task and all sub-tasks in order using test-driven development (TDD) approach WITH mandatory subagent compliance validation.
+
+<execution_with_compliance>
+  <before_each_subtask>
+    VALIDATE: Component architecture against subagent rules
+    ENSURE: Agent-native feature integration
+    VERIFY: Performance and type safety compliance
+  </before_each_subtask>
+  <during_implementation>
+    MONITOR: Component size and complexity metrics
+    APPLY: Memoization for expensive operations
+    IMPLEMENT: Proper cleanup functions
+  </during_implementation>
+  <after_each_subtask>
+    TEST: Subagent validation passes
+    CONFIRM: Agent interface registration
+    VERIFY: No architecture violations
+  </after_each_subtask>
+</execution_with_compliance>
 
 <typical_task_structure>
   <first_subtask>Write tests for [feature]</first_subtask>
@@ -188,9 +251,43 @@ Execute the parent task and all sub-tasks in order using test-driven development
 
 </step>
 
-<step number="6" subagent="test-runner" name="task_test_verification">
+<step number="7" subagent="SmugMugPhotoDiscoverySubagent" name="architecture_validation">
 
-### Step 6: Task-Specific Test Verification
+### Step 7: Post-Implementation Architecture Validation
+
+Use the SmugMug Photo Discovery Subagent to validate ALL implemented code against architecture standards before proceeding.
+
+<comprehensive_validation>
+  <code_inspection>
+    ANALYZE: All modified/created components
+    CHECK: Architecture compliance metrics
+    VALIDATE: Agent-native integration
+    MEASURE: Performance characteristics
+  </code_inspection>
+  <violation_handling>
+    IF violations detected:
+      - STOP implementation immediately
+      - REFACTOR to meet standards
+      - RE-VALIDATE until 100% compliant
+    ELSE:
+      - DOCUMENT compliance metrics
+      - PROCEED to testing phase
+  </violation_handling>
+</comprehensive_validation>
+
+<instructions>
+  ACTION: Run subagent validation on all implementation
+  COMMAND: "node activate-subagent.cjs validate-implementation --task=[TASK_NAME]"
+  PROCESS: Detailed violation reports
+  REFACTOR: Any components that fail validation
+  CONFIRM: Zero architecture violations before proceeding
+</instructions>
+
+</step>
+
+<step number="8" subagent="test-runner" name="task_test_verification">
+
+### Step 8: Task-Specific Test Verification
 
 Use the test-runner subagent to run and verify only the tests specific to this parent task (not the full test suite) to ensure the feature is working correctly.
 
@@ -226,9 +323,9 @@ Use the test-runner subagent to run and verify only the tests specific to this p
 
 </step>
 
-<step number="7" name="task_status_updates">
+<step number="9" name="task_status_updates">
 
-### Step 7: Mark this task and sub-tasks complete
+### Step 9: Mark this task and sub-tasks complete
 
 IMPORTANT: In the tasks.md file, mark this task and its sub-tasks complete by updating each task checkbox to [x].
 
