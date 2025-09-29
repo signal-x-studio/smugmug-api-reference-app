@@ -3,6 +3,7 @@
  */
 
 import { describe, test, expect, beforeEach, vi } from 'vitest';
+import '@testing-library/jest-dom/vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { 
   BulkOperationsPanel,
@@ -22,43 +23,58 @@ describe('Bulk Selection & Operations', () => {
   let mockOnOperationExecute: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    mockPhotos = [
+    const mockPhotos: Photo[] = [
       {
         id: 'photo-1',
+        uri: '/api/photo-1',
+        imageUrl: '/images/sunset-beach.jpg',
+        status: 'ANALYZED' as any,
+        aiData: { title: 'Sunset Beach', description: 'Beautiful sunset', keywords: ['sunset', 'beach'] },
+        error: null,
         filename: 'sunset-beach.jpg',
         metadata: {
-          keywords: ['sunset', 'beach', 'vacation'],
-          objects: ['ocean', 'sky'],
-          scenes: ['landscape'],
+          keywords: ['sunset', 'beach', 'ocean'],
+          objects: ['beach', 'waves'],
+          scenes: ['sunset'],
           location: 'Hawaii',
           camera: 'Canon EOS R5',
-          takenAt: new Date('2023-07-15T19:30:00Z'),
+          takenAt: new Date('2023-08-15'),
           confidence: 0.95
         }
       },
       {
-        id: 'photo-2', 
+        id: 'photo-2',
+        uri: '/api/photo-2',
+        imageUrl: '/images/family-park.jpg',
+        status: 'ANALYZED' as any,
+        aiData: { title: 'Family Park', description: 'Family at park', keywords: ['family', 'park'] },
+        error: null,
         filename: 'family-park.jpg',
         metadata: {
-          keywords: ['family', 'children', 'park'],
+          keywords: ['family', 'park', 'children'],
           objects: ['people', 'trees'],
-          scenes: ['portrait'],
+          scenes: ['park'],
           location: 'Central Park',
           camera: 'Nikon D850',
-          takenAt: new Date('2023-08-20T14:15:00Z'),
+          takenAt: new Date('2023-09-10'),
           confidence: 0.88
         }
       },
       {
         id: 'photo-3',
+        uri: '/api/photo-3',
+        imageUrl: '/images/mountain-view.jpg',
+        status: 'ANALYZED' as any,
+        aiData: { title: 'Mountain View', description: 'Mountain landscape', keywords: ['mountain', 'landscape'] },
+        error: null,
         filename: 'mountain-view.jpg',
         metadata: {
-          keywords: ['mountain', 'landscape', 'nature'],
-          objects: ['mountains', 'trees'],
+          keywords: ['mountain', 'landscape'],
+          objects: ['mountain', 'sky'],
           scenes: ['landscape'],
           location: 'Colorado',
-          camera: 'Sony A7R IV',
-          takenAt: new Date('2023-09-10T10:20:00Z'),
+          camera: 'Canon EOS R5',
+          takenAt: new Date('2023-07-20'),
           confidence: 0.92
         }
       }
@@ -224,7 +240,9 @@ describe('Bulk Selection & Operations', () => {
           operationProgress={{
             operation: 'download',
             progress: 0.6,
-            currentFile: 'sunset-beach.jpg'
+            currentFile: 'sunset-beach.jpg',
+            completed: 3,
+            total: 5
           }}
         />
       );
@@ -482,8 +500,8 @@ describe('Bulk Selection & Operations', () => {
       
       // Verify agent state is populated
       expect(window.agentState.bulkOperations).toBeDefined();
-      expect(window.agentState.bulkOperations.selectedCount).toBe(3);
-      expect(window.agentState.bulkOperations.availableOperations).toContain('download');
+      expect(window.agentState.bulkOperations.current.selectedCount).toBe(3);
+      expect(window.agentState.bulkOperations.current.availableOperations).toContain('download');
     });
   });
 

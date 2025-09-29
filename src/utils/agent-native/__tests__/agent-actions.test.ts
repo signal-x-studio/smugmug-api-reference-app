@@ -13,15 +13,10 @@ import {
 } from '../agent-actions';
 import { Photo, Album, PhotoStatus } from '../../../types';
 
-// Mock global window for testing
-declare global {
-  var window: any;
-}
-
 describe('Agent Action Registry Infrastructure', () => {
   beforeEach(() => {
     // Reset global state before each test
-    global.window = {
+    (global as any).window = {
       agentActions: {},
       agentActionHistory: []
     };

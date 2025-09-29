@@ -18,6 +18,8 @@ describe('Structured Data Utilities', () => {
   // Mock photo data for testing
   const mockPhoto: Photo = {
     id: 'photo-123',
+    uri: '/api/v2/image/photo-123',
+    imageUrl: 'https://example.com/photos/sunset-beach.jpg',
     filename: 'sunset-beach.jpg',
     title: 'Beautiful Sunset at Beach',
     url: 'https://example.com/photos/sunset-beach.jpg',
@@ -29,17 +31,24 @@ describe('Structured Data Utilities', () => {
     width: 1920,
     height: 1080,
     status: PhotoStatus.ANALYZED,
-    isAutoProcessed: false,
-    albumId: 'album-456'
+    aiData: {
+      title: 'Beautiful Sunset at Beach',
+      description: 'A stunning sunset photograph taken at the beach',
+      keywords: ['sunset', 'beach', 'landscape']
+    },
+    error: null,
+    isAutoProcessed: false
   };
 
   // Mock album data for testing
   const mockAlbum: Album = {
     id: 'album-456',
+    uri: '/api/v2/album/album-456',
     name: 'Beach Vacation 2025',
     description: 'Photos from our amazing beach vacation',
+    keywords: ['beach', 'vacation'],
     imageCount: 25,
-    createdDate: '2025-09-20T10:00:00Z'
+    type: 'Album'
   };
 
   describe('generatePhotographSchema', () => {
@@ -90,11 +99,20 @@ describe('Structured Data Utilities', () => {
     test('should handle photos with minimal data', () => {
       const minimalPhoto: Photo = {
         id: 'photo-minimal',
+        uri: '/api/v2/image/photo-minimal',
+        imageUrl: 'https://example.com/test.jpg',
         filename: 'test.jpg',
         url: 'https://example.com/test.jpg',
-        status: PhotoStatus.READY,
-        isAutoProcessed: false,
-        albumId: 'album-123'
+        width: 1920,
+        height: 1080,
+        status: PhotoStatus.ANALYZED,
+        aiData: {
+          title: 'Test Photo',
+          description: 'A test photo',
+          keywords: []
+        },
+        error: null,
+        isAutoProcessed: false
       };
 
       const schema = generatePhotographSchema(minimalPhoto);

@@ -6,6 +6,7 @@
  */
 
 import React, { useEffect, useMemo, useRef } from 'react';
+import type { JSX } from 'react';
 import { AgentStateExposure } from '../interfaces/state-exposure';
 import { SchemaOrgStructuredData, SchemaOrgTypeName } from '../interfaces/schema-org';
 import { AgentAction } from '../interfaces/agent-action';
@@ -42,7 +43,7 @@ export interface AgentWrapperProps {
 export const AgentWrapper: React.FC<AgentWrapperProps> = ({
   agentInterface,
   children,
-  schemaType = 'WebPageElement',
+  schemaType = 'WebApplication',
   as: Component = 'article',
   className = '',
   htmlAttributes = {},
@@ -174,7 +175,7 @@ export const AgentWrapper: React.FC<AgentWrapperProps> = ({
       <script
         ref={structuredDataRef}
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData, null, 2) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(agentInterface.structuredData, null, 2) }}
       />
       
       {/* Debug information (only in development) */}
@@ -235,7 +236,7 @@ function mapComponentTypeToSchemaType(componentType: string): SchemaOrgTypeName 
     case 'user':
       return 'Person';
     default:
-      return 'WebPageElement';
+      return 'WebApplication';
   }
 }
 

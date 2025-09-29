@@ -239,11 +239,12 @@ describe('Natural Language API Development', () => {
         },
         actions: {
           selectPhoto: vi.fn()
-        }
+        },
+        lastUpdated: Date.now()
       };
 
       // Mock global state
-      global.window = { agentState: { photoGrid: mockPhotoState } };
+      (global as any).window = { agentState: { photoGrid: mockPhotoState } };
 
       const result = await nlProcessor.processCommand('select photo beach.jpg');
 
@@ -273,10 +274,11 @@ describe('Natural Language API Development', () => {
     test('should handle confirmation dialogs for destructive actions', async () => {
       const mockAlbumState = {
         current: { albums: [{ id: 'album-123', name: 'Test Album' }] },
-        actions: { deleteAlbum: vi.fn() }
+        actions: { deleteAlbum: vi.fn() },
+        lastUpdated: Date.now()
       };
 
-      global.window = { agentState: { albumList: mockAlbumState } };
+      (global as any).window = { agentState: { albumList: mockAlbumState } };
 
       const result = await nlProcessor.processCommand('delete album Test Album');
 
@@ -294,10 +296,11 @@ describe('Natural Language API Development', () => {
           photos: [{ id: 'photo-123', filename: 'test.jpg' }],
           selectedIds: ['photo-123']
         },
-        actions: { selectPhoto: vi.fn() }
+        actions: { selectPhoto: vi.fn() },
+        lastUpdated: Date.now()
       };
 
-      global.window = { agentState: { photoGrid: mockState } };
+      (global as any).window = { agentState: { photoGrid: mockState } };
 
       const result = await nlProcessor.processCommand('analyze selected photos');
 
@@ -314,10 +317,11 @@ describe('Natural Language API Development', () => {
             { id: 'photo-3', uploadDate: '2025-01-03' }
           ]
         },
-        actions: { selectPhoto: vi.fn() }
+        actions: { selectPhoto: vi.fn() },
+        lastUpdated: Date.now()
       };
 
-      global.window = { agentState: { photoGrid: mockState } };
+      (global as any).window = { agentState: { photoGrid: mockState } };
 
       const result = await nlProcessor.processCommand('select the latest photo');
 
@@ -382,15 +386,17 @@ describe('Natural Language API Development', () => {
             filterByKeywords: vi.fn(),
             selectMultiple: vi.fn(),
             batchAnalyze: vi.fn()
-          }
+          },
+          lastUpdated: Date.now()
         },
         albumList: {
           current: { albums: [] },
-          actions: { createAlbum: vi.fn() }
+          actions: { createAlbum: vi.fn() },
+          lastUpdated: Date.now()
         }
       };
 
-      global.window = { agentState: mockStates };
+      (global as any).window = { agentState: mockStates };
 
       const commands = [
         'create album Processed Photos',

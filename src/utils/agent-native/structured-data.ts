@@ -5,7 +5,7 @@
  * to enable AI agents to discover and interact with application content.
  */
 
-import { Photo, Album, SmugMugNode } from '../../types';
+import { Photo, Album, SmugMugNode, PhotoStatus } from '../../types';
 
 // Schema.org types for agent discovery
 export interface SchemaOrgPhotograph {
@@ -36,7 +36,7 @@ export interface SchemaOrgImageGallery {
 }
 
 export interface SchemaOrgAction {
-  '@type': 'Action';
+  '@type': 'Action' | 'ViewAction' | 'ShareAction' | 'AnalyzeAction' | 'SearchAction';
   name: string;
   target: string | ActionTarget;
   description?: string;
@@ -73,7 +73,7 @@ export function generatePhotographSchema(photo: Photo): SchemaOrgPhotograph {
   ];
 
   // Add analysis action if photo supports AI processing
-  if (photo.status !== 'uploading') {
+  if (photo.status !== PhotoStatus.UPLOADING) {
     potentialActions.push({
       '@type': 'AnalyzeAction',
       name: 'Generate AI Metadata',

@@ -10,7 +10,7 @@ import {
   AgentActionRegistry,
   ActionResult 
 } from '../utils/agent-native/agent-actions';
-import { Photo, PhotoStatus } from '../../types';
+import { Photo, PhotoStatus } from '../types';
 
 // Photo selection actions
 export const photoSelectAction = createAgentAction(

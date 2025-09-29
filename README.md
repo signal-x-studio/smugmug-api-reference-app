@@ -5,15 +5,19 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4-646cff)](https://vitejs.dev/)
 [![Live Demo](https://img.shields.io/badge/Live-Demo-blue)](https://signal-x-studio.github.io/smugmug-api-reference-app/)
 
-This is a reference application demonstrating how to integrate with the SmugMug API using a modern web stack. It serves as a practical example of a React/TypeScript application that includes patterns for AI integration and a dual-interface design for both human and programmatic interaction.
+This project is a reference application and case study for building an **AI-native** system. It demonstrates a holistic AI-first strategy with three core pillars:
+
+1.  **Building WITH AI**: Using a multi-agent workflow and a custom subagent to enforce architectural standards and accelerate development.
+2.  **Building AI INTO Features**: Integrating AI for core application functionality, like semantic photo search.
+3.  **Building FOR AI**: Architecting the application with a dual (human/machine) interface to be natively controllable by external AI agents.
 
 ## Core Features
 
 -   **AI-Powered Photo Search**: Natural language search for photo discovery.
 -   **Bulk Operations**: A virtualized interface for selecting and managing thousands of photos.
 -   **SmugMug API Integration**: A complete reference implementation for OAuth 1.0a authentication.
--   **Dual-Interface Design**: Components are built to be controlled by both the visual UI and by programmatic AI agents.
--   **Portable AI Framework**: Includes the **[Portable Subagent Framework](portable-subagent-framework/)**, a generalized system for enforcing architectural standards.
+-   **Agent-Native Design**: Components are built with a dual interface for both UI and programmatic control.
+-   **AI-Enforced Architecture**: A portable subagent framework enforces project-specific coding standards.
 
 ## Live Demo
 
@@ -43,10 +47,10 @@ The application will be available at `http://localhost:3000`.
 
 This project's documentation explains the principles and patterns used in its construction.
 
--   **[Technical Decisions](./docs/architecture/technical-decisions.md)**: Explains the core architectural choices, such as the service layer, state management, and error handling patterns.
--   **[Code Quality Standards](./docs/development/code-quality.md)**: Outlines the configuration for TypeScript, linting, formatting, and testing.
+-   **[AI-Native Case Study](./AI-NATIVE-CASE-STUDY.md)**: A high-level overview of the project's AI-first strategy.
+-   **[Technical Decisions](./docs/architecture/technical-decisions.md)**: Explains the core architectural choices, such as the service layer and state management.
+-   **[Code Quality Standards](./docs/development/code-quality.md)**: Outlines the configuration for TypeScript, linting, and testing.
 -   **[AI-Assisted Workflow](./docs/development/ai-workflow.md)**: Describes the process for using AI tools in the development cycle.
--   **[AI Prompting Strategies](./docs/development/prompting-strategies.md)**: Provides templates for writing effective prompts for code generation, refactoring, and analysis.
 
 For a full list of documents, see the **[Documentation Index](./docs/README.md)**.
 

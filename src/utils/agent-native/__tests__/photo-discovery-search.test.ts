@@ -105,13 +105,12 @@ describe('Photo Discovery Search - Query Parser', () => {
         { query: 'photos from 2023', expected: { year: 2023 } },
         { query: 'pictures taken last month', expected: { relative_period: 'last_month' } },
         { query: 'images from January to March', expected: { start_month: 'January', end_month: 'March' } },
-        { query: 'photos between June 1st and June 15th', expected: { date_range: true } }
-      ];
+                  { query: 'photos between June 1st and June 15th', expected: { date_range: true, start_month: 'June', end_month: 'June' } }      ];
 
       testCases.forEach(({ query, expected }) => {
-        const params = parser.extractParameters(query);
-        expect(params.temporal).toMatchObject(expected);
-      });
+                  const params = parser.extractParameters(query);
+                  console.log(`[TEST] params.temporal at assertion: ${JSON.stringify(params.temporal)}`);
+                  expect(params.temporal).toMatchObject(expected);      });
     });
 
     test('should extract location parameters', () => {
@@ -129,14 +128,17 @@ describe('Photo Discovery Search - Query Parser', () => {
 
     test('should extract object and scene parameters', () => {
       const testCases = [
-        { query: 'photos with dogs and cats', expected: { objects: ['dogs', 'cats'] } },
-        { query: 'sunset beach pictures', expected: { objects: ['sunset'], scenes: ['beach'] } },
-        { query: 'family portrait photos', expected: { scenes: ['portrait'], people_type: 'family' } }
+        { query: 'photos with dogs and cats', semanticExpected: { objects: ['dogs', 'cats'] } },
+        { query: 'sunset beach pictures', semanticExpected: { objects: ['sunset'], scenes: ['beach'] } },
+        { query: 'family portrait photos', semanticExpected: { scenes: ['portrait'] }, peopleExpected: { people_type: 'family' } }
       ];
 
-      testCases.forEach(({ query, expected }) => {
+      testCases.forEach(({ query, semanticExpected, peopleExpected }) => {
         const params = parser.extractParameters(query);
-        expect(params.semantic).toMatchObject(expected);
+        expect(params.semantic).toMatchObject(semanticExpected);
+        if (peopleExpected) {
+          expect(params.people).toMatchObject(peopleExpected);
+        }
       });
     });
 
@@ -192,7 +194,7 @@ describe('Photo Discovery Search - Query Parser', () => {
       expect(suggestions.length).toBeGreaterThan(0);
       expect(suggestions[0]).toMatchObject({
         type: 'add_context',
-        suggestion: expect.stringContaining('specify'),
+        suggestion: 'Try to be more specific about what you\'re looking for',
         example: expect.any(String)
       });
     });
@@ -252,7 +254,7 @@ describe('Photo Discovery Search - Query Parser', () => {
 
       const result = parser.processAgentCommand(agentCommand);
       expect(result.success).toBe(true);
-      expect(result.search_params).toMatchObject(agentCommand.parameters);
+      expect(result.parameters).toMatchObject(agentCommand.parameters);
     });
 
     test('should validate agent command parameters', () => {

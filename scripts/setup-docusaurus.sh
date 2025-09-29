@@ -141,7 +141,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl:
-            'https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/',
+            'https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs/',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
           remarkPlugins: [require('remark-math')],
@@ -150,7 +150,7 @@ const config = {
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs-site/',
+            'https://github.com/signal-x-studio/smugmug-api-reference-app/tree/main/docs/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

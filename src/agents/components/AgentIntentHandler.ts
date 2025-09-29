@@ -1,4 +1,4 @@
-import { SemanticQuery, Entity } from '../interfaces/semantic-query';
+import { SemanticQuery, Entity, EntityType } from '../interfaces/semantic-query';
 import { AgentAction } from '../interfaces/agent-action';
 
 /**
@@ -119,7 +119,7 @@ export class AgentIntentHandler {
             const keywords = value.split(' and ').map(k => k.trim()).filter(k => k);
             keywords.forEach((keyword, index) => {
               entities.push({
-                type: entityType,
+                type: entityType as EntityType,
                 value: keyword,
                 confidence: config.confidence - (index * 0.05), // Slightly lower confidence for later keywords
                 span: { start: start + index * 10, end: start + index * 10 + keyword.length } // Approximate spans
@@ -127,7 +127,7 @@ export class AgentIntentHandler {
             });
           } else {
             entities.push({
-              type: entityType,
+              type: entityType as EntityType,
               value,
               confidence: config.confidence,
               span: { start, end }
@@ -178,6 +178,10 @@ export class AgentIntentHandler {
     
     if (maxScore === 0) {
       return 'unknown';
+    }
+
+    if (cleanedQuery.includes('find') && !cleanedQuery.includes('with')) {
+      return 'search';
     }
     
     const bestIntent = Object.entries(intentScores)

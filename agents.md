@@ -254,14 +254,14 @@ The system processes natural language commands for agents:
 ### **File Structure Standards**
 ```
 src/
-├── components/           # React components (< 200 lines each)
+├── src/components/           # React components (< 200 lines each)
 │   ├── __tests__/       # Component tests  
 │   └── shared/          # Reusable components
 ├── hooks/               # Custom React hooks
 ├── utils/               # Pure utility functions
 │   └── agent-native/    # Agent integration layer
 ├── types/               # TypeScript type definitions
-└── services/            # Business logic services
+└── src/services/            # Business logic services
 ```
 
 ### **Component Patterns**

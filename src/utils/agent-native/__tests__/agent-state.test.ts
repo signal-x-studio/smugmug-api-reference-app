@@ -1,6 +1,5 @@
-/**
- * Tests for Agent State Registry System
- */
+import { useState } from 'react';
+import { renderHook, act } from '@testing-library/react';
 
 import { vi } from 'vitest';
 import { 
@@ -13,14 +12,10 @@ import {
 import { Photo, Album, PhotoStatus } from '../../../types';
 
 // Mock global window for testing
-declare global {
-  var window: any;
-}
-
 describe('Agent State Registry System', () => {
   beforeEach(() => {
     // Reset global state before each test
-    global.window = {
+    (global as any).window = {
       agentState: {},
       agentStateEvents: new EventTarget()
     };
@@ -63,7 +58,7 @@ describe('Agent State Registry System', () => {
           detail: {
             componentId: 'photoGrid',
             newState: newState,
-            timestamp: expect.any(number)
+            timestamp: expect.any(Number)
           }
         })
       );
@@ -143,63 +138,63 @@ describe('Agent State Registry System', () => {
 
   describe('createAgentStateHook', () => {
     test('should create hook that registers component state', () => {
-      const mockSetState = vi.fn();
-      const mockState = { photos: [], selectedIds: [] };
-      
-      // Mock React.useState
-      const mockUseState = jest.fn(() => [mockState, mockSetState]);
-      
       const useAgentState = createAgentStateHook('photoGrid', {
         photos: { type: 'array', required: true },
         selectedIds: { type: 'array', required: false }
       });
 
-      // Simulate hook usage (would normally be called within React component)
-      const hookResult = useAgentState(mockState, mockSetState);
+      const { result } = renderHook(() => {
+        const [state, setState] = useState({ photos: [], selectedIds: [] });
+        return useAgentState(state, setState);
+      });
 
-      expect(hookResult).toEqual([mockState, expect.any(Function)]);
+      expect(result.current[0]).toEqual({ photos: [], selectedIds: [] });
       expect(window.agentState.photoGrid).toBeDefined();
-      expect(window.agentState.photoGrid.current).toEqual(mockState);
+      expect(window.agentState.photoGrid.current).toEqual({ photos: [], selectedIds: [] });
     });
 
     test('should provide agent-compatible setState wrapper', () => {
-      const mockSetState = vi.fn();
-      const initialState = { photos: [], selectedIds: [] };
-      
       const useAgentState = createAgentStateHook('photoGrid', {
         photos: { type: 'array', required: true },
         selectedIds: { type: 'array', required: false }
       });
 
-      const [state, agentSetState] = useAgentState(initialState, mockSetState);
+      const { result } = renderHook(() => {
+        const [state, setState] = useState({ photos: [], selectedIds: [] });
+        return useAgentState(state, setState);
+      });
 
       const newState = { photos: [{ id: 'photo-1' }], selectedIds: ['photo-1'] };
-      agentSetState(newState);
+      act(() => {
+        result.current[1](newState);
+      });
 
-      expect(mockSetState).toHaveBeenCalledWith(newState);
+      expect(result.current[0]).toEqual(newState);
       expect(window.agentState.photoGrid.current).toEqual(newState);
     });
 
     test('should handle state validation in hook', () => {
-      const mockSetState = vi.fn();
-      const initialState = { photos: [] }; // missing selectedIds, but not required
-      
       const useAgentState = createAgentStateHook('photoGrid', {
         photos: { type: 'array', required: true },
         selectedIds: { type: 'array', required: false }
       });
 
-      expect(() => {
-        useAgentState(initialState, mockSetState);
-      }).not.toThrow();
+      const { result } = renderHook(() => {
+        const [state, setState] = useState({ photos: [] });
+        return useAgentState(state, setState);
+      });
+      expect(result.current[0]).toEqual({ photos: [] });
 
       // Test with invalid state (missing required field)
       const useInvalidAgentState = createAgentStateHook('invalid', {
         required_field: { type: 'string', required: true }
       });
-
+      
       expect(() => {
-        useInvalidAgentState({}, mockSetState);
+        renderHook(() => {
+          const [state, setState] = useState({});
+          return useInvalidAgentState(state, setState);
+        });
       }).toThrow();
     });
   });
@@ -209,7 +204,7 @@ describe('Agent State Registry System', () => {
       const photoState = {
         photos: [
           { id: 'photo-1', title: 'Sunset', status: PhotoStatus.ANALYZED },
-          { id: 'photo-2', title: 'Beach', status: PhotoStatus.READY }
+          { id: 'photo-2', title: 'Beach', status: PhotoStatus.ANALYZED }
         ],
         selectedIds: ['photo-1'],
         isSelectionMode: true,
@@ -217,13 +212,13 @@ describe('Agent State Registry System', () => {
       };
 
       const photoActions = {
-        selectPhoto: jest.fn((photoId: string) => {
+        selectPhoto: vi.fn((photoId: string) => {
           photoState.selectedIds.push(photoId);
         }),
-        toggleSelectionMode: jest.fn(() => {
+        toggleSelectionMode: vi.fn(() => {
           photoState.isSelectionMode = !photoState.isSelectionMode;
         }),
-        batchAnalyze: jest.fn((photoIds: string[]) => {
+        batchAnalyze: vi.fn((photoIds: string[]) => {
           console.log(`Analyzing photos: ${photoIds.join(', ')}`);
         })
       };
@@ -250,10 +245,10 @@ describe('Agent State Registry System', () => {
       };
 
       const albumActions = {
-        selectAlbum: jest.fn((album: Album) => {
+        selectAlbum: vi.fn((album: Album) => {
           albumState.selectedAlbum = album;
         }),
-        createAlbum: jest.fn((name: string) => {
+        createAlbum: vi.fn((name: string) => {
           const newAlbum = { id: `album-${Date.now()}`, name, imageCount: 0 };
           albumState.albums.push(newAlbum);
         })

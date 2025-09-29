@@ -202,7 +202,7 @@ export const ResultsGrid: React.FC<ResultsGridProps> = ({
             )}
             
             <img
-              src={photo.thumbnail || `/thumbs/${photo.id}`}
+              src={photo.thumbnailUrl || `/thumbs/${photo.id}`}
               alt={photo.filename}
               className="photo-thumbnail"
             />
@@ -281,11 +281,16 @@ export const BulkOperationsPanel: React.FC<BulkOperationsPanelProps> = ({
     if (exposeToAgents && typeof window !== 'undefined') {
       window.agentState = window.agentState || {};
       window.agentState.bulkOperations = {
-        selectedCount: selectedPhotos.length,
-        availableOperations: availableOperations.map(op => op.type),
-        execute: (operation: string, params: any) => {
-          onOperationExecute({ type: operation, parameters: params });
-        }
+        current: {
+          selectedCount: selectedPhotos.length,
+          availableOperations: availableOperations.map(op => op.type)
+        },
+        actions: {
+          execute: (operation: string, params: any) => {
+            onOperationExecute({ type: operation, parameters: params });
+          }
+        },
+        lastUpdated: Date.now()
       };
     }
   }, [selectedPhotos, exposeToAgents, onOperationExecute, availableOperations]);
@@ -365,11 +370,11 @@ export const BulkOperationsPanel: React.FC<BulkOperationsPanelProps> = ({
     if (!agentState) return [];
 
     const suggestions = [];
-    if (agentState.lastQuery?.includes('beach')) {
+    if (agentState.current?.lastQuery?.includes('beach')) {
       suggestions.push('Create "Hawaii Beach Photos" album');
     }
-    if (agentState.currentFilters?.location) {
-      suggestions.push(`Tag as ${agentState.currentFilters.location} photos`);
+    if (agentState.current?.currentFilters?.location) {
+      suggestions.push(`Tag as ${agentState.current.currentFilters.location} photos`);
     }
     
     return suggestions;

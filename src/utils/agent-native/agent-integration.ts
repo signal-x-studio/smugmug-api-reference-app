@@ -283,9 +283,13 @@ export class AgentSearchInterface {
         location: request.spatial_filter?.location
       },
       temporal: {
-        start_date: request.temporal_filter?.start_date ? new Date(request.temporal_filter.start_date) : undefined,
-        end_date: request.temporal_filter?.end_date ? new Date(request.temporal_filter.end_date) : undefined,
-        year: request.temporal_filter?.year
+        year: request.temporal_filter?.year,
+        date_range: request.temporal_filter?.start_date && request.temporal_filter?.end_date 
+          ? { 
+              start: new Date(request.temporal_filter.start_date), 
+              end: new Date(request.temporal_filter.end_date) 
+            }
+          : undefined
       },
       people: {
         named_people: request.technical_filter?.people
@@ -305,7 +309,7 @@ export class AgentSearchInterface {
         '@type': 'ImageObject',
         name: photo.filename,
         contentUrl: photo.url || `/photos/${photo.id}`,
-        thumbnailUrl: photo.thumbnail || `/thumbs/${photo.id}`,
+        thumbnailUrl: photo.thumbnailUrl || `/thumbs/${photo.id}`,
         keywords: photo.metadata?.keywords || [],
         locationCreated: photo.metadata?.location,
         dateCreated: photo.metadata?.takenAt?.toISOString() || '',
@@ -505,11 +509,20 @@ export class AgentStateRegistry {
 
   private initializeAgentState() {
     if (typeof window !== 'undefined') {
-      window.agentState = window.agentState || {
-        commands: {},
-        searchHistory: [],
-        currentSearch: null
-      };
+      window.agentState = window.agentState || {};
+      
+      // Initialize global state entry for agent integration
+      if (!window.agentState['agent-integration']) {
+        window.agentState['agent-integration'] = {
+          current: {
+            commands: {},
+            searchHistory: [],
+            currentSearch: null
+          },
+          actions: {},
+          lastUpdated: Date.now()
+        };
+      }
     }
   }
 
@@ -524,13 +537,18 @@ export class AgentStateRegistry {
 
   registerCommand(name: string, handler: Function) {
     if (typeof window !== 'undefined') {
-      window.agentState.commands[name] = handler;
+      const entry = window.agentState['agent-integration'];
+      if (entry) {
+        entry.current.commands[name] = handler;
+        entry.lastUpdated = Date.now();
+      }
     }
   }
 
   getSearchHistory(): SearchRequest[] {
     if (typeof window !== 'undefined') {
-      return window.agentState.searchHistory || [];
+      const entry = window.agentState['agent-integration'];
+      return entry?.current?.searchHistory || [];
     }
     return [];
   }
@@ -581,14 +599,3 @@ export class StructuredDataMarkup {
   }
 }
 
-// Global type augmentation for window.agentState
-declare global {
-  interface Window {
-    agentState: {
-      commands: Record<string, Function>;
-      searchHistory: SearchRequest[];
-      currentSearch: any;
-      [key: string]: any;
-    };
-  }
-}

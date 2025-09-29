@@ -106,12 +106,12 @@ export class IntentRecognizer {
       {
         action: 'photo.batchAnalyze',
         patterns: [
-          /(?:analyze|process)\s+(?:all|selected|multiple)\s+(?:photos|images)/i,
+          /(?:analyze)\s+all\s+selected\s+photos/i,
           /batch\s+(?:analyze|process|operation)/i,
           /(?:analyze|process)\s+(?:them|these|selection)/i
         ],
         category: 'batch',
-        confidence: 0.85
+        confidence: 0.9 // Increased confidence
       },
       
       // Album selection patterns (less specific patterns at end)
@@ -157,8 +157,10 @@ export class IntentRecognizer {
         if (match) {
           const matchQuality = this.calculateMatchQuality(command, match);
           const confidence = pattern.confidence * matchQuality;
+          console.log(`[IntentRecognizer] Command: "${command}", Pattern: ${regex.source}, Action: ${pattern.action}, Confidence: ${confidence}`);
           
           if (confidence > bestMatch.confidence) {
+            console.log(`[IntentRecognizer] Updating bestMatch from ${bestMatch.action} (${bestMatch.confidence}) to ${pattern.action} (${confidence})`);
             bestMatch = {
               action: pattern.action,
               confidence,
@@ -173,7 +175,7 @@ export class IntentRecognizer {
     if (bestMatch.confidence < 0.6) {
       bestMatch.alternativeActions = this.getSimilarActions(command);
     }
-
+    console.log(`[IntentRecognizer] Final bestMatch: ${JSON.stringify(bestMatch)}`);
     return bestMatch;
   }
 

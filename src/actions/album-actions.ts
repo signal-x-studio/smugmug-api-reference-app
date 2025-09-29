@@ -9,7 +9,7 @@ import {
   AgentActionRegistry,
   ActionResult 
 } from '../utils/agent-native/agent-actions';
-import { Album } from '../../types';
+import { Album } from '../types';
 
 // Album selection actions
 export const albumSelectAction = createAgentAction(

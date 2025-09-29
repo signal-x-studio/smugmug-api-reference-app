@@ -30,7 +30,7 @@ if [ $ROOT_DOCS -gt 0 ]; then
 fi
 
 echo "📝 Creating AI prompt templates..."
-cat > ai-prompts/README.md << 'EOF'
+cat > agent-framework/prompts/README.md << 'EOF'
 # AI Prompts for Dual-Purpose Documentation
 
 This directory contains templates for generating both practical developer documentation and enterprise showcase documentation using different AI tools.
@@ -102,7 +102,7 @@ echo "✅ Setup Complete!"
 echo ""
 echo "📋 Next Steps:"
 echo "1. Edit project-context.yml with your project details"
-echo "2. Use prompts in ai-prompts/ with appropriate AI tools"
+echo "2. Use prompts in agent-framework/prompts/ with appropriate AI tools"
 echo "3. Place generated docs in proper directories"
 echo "4. Run ./scripts/validate-docs-org.sh to verify setup"
 echo ""

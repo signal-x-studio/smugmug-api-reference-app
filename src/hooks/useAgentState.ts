@@ -2,7 +2,15 @@
  * React Hooks for Agent State Management
  * 
  * Provides React hooks that integrate with the agent state registry
- * to expose component state to browser agents.
+ * to expose component state to       const newAlbum: Album = {
+        id: `album-${Date.now()}`,
+        name: name,
+        uri: `/api/v2/album/${Date.now()}`,
+        description: description,
+        keywords: [],
+        imageCount: 0,
+        type: 'Album'
+      };r agents.
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -13,7 +21,7 @@ import {
   AgentStateSchema,
   AgentStateConfig 
 } from '../utils/agent-native/agent-state';
-import { Photo, Album } from '../../types';
+import { Photo, Album } from '../types';
 
 // Photo management state schema
 const photoStateSchema: AgentStateSchema = {
@@ -38,12 +46,12 @@ export const useAgentAlbumState = createAgentStateHook('albumList', albumStateSc
  * Hook for photo grid component with agent integration
  */
 export function usePhotoGridAgent(photos: Photo[]) {
-  const [photoState, setPhotoState] = useAgentPhotoState({
+  const [photoState, setPhotoState] = useState({
     photos: photos,
     selectedIds: [],
     isSelectionMode: false,
     loadingPhotos: false
-  }, setPhotoState);
+  });
 
   // Define actions that agents can execute
   const photoActions = {
@@ -126,11 +134,11 @@ export function usePhotoGridAgent(photos: Photo[]) {
  * Hook for album list component with agent integration
  */
 export function useAlbumListAgent(albums: Album[]) {
-  const [albumState, setAlbumState] = useAgentAlbumState({
+  const [albumState, setAlbumState] = useState({
     albums: albums,
     selectedAlbum: null,
     isLoading: false
-  }, setAlbumState);
+  });
 
   // Define actions that agents can execute
   const albumActions = {
@@ -152,9 +160,11 @@ export function useAlbumListAgent(albums: Album[]) {
       const newAlbum: Album = {
         id: `album-${Date.now()}`,
         name: albumName,
-        description: description,
+        uri: `/api/v2/album/${Date.now()}`,
+        description: description || '',
+        keywords: [],
         imageCount: 0,
-        createdDate: new Date().toISOString()
+        type: 'Album'
       };
       
       setAlbumState(prev => ({

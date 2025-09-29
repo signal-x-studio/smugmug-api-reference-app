@@ -146,9 +146,11 @@ export function useDualInterface(config: DualInterfaceConfig): DualInterfaceRetu
       console.error('Failed to generate structured data:', error);
       return {
         '@context': 'https://schema.org',
-        '@type': 'WebPageElement',
+        '@type': 'WebApplication',
         identifier: config.componentId,
-        name: `Component ${config.componentId}`
+        name: `Component ${config.componentId}`,
+        applicationCategory: 'MediaApplication',
+        operatingSystem: 'Any'
       };
     }
   }, [config.componentId, config.data, config.state, agentActions, metadata.componentType, security]);

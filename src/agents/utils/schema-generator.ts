@@ -262,11 +262,10 @@ export function generateActionSchema(
   
   const target = action.id.includes('search') 
     ? {
-        '@context': 'https://schema.org',
-        '@type': 'EntryPoint',
+        '@context': 'https://schema.org' as const,
+        '@type': 'EntryPoint' as const,
         urlTemplate: `${config.baseUrl}/api/actions/${action.id}?{parameters}`,
-        encodingType: 'application/json',
-        httpMethod: 'POST' as const
+        encodingType: 'application/json'
       }
     : `${config.baseUrl}/api/actions/${action.id}`;
 

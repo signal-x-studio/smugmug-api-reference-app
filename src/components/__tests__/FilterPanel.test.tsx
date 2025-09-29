@@ -22,30 +22,40 @@ describe('Advanced Filter Interface', () => {
   let mockSearchEngine: SemanticSearchEngine;
 
   beforeEach(() => {
-    mockPhotos = [
+    const mockPhotos: Photo[] = [
       {
         id: 'photo-1',
+        uri: '/api/photo-1',
+        imageUrl: '/images/sunset-beach.jpg',
+        status: 'ANALYZED' as any,
+        aiData: { title: 'Sunset Beach', description: 'Beautiful sunset', keywords: ['sunset', 'beach'] },
+        error: null,
         filename: 'sunset-beach.jpg',
         metadata: {
-          keywords: ['sunset', 'beach', 'vacation'],
-          objects: ['ocean', 'sky'],
-          scenes: ['landscape'],
+          keywords: ['sunset', 'beach'],
+          objects: ['beach', 'waves'],
+          scenes: ['sunset'],
           location: 'Hawaii',
           camera: 'Canon EOS R5',
-          takenAt: new Date('2023-07-15T19:30:00Z'),
+          takenAt: new Date('2023-08-15'),
           confidence: 0.95
         }
       },
       {
-        id: 'photo-2', 
+        id: 'photo-2',
+        uri: '/api/photo-2',
+        imageUrl: '/images/family-park.jpg',
+        status: 'ANALYZED' as any,
+        aiData: { title: 'Family Park', description: 'Family at park', keywords: ['family', 'park'] },
+        error: null,
         filename: 'family-park.jpg',
         metadata: {
-          keywords: ['family', 'children', 'park'],
+          keywords: ['family', 'park'],
           objects: ['people', 'trees'],
-          scenes: ['portrait'],
+          scenes: ['park'],
           location: 'Central Park',
           camera: 'Nikon D850',
-          takenAt: new Date('2023-08-20T14:15:00Z'),
+          takenAt: new Date('2023-09-10'),
           confidence: 0.88
         }
       }
@@ -430,9 +440,33 @@ describe('Advanced Filter Interface', () => {
   describe('Integration with Semantic Search', () => {
     test('should integrate filter results with semantic search', async () => {
       const mockSearchResults = {
-        photos: [mockPhotos[0]],
+        photos: [{
+          ...mockPhotos[0],
+          relevanceScore: 0.95,
+          matchedCriteria: ['tags'],
+          highlightedFields: { tags: 'test' }
+        }],
         totalCount: 1,
-        searchTime: 850
+        searchTime: 850,
+        query: { 
+          semantic: { 
+            objects: ['test'] 
+          } 
+        },
+        searchMetadata: {
+          appliedFilters: { 
+            semantic: { 
+              objects: ['test'] 
+            } 
+          },
+          matchedCriteria: ['tags'],
+          performanceMetrics: {
+            indexLookupTime: 10,
+            fuzzyMatchTime: 5,
+            sortingTime: 2,
+            totalSearchTime: 850
+          }
+        }
       };
       
       vi.mocked(mockSearchEngine.search).mockResolvedValue(mockSearchResults);

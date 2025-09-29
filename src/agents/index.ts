@@ -5,6 +5,8 @@
  * This module provides a clean API for integrating agent capabilities into React components.
  */
 
+import React from 'react';
+
 // Core interfaces
 export type {
   // Agent Action interfaces
@@ -82,6 +84,10 @@ export {
   validateAgentWrapper
 } from './components/AgentWrapper';
 
+import { validateAgentWrapper } from './components/AgentWrapper';
+import { generateSchemaOrgData, validateSchemaOrg } from './utils/schema-generator';
+import { agentActionRegistry, registerAgentAction, executeAgentAction } from './registry';
+
 export {
   AgentIntentHandler
 } from './components/AgentIntentHandler';
@@ -137,7 +143,13 @@ export function createAgentReadyComponent<T extends Record<string, any>>(
     setState,
     exposeGlobally: true,
     performanceMonitoring: {
-      enabled: process.env.NODE_ENV === 'development'
+      enabled: process.env.NODE_ENV === 'development',
+      sampleRate: 1.0,
+      thresholds: {
+        responseTime: 100,
+        memoryUsage: 50,
+        errorRate: 0.01
+      }
     },
     security: {
       accessLevel: 'read-only',
@@ -161,7 +173,6 @@ export function createAgentReadyComponent<T extends Record<string, any>>(
 /**
  * Higher-order component for making any React component agent-ready
  */
-import React from 'react';
 
 export function withAgentCapabilities<P extends Record<string, any>>(
   WrappedComponent: React.ComponentType<P>,
@@ -188,13 +199,13 @@ export function withAgentCapabilities<P extends Record<string, any>>(
       exposeGlobally: true
     });
 
-    return (
-      <AgentWrapper 
-        agentInterface={agentInterface} 
-        schemaType={config.schemaType}
-      >
-        <WrappedComponent {...props} />
-      </AgentWrapper>
+    return React.createElement(
+      AgentWrapper,
+      {
+        agentInterface,
+        schemaType: config.schemaType,
+        children: React.createElement(WrappedComponent, props)
+      }
     );
   };
 }

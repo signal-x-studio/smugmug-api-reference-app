@@ -321,6 +321,21 @@ export class SemanticSearchEngine {
 
     // Semantic matching
     if (query.semantic) {
+      if (query.semantic.keywords) {
+        const keywordMatches = new Set<string>();
+        const exactMatches = new Set<string>();
+        for (const keyword of query.semantic.keywords) {
+          const matches = await this.findMatches(keyword, this.index.keywordIndex, 'keywords');
+          matches.forEach(match => {
+            keywordMatches.add(match.id);
+            if (match.isExact) exactMatches.add(match.id);
+          });
+        }
+        if (keywordMatches.size > 0) {
+          matchingSets.keywords = {photoIds: keywordMatches, exactMatches};
+        }
+      }
+
       if (query.semantic.objects) {
         const objectMatches = new Set<string>();
         const exactMatches = new Set<string>();
