@@ -132,7 +132,7 @@ export const AgentWrapper: React.FC<AgentWrapperProps> = ({
 
   // Combine HTML attributes
   const combinedAttributes = useMemo(() => {
-    const baseAttributes = {
+    const baseAttributes: Record<string, any> = {
       itemScope: true,
       itemType: schemaTypeUrl,
       'data-agent-component': agentInterface.componentId,

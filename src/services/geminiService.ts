@@ -93,6 +93,10 @@ export async function generatePhotoMetadata(
   };
 
   try {
+    if (!ai) {
+      throw new Error('AI service not available - API key not configured');
+    }
+    
     const response = await ai.models.generateContent({
       model: model,
       contents: { parts: [textPart, imagePart] },
@@ -103,6 +107,10 @@ export async function generatePhotoMetadata(
       },
     });
 
+    if (!response.text) {
+      throw new Error('No response text received from AI service');
+    }
+    
     const jsonText = response.text.trim();
     const parsedData = JSON.parse(jsonText);
     
@@ -147,6 +155,10 @@ export async function doesImageMatchPrompt(
     };
 
     try {
+        if (!ai) {
+            throw new Error('AI service not available - API key not configured');
+        }
+        
         const response = await ai.models.generateContent({
             model: model,
             contents: { parts: [textPart, imagePart] },
@@ -157,6 +169,10 @@ export async function doesImageMatchPrompt(
             },
         });
 
+        if (!response.text) {
+            throw new Error('No response text received from AI service');
+        }
+        
         const jsonText = response.text.trim();
         const parsedData = JSON.parse(jsonText);
 
@@ -222,6 +238,10 @@ Based on all the images provided, generate the following:
   };
 
   try {
+    if (!ai) {
+      throw new Error('AI service not available - API key not configured');
+    }
+    
     const response = await ai.models.generateContent({
       model: model,
       contents: { parts: [textPart, ...imageParts] },
@@ -232,6 +252,10 @@ Based on all the images provided, generate the following:
       },
     });
 
+    if (!response.text) {
+      throw new Error('No response text received from AI service');
+    }
+    
     const jsonText = response.text.trim();
     const parsedData = JSON.parse(jsonText);
 

@@ -48,7 +48,7 @@ export const useAgentAlbumState = createAgentStateHook('albumList', albumStateSc
 export function usePhotoGridAgent(photos: Photo[]) {
   const [photoState, setPhotoState] = useState({
     photos: photos,
-    selectedIds: [],
+    selectedIds: [] as string[],
     isSelectionMode: false,
     loadingPhotos: false
   });
@@ -136,7 +136,7 @@ export function usePhotoGridAgent(photos: Photo[]) {
 export function useAlbumListAgent(albums: Album[]) {
   const [albumState, setAlbumState] = useState({
     albums: albums,
-    selectedAlbum: null,
+    selectedAlbum: null as Album | null,
     isLoading: false
   });
 

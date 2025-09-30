@@ -13,6 +13,7 @@ import {
   NLProcessingResult
 } from '../natural-language';
 import { Photo, Album, PhotoStatus } from '../../../types';
+import { AgentActionRegistry, createAgentAction } from '../agent-actions';
 
 describe('Natural Language API Development', () => {
   let nlProcessor: NaturalLanguageProcessor;
@@ -21,6 +22,61 @@ describe('Natural Language API Development', () => {
   let parameterExtractor: ParameterExtractor;
 
   beforeEach(() => {
+    // Initialize window object for agent actions
+    if (typeof window === 'undefined') {
+      (global as any).window = {};
+    }
+    window.agentActions = {};
+    window.agentActionHistory = [];
+
+    // Register mock actions required for Natural Language API tests
+    const mockActions = [
+      createAgentAction(
+        'photo.select',
+        'Select a photo by ID',
+        { photoId: { type: 'string', required: true } },
+        vi.fn().mockResolvedValue({ success: true, data: { selected: true } })
+      ),
+      createAgentAction(
+        'photo.analyze',
+        'Analyze a photo with AI',
+        { photoId: { type: 'string', required: true } },
+        vi.fn().mockResolvedValue({ success: true, data: { metadata: {} } })
+      ),
+      createAgentAction(
+        'photo.search',
+        'Search for photos',
+        { keywords: { type: 'string', required: false } },
+        vi.fn().mockResolvedValue({ success: true, data: { results: [] } })
+      ),
+      createAgentAction(
+        'photo.batchAnalyze',
+        'Analyze multiple photos',
+        { photoIds: { type: 'array', required: false } },
+        vi.fn().mockResolvedValue({ success: true, data: { processed: 0 } })
+      ),
+      createAgentAction(
+        'album.create',
+        'Create a new album',
+        { 
+          name: { type: 'string', required: true },
+          description: { type: 'string', required: false }
+        },
+        vi.fn().mockResolvedValue({ success: true, data: { albumId: 'new-album' } })
+      ),
+      createAgentAction(
+        'album.select',
+        'Select an album',
+        { albumId: { type: 'string', required: true } },
+        vi.fn().mockResolvedValue({ success: true, data: { selected: true } })
+      )
+    ];
+
+    // Register all mock actions
+    mockActions.forEach(action => {
+      AgentActionRegistry.register(action.name, action);
+    });
+
     nlProcessor = new NaturalLanguageProcessor();
     commandParser = new CommandParser();
     intentRecognizer = new IntentRecognizer();
@@ -243,8 +299,9 @@ describe('Natural Language API Development', () => {
         lastUpdated: Date.now()
       };
 
-      // Mock global state
-      (global as any).window = { agentState: { photoGrid: mockPhotoState } };
+      // Mock global state - preserve existing agentActions
+      if (!window.agentState) window.agentState = {};
+      window.agentState.photoGrid = mockPhotoState;
 
       const result = await nlProcessor.processCommand('select photo beach.jpg');
 
@@ -278,7 +335,9 @@ describe('Natural Language API Development', () => {
         lastUpdated: Date.now()
       };
 
-      (global as any).window = { agentState: { albumList: mockAlbumState } };
+      // Mock global state - preserve existing agentActions
+      if (!window.agentState) window.agentState = {};
+      window.agentState.albumList = mockAlbumState;
 
       const result = await nlProcessor.processCommand('delete album Test Album');
 
@@ -300,7 +359,9 @@ describe('Natural Language API Development', () => {
         lastUpdated: Date.now()
       };
 
-      (global as any).window = { agentState: { photoGrid: mockState } };
+      // Mock global state - preserve existing agentActions
+      if (!window.agentState) window.agentState = {};
+      window.agentState.photoGrid = mockState;
 
       const result = await nlProcessor.processCommand('analyze selected photos');
 
@@ -321,7 +382,9 @@ describe('Natural Language API Development', () => {
         lastUpdated: Date.now()
       };
 
-      (global as any).window = { agentState: { photoGrid: mockState } };
+      // Mock global state - preserve existing agentActions
+      if (!window.agentState) window.agentState = {};
+      window.agentState.photoGrid = mockState;
 
       const result = await nlProcessor.processCommand('select the latest photo');
 
@@ -396,7 +459,9 @@ describe('Natural Language API Development', () => {
         }
       };
 
-      (global as any).window = { agentState: mockStates };
+      // Mock global state - preserve existing agentActions
+      if (!window.agentState) window.agentState = {};
+      Object.assign(window.agentState, mockStates);
 
       const commands = [
         'create album Processed Photos',

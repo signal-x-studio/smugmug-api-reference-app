@@ -13,9 +13,9 @@ interface AlbumSettingsModalProps {
 }
 
 type EditableSettings = {
-    customInstructions: string | null;
-    keywordDenylist: string | null;
-    keywordPreferredlist: string | null;
+    customInstructions: string | undefined;
+    keywordDenylist: string | undefined;
+    keywordPreferredlist: string | undefined;
 };
 
 export const AlbumSettingsModal: React.FC<AlbumSettingsModalProps> = ({ 
@@ -28,17 +28,17 @@ export const AlbumSettingsModal: React.FC<AlbumSettingsModalProps> = ({
   onGenerateStory
 }) => {
   const [settings, setSettings] = useState<EditableSettings>({
-      customInstructions: null,
-      keywordDenylist: null,
-      keywordPreferredlist: null,
+      customInstructions: undefined,
+      keywordDenylist: undefined,
+      keywordPreferredlist: undefined,
   });
 
   useEffect(() => {
     if (isOpen) {
       setSettings({
-        customInstructions: currentOverrides.customInstructions ?? null,
-        keywordDenylist: currentOverrides.keywordDenylist ?? null,
-        keywordPreferredlist: currentOverrides.keywordPreferredlist ?? null,
+        customInstructions: currentOverrides.customInstructions ?? undefined,
+        keywordDenylist: currentOverrides.keywordDenylist ?? undefined,
+        keywordPreferredlist: currentOverrides.keywordPreferredlist ?? undefined,
       });
     }
   }, [isOpen, currentOverrides]);

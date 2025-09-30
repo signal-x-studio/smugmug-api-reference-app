@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { FilterCombination } from '../hooks/useFilterState';
+import { FilterCombination } from '../types';
 
 interface FilterHeaderProps {
   combMode: FilterCombination;

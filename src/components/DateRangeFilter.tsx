@@ -16,6 +16,7 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
 }) => {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+  const [showPresets, setShowPresets] = useState(false);
 
   const handleDateChange = () => {
     if (startDate && endDate) {
@@ -55,12 +56,40 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
     setEndDate('');
   };
 
+  const handlePresetClick = (preset: string) => {
+    const now = new Date();
+    let start: Date;
+    let end = now;
+
+    switch (preset) {
+      case 'Last Week':
+        start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case 'Last Month':
+        start = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+        break;
+      case 'Last Year':
+        start = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+        break;
+      default:
+        return;
+    }
+
+    const startISO = start.toISOString().split('T')[0];
+    const endISO = end.toISOString().split('T')[0];
+    
+    setStartDate(startISO);
+    setEndDate(endISO);
+    onDateRangeSelect(start, end);
+    setShowPresets(false);
+  };
+
   return (
     <div className="date-range-filter">
       <h4>Date Range</h4>
       <div className="date-inputs">
         <div className="date-input-group">
-          <label htmlFor="start-date">From:</label>
+          <label htmlFor="start-date">Start Date</label>
           <input
             id="start-date"
             type="date"
@@ -70,7 +99,7 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
           />
         </div>
         <div className="date-input-group">
-          <label htmlFor="end-date">To:</label>
+          <label htmlFor="end-date">End Date</label>
           <input
             id="end-date"
             type="date"
@@ -80,6 +109,32 @@ export const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
           />
         </div>
       </div>
+      
+      {/* Date Presets */}
+      <div className="date-presets">
+        <button 
+          type="button" 
+          onClick={() => handlePresetClick('Last Week')}
+          className="preset-button"
+        >
+          Last Week
+        </button>
+        <button 
+          type="button" 
+          onClick={() => handlePresetClick('Last Month')}
+          className="preset-button"
+        >
+          Last Month
+        </button>
+        <button 
+          type="button" 
+          onClick={() => handlePresetClick('Last Year')}
+          className="preset-button"
+        >
+          Last Year
+        </button>
+      </div>
+
       <div className="date-actions">
         <button
           type="button"

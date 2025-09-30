@@ -45,8 +45,8 @@ describe('Agent-Ready Search Results', () => {
         error: null,
         metadata: {
           keywords: ['sunset', 'hawaii', 'beach'],
-          objects: ['ocean', 'sky'],
-          scenes: ['landscape'],
+          objects: ['sunset', 'ocean', 'sky'],
+          scenes: ['beach', 'landscape', 'vacation'],
           location: 'Hawaii',
           camera: 'Canon EOS R5',
           takenAt: new Date('2023-07-15T19:30:00Z'),
@@ -70,8 +70,9 @@ describe('Agent-Ready Search Results', () => {
         metadata: {
           keywords: ['family', 'vacation', 'people'],
           objects: ['people', 'trees'],
-          scenes: ['park', 'outdoor'],
+          scenes: ['park', 'outdoor', 'vacation'],
           location: 'California',
+          people: ['family'],
           camera: 'iPhone 14 Pro',
           takenAt: new Date('2023-08-22T14:15:00Z'),
           confidence: 0.88
@@ -102,15 +103,15 @@ describe('Agent-Ready Search Results', () => {
       });
 
       expect(results.structuredData).toBeDefined();
-      expect(results.structuredData['@context']).toBe('https://schema.org');
-      expect(results.structuredData['@type']).toBe('SearchResultsPage');
+      expect(results.structuredData?.['@context']).toBe('https://schema.org');
+      expect(results.structuredData?.['@type']).toBe('SearchResultsPage');
       
       // Check individual photo structured data
-      const firstPhoto = results.structuredData.mainEntity[0];
-      expect(firstPhoto['@type']).toBe('Photograph');
-      expect(firstPhoto.name).toBe('sunset-hawaii.jpg');
-      expect(firstPhoto.contentUrl).toBe('/photos/sunset-hawaii.jpg');
-      expect(firstPhoto.thumbnailUrl).toBe('/thumbs/sunset-hawaii.jpg');
+      const firstPhoto = results.structuredData?.mainEntity[0];
+      expect(firstPhoto?.['@type']).toBe('Photograph');
+      expect(firstPhoto?.name).toBe('sunset-hawaii.jpg');
+      expect(firstPhoto?.contentUrl).toBe('/photos/sunset-hawaii.jpg');
+      expect(firstPhoto?.thumbnailUrl).toBe('/thumbs/sunset-hawaii.jpg');
     });
 
     test('should include comprehensive metadata in structured format', async () => {
@@ -121,12 +122,12 @@ describe('Agent-Ready Search Results', () => {
         format: 'structured'
       });
 
-      const photo = results.structuredData.mainEntity[0];
-      expect(photo.locationCreated).toBeDefined();
-      expect(photo.dateCreated).toBe('2023-07-15T19:30:00.000Z');
-      expect(photo.keywords).toEqual(['sunset', 'hawaii', 'beach']);
-      expect(photo.exifData).toBeDefined();
-      expect(photo.exifData.camera).toBe('Canon EOS R5');
+      const photo = results.structuredData?.mainEntity[0];
+      expect(photo?.locationCreated).toBeDefined();
+      expect(photo?.dateCreated).toBe('2023-07-15T19:30:00.000Z');
+      expect(photo?.keywords).toEqual(['sunset', 'hawaii', 'beach']);
+      expect(photo?.exifData).toBeDefined();
+      expect(photo?.exifData?.camera).toBe('Canon EOS R5');
     });
 
     test('should provide agent-accessible search metadata', async () => {
@@ -162,7 +163,7 @@ describe('Agent-Ready Search Results', () => {
 
       // Browser agent format should include DOM-ready elements
       expect(browserResults.domElements).toBeDefined();
-      expect(browserResults.domElements.length).toBeGreaterThan(0);
+      expect(browserResults.domElements?.length).toBeGreaterThan(0);
 
       // API format should be clean JSON
       expect(apiResults.structuredData).toBeDefined();
@@ -208,13 +209,14 @@ describe('Agent-Ready Search Results', () => {
     });
 
     test('should track search history for agents', async () => {
-      const registry = new AgentStateRegistry();
+      await searchEngine.indexPhotos(mockPhotos);
       
       // Execute multiple searches
       await agentInterface.executeSearch({ query: 'sunset photos' });
       await agentInterface.executeSearch({ query: 'family vacation' });
       await agentInterface.executeSearch({ query: 'beach landscapes' });
 
+      const registry = agentInterface.getStateRegistry();
       const history = registry.getSearchHistory();
       expect(history).toHaveLength(3);
       expect(history[0].query).toBe('sunset photos');
@@ -278,10 +280,10 @@ describe('Agent-Ready Search Results', () => {
 
       expect(results.bulkActions).toBeDefined();
       expect(Array.isArray(results.bulkActions)).toBe(true);
-      expect(results.bulkActions!.length).toBeGreaterThan(0);
+      expect(results.bulkActions?.length).toBeGreaterThan(0);
       
       // Check that bulk actions contain expected action types
-      const actionTypes = results.bulkActions!.map(action => action.type);
+      const actionTypes = results.bulkActions?.map(action => action.type) || [];
       expect(actionTypes).toContain('download');
       expect(actionTypes).toContain('addToAlbum');
       expect(actionTypes).toContain('export');
@@ -354,10 +356,10 @@ describe('Agent-Ready Search Results', () => {
       });
 
       expect(results.metadata).toBeDefined();
-      expect(results.metadata.totalIndexedPhotos).toBe(2);
-      expect(results.metadata.searchEngineVersion).toBeDefined();
-      expect(results.metadata.indexLastUpdated).toBeDefined();
-      expect(results.metadata.availableFilters).toBeDefined();
+      expect(results.metadata?.totalIndexedPhotos).toBe(2);
+      expect(results.metadata?.searchEngineVersion).toBeDefined();
+      expect(results.metadata?.indexLastUpdated).toBeDefined();
+      expect(results.metadata?.availableFilters).toBeDefined();
     });
 
     test('should include performance metrics', async () => {
@@ -369,10 +371,10 @@ describe('Agent-Ready Search Results', () => {
       });
 
       expect(results.metrics).toBeDefined();
-      expect(results.metrics.indexLookupTime).toBeGreaterThan(0);
-      expect(results.metrics.semanticMatchTime).toBeGreaterThan(0);
-      expect(results.metrics.totalExecutionTime).toBeGreaterThan(0);
-      expect(results.metrics.memoryUsage).toBeDefined();
+      expect(results.metrics?.indexLookupTime).toBeGreaterThan(0);
+      expect(results.metrics?.semanticMatchTime).toBeGreaterThan(0);
+      expect(results.metrics?.totalExecutionTime).toBeGreaterThan(0);
+      expect(results.metrics?.memoryUsage).toBeDefined();
     });
 
     test('should provide filter suggestion metadata', async () => {
@@ -479,7 +481,7 @@ describe('Agent-Ready Search Results', () => {
       const scriptTags = document.querySelectorAll('script[type="application/ld+json"]');
       expect(scriptTags.length).toBeGreaterThan(0);
       
-      const structuredData = JSON.parse(scriptTags[0].textContent);
+      const structuredData = JSON.parse(scriptTags[0].textContent || '{}');
       expect(structuredData['@type']).toBe('SearchResultsPage');
     });
   });

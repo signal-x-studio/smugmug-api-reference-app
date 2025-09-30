@@ -5,9 +5,8 @@
  * Handles semantic filter controls like objects, scenes, and keywords.
  */
 
-import React from 'react';
-import { FilterState } from '../hooks/useFilterState';
-import { FilterCategory } from '../hooks/useFilterCategories';
+import React, { useMemo, useCallback } from 'react';
+import { FilterCategory, FilterState } from '../types';
 
 interface SemanticFiltersProps {
   categories: FilterCategory[];
@@ -17,15 +16,17 @@ interface SemanticFiltersProps {
   onToggleCategory: (categoryId: string) => void;
 }
 
-export const SemanticFilters: React.FC<SemanticFiltersProps> = ({
+export const SemanticFilters: React.FC<SemanticFiltersProps> = React.memo(({
   categories,
   currentFilters,
   onFilterSelect,
   expandedCategories,
   onToggleCategory
 }) => {
-  const semanticCategories = categories.filter(cat => 
-    ['objects', 'scenes', 'keywords'].includes(cat.id)
+  const semanticCategories = useMemo(() => 
+    categories.filter(cat => 
+      ['objects', 'scenes', 'keywords'].includes(cat.id)
+    ), [categories]
   );
 
   const isFilterSelected = (categoryId: string, value: string): boolean => {
@@ -78,4 +79,4 @@ export const SemanticFilters: React.FC<SemanticFiltersProps> = ({
       ))}
     </div>
   );
-};
+});

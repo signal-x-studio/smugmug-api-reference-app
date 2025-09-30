@@ -5,9 +5,8 @@
  * Handles simple filter controls like location and camera.
  */
 
-import React from 'react';
-import { FilterState } from '../hooks/useFilterState';
-import { FilterCategory } from '../hooks/useFilterCategories';
+import React, { useMemo } from 'react';
+import { FilterCategory, FilterState } from '../types';
 
 interface BasicFiltersProps {
   categories: FilterCategory[];
@@ -17,15 +16,17 @@ interface BasicFiltersProps {
   onToggleCategory: (categoryId: string) => void;
 }
 
-export const BasicFilters: React.FC<BasicFiltersProps> = ({
+export const BasicFilters: React.FC<BasicFiltersProps> = React.memo(({
   categories,
   currentFilters,
   onFilterSelect,
   expandedCategories,
   onToggleCategory
 }) => {
-  const basicCategories = categories.filter(cat => 
-    ['location', 'camera'].includes(cat.id)
+  const basicCategories = useMemo(() => 
+    categories.filter(cat => 
+      !['objects', 'scenes', 'keywords'].includes(cat.id)
+    ), [categories]
   );
 
   const isFilterSelected = (categoryId: string, value: string): boolean => {
@@ -77,4 +78,4 @@ export const BasicFilters: React.FC<BasicFiltersProps> = ({
       ))}
     </div>
   );
-};
+});

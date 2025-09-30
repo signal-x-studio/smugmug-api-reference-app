@@ -201,6 +201,11 @@ export class AgentActionRegistry {
    * Validate individual parameter value
    */
   static validateParameterValue(value: any, paramDef: ActionParameter): boolean {
+    // Handle optional parameters - if not required and value is undefined, it's valid
+    if (!paramDef.required && (value === undefined || value === null)) {
+      return true;
+    }
+    
     switch (paramDef.type) {
       case 'string':
         return typeof value === 'string';
@@ -238,6 +243,15 @@ export class AgentActionRegistry {
   static getExecutionHistory(): ExecutionHistory[] {
     this.initialize();
     return window.agentActionHistory || [];
+  }
+
+  /**
+   * Clear all registered actions
+   */
+  static clearAll(): void {
+    if (window.agentActions) {
+      window.agentActions = {};
+    }
   }
 
   /**

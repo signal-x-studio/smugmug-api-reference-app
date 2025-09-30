@@ -116,8 +116,8 @@ describe('Semantic Search Engine', () => {
 
       const sunsetEntry = index.keywordIndex.get('sunset');
       expect(sunsetEntry).toBeDefined();
-      expect(sunsetEntry.confidence).toBe(0.95);
-      expect(sunsetEntry.photoIds).toContain('photo-1');
+      expect(sunsetEntry?.confidence).toBe(0.95);
+      expect(sunsetEntry?.photoIds).toContain('photo-1');
     });
 
     test('should create efficient lookup structures', async () => {
@@ -423,7 +423,7 @@ describe('Semantic Search Engine', () => {
       await expect(searchEngine.indexPhotos([incompletePhoto])).resolves.not.toThrow();
       
       const results = await searchEngine.search({
-        semantic: { objects: ['test'] },
+        semantic: { keywords: ['test'] },
         spatial: {},
         temporal: {},
         people: {}
@@ -440,7 +440,7 @@ describe('Semantic Search Engine', () => {
 
     test('should return properly structured search results', async () => {
       const results = await searchEngine.search({
-        semantic: { objects: ['sunset'] },
+        semantic: { keywords: ['sunset'] },
         spatial: {},
         temporal: {},
         people: {}

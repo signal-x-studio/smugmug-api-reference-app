@@ -5,14 +5,8 @@
  * for filter operations. Extracted from FilterPanel God Component.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { SearchParameters } from '../utils/agent-native/photo-discovery-search';
-
-export interface FilterState extends SearchParameters {
-  // Additional UI-specific state
-}
-
-export type FilterCombination = 'AND' | 'OR';
+import { useState, useEffect, useCallback } from 'react';
+import { FilterState, FilterCombination } from '../types';
 
 interface UseFilterStateProps {
   persistState?: boolean;
@@ -28,13 +22,13 @@ interface UseFilterStateReturn {
   toggleCombinationMode: () => void;
 }
 
-const INITIAL_FILTER_STATE: FilterState = {
+const createInitialFilterState = (): FilterState => ({
   semantic: {},
   spatial: {},
   temporal: {},
   people: {},
   technical: {}
-};
+});
 
 const STORAGE_KEY = 'photo-search-filters';
 
@@ -42,7 +36,7 @@ export const useFilterState = ({
   persistState = false,
   combinationMode = 'AND'
 }: UseFilterStateProps = {}): UseFilterStateReturn => {
-  const [currentFilters, setCurrentFilters] = useState<FilterState>(INITIAL_FILTER_STATE);
+  const [currentFilters, setCurrentFilters] = useState<FilterState>(createInitialFilterState);
   const [combMode, setCombMode] = useState<FilterCombination>(combinationMode);
 
   // Load persisted state on mount
@@ -53,8 +47,8 @@ export const useFilterState = ({
         try {
           const parsedFilters = JSON.parse(saved);
           setCurrentFilters(parsedFilters);
-        } catch (e) {
-          console.warn('Failed to load saved filters:', e);
+        } catch {
+          // Silently fail to load saved filters
         }
       }
     }
@@ -65,14 +59,14 @@ export const useFilterState = ({
     if (persistState) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(currentFilters));
-      } catch (e) {
-        console.warn('Failed to save filters:', e);
+      } catch {
+        // Silently fail to save filters
       }
     }
   }, [currentFilters, persistState]);
 
   const clearAllFilters = useCallback(() => {
-    setCurrentFilters(INITIAL_FILTER_STATE);
+    setCurrentFilters(createInitialFilterState());
   }, []);
 
   const toggleCombinationMode = useCallback(() => {

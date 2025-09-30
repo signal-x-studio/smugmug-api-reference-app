@@ -39,7 +39,7 @@ export const useAgentAttributes = ({
   
   // Combine HTML attributes with proper memoization
   const combinedAttributes = useMemo(() => {
-    const baseAttributes = {
+    const baseAttributes: Record<string, any> = {
       itemScope: true,
       itemType: schemaTypeUrl,
       'data-agent-component': componentId,

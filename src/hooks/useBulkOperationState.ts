@@ -130,17 +130,32 @@ export const useBulkOperationState = (): BulkOperationStateReturn => {
 
     try {
       if (executor) {
-        const parseResult = await executor.parseCommand(commandInput);
-        if (parseResult.confidence > 0.7) {
-          onExecute({
-            type: parseResult.operation,
-            parameters: parseResult.parameters,
-            photos: selectedPhotos
-          });
-          setCommandInput('');
-        } else {
-          // Show suggestions for low confidence commands
-          setCommandSuggestions(parseResult.suggestions || []);
+        // Handle function-based processor (for tests)
+        if (typeof executor === 'function') {
+          const parseResult = await executor(commandInput);
+          if (parseResult && parseResult.operation) {
+            onExecute({
+              type: parseResult.operation,
+              parameters: parseResult.parameters,
+              photos: selectedPhotos
+            });
+            setCommandInput('');
+          }
+        } 
+        // Handle object-based executor (for production)
+        else if (executor.parseCommand) {
+          const parseResult = await executor.parseCommand(commandInput);
+          if (parseResult.confidence > 0.7) {
+            onExecute({
+              type: parseResult.operation,
+              parameters: parseResult.parameters,
+              photos: selectedPhotos
+            });
+            setCommandInput('');
+          } else {
+            // Show suggestions for low confidence commands
+            setCommandSuggestions(parseResult.suggestions || []);
+          }
         }
       }
     } catch (error) {

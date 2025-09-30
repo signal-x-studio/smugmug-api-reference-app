@@ -66,10 +66,11 @@ export class IntentRecognizer {
         patterns: [
           /(?:create|make|add)\s+(?:a\s+)?(?:new\s+)?album\s+(?:called|named)?\s*["']?([^"']+)["']?/i,
           /new\s+album\s+["']?([^"']+)["']?/i,
-          /(?:create|make)\s+["']?([^"']+)["']?\s+album/i
+          /(?:create|make)\s+["']?([^"']+)["']?\s+album/i,
+          /(?:create|make|add)\s+(?:a\s+)?(?:new\s+)?album\s*$/i  // Match "create album" without name
         ],
         category: 'album',
-        confidence: 0.9
+        confidence: 0.95
       },
       
       // Photo selection patterns (specific file extensions first)
@@ -126,6 +127,27 @@ export class IntentRecognizer {
         confidence: 0.8
       },
       
+      // Delete operations (destructive actions)
+      {
+        action: 'album.delete',
+        patterns: [
+          /(?:delete|remove)\s+album\s+(.+)/i,
+          /(?:delete|remove)\s+(.+)\s+album/i
+        ],
+        category: 'album',
+        confidence: 0.85
+      },
+      
+      {
+        action: 'photo.delete',
+        patterns: [
+          /(?:delete|remove)\s+(?:photo|image|picture)\s+(.+)/i,
+          /(?:delete|remove)\s+(.+\.(?:jpg|jpeg|png|gif))/i
+        ],
+        category: 'photo',
+        confidence: 0.85
+      },
+
       // Search and filter patterns (most general, should be last)
       {
         action: 'photo.search',
@@ -157,10 +179,8 @@ export class IntentRecognizer {
         if (match) {
           const matchQuality = this.calculateMatchQuality(command, match);
           const confidence = pattern.confidence * matchQuality;
-          console.log(`[IntentRecognizer] Command: "${command}", Pattern: ${regex.source}, Action: ${pattern.action}, Confidence: ${confidence}`);
           
           if (confidence > bestMatch.confidence) {
-            console.log(`[IntentRecognizer] Updating bestMatch from ${bestMatch.action} (${bestMatch.confidence}) to ${pattern.action} (${confidence})`);
             bestMatch = {
               action: pattern.action,
               confidence,
@@ -175,7 +195,7 @@ export class IntentRecognizer {
     if (bestMatch.confidence < 0.6) {
       bestMatch.alternativeActions = this.getSimilarActions(command);
     }
-    console.log(`[IntentRecognizer] Final bestMatch: ${JSON.stringify(bestMatch)}`);
+    
     return bestMatch;
   }
 
@@ -249,6 +269,10 @@ export class ParameterExtractor {
       case 'photo.batchAnalyze':
       case 'photo.batch': // Add support for generic batch operations
         return this.extractBatchParams(command);
+      
+      case 'album.delete':
+      case 'photo.delete':
+        return this.extractDeleteParams(command);
       
       default:
         return this.extractGenericParams(command);
@@ -407,6 +431,22 @@ export class ParameterExtractor {
   private extractBatchParams(command: string): { [key: string]: any } {
     const params: { [key: string]: any } = {};
     
+    // Extract custom instructions first (highest priority)
+    const instructionPatterns = [
+      /(?:with\s+)?(?:custom\s+)?instructions?\s+["']([^"']+)["']/i,
+      /(?:with\s+)?(?:instructions?|prompt)\s+["']([^"']+)["']/i,
+      /with\s+["']([^"']+)["']/i,
+      /focus\s+on\s+([^"'\n]+)/i
+    ];
+
+    for (const pattern of instructionPatterns) {
+      const match = command.match(pattern);
+      if (match) {
+        params.customInstructions = match[1].trim();
+        break;
+      }
+    }
+    
     // Extract count and position (first/last N items) - prioritize this
     const countMatch = command.match(/(?:the\s+)?(first|last)\s+(\d+)/i);
     if (countMatch) {
@@ -444,6 +484,46 @@ export class ParameterExtractor {
         params.position = 'first';
       } else if (/last/i.test(command)) {
         params.position = 'last';
+      }
+    }
+
+    return params;
+  }
+
+  /**
+   * Extract delete operation parameters
+   */
+  private extractDeleteParams(command: string): { [key: string]: any } {
+    const params: { [key: string]: any } = {};
+    
+    // Extract album names
+    const albumPatterns = [
+      /(?:delete|remove)\s+album\s+["']([^"']+)["']/i,
+      /(?:delete|remove)\s+album\s+(.+?)(?:\s*$)/i, // Capture everything after "album" until end of line
+      /(?:delete|remove)\s+["']([^"']+)["']\s+album/i
+    ];
+
+    for (const pattern of albumPatterns) {
+      const match = command.match(pattern);
+      if (match) {
+        params.name = match[1].trim();
+        params.albumName = match[1].trim(); // Also set as albumName for consistency
+        break;
+      }
+    }
+
+    // Extract photo names/IDs
+    const photoPatterns = [
+      /(?:delete|remove)\s+(?:photo|image|picture)\s+["']([^"']+)["']/i,
+      /(?:delete|remove)\s+(?:photo|image|picture)\s+([^\s"']+)/i,
+      /(?:delete|remove)\s+([^\s"']+\.(?:jpg|jpeg|png|gif))/i
+    ];
+
+    for (const pattern of photoPatterns) {
+      const match = command.match(pattern);
+      if (match) {
+        params.photoId = match[1].trim();
+        break;
       }
     }
 
@@ -512,6 +592,14 @@ export class CommandParser {
     const parameterConfidence = Object.keys(parameters).length > 0 ? 0.8 : 0.4;
     const overallConfidence = (intent.confidence + parameterConfidence) / 2;
 
+    // Add errors for low confidence commands to ensure graceful error handling
+    if (overallConfidence < 0.3) {
+      errors.push(`Could not understand command: "${command}"`);
+      if (intent.action === 'unknown') {
+        errors.push('Command not recognized or too ambiguous');
+      }
+    }
+
     return {
       intent,
       parameters,
@@ -567,6 +655,11 @@ export class NaturalLanguageProcessor {
     options: ProcessingOptions = {}
   ): Promise<NLProcessingResult> {
     try {
+      // Handle help requests first (before parsing)
+      if (this.isHelpRequest(command)) {
+        return this.generateHelpResponse();
+      }
+
       // Parse command
       const parsed = this.commandParser.parse(command);
       
@@ -584,11 +677,6 @@ export class NaturalLanguageProcessor {
         };
       }
 
-      // Handle help requests
-      if (this.isHelpRequest(command)) {
-        return this.generateHelpResponse();
-      }
-
       // Check for destructive actions requiring confirmation
       if (this.requiresConfirmation(parsed.intent.action)) {
         return this.handleConfirmationRequired(parsed);
@@ -602,19 +690,72 @@ export class NaturalLanguageProcessor {
       // Resolve contextual parameters
       const resolvedParams = this.resolveContextualParameters(parsed.parameters, parsed.intent.action);
 
+      // Validate parameters before execution
+      const validationError = this.validateActionParameters(parsed.intent.action, resolvedParams);
+      if (validationError) {
+        return {
+          success: false,
+          error: validationError.message,
+          suggestions: validationError.suggestions
+        };
+      }
+
       // Execute action
-      const result = await AgentActionRegistry.execute(parsed.intent.action, resolvedParams);
+      try {
+        // Execute the action
 
-      // Update context for future commands
-      this.updateContext(parsed.intent.action, resolvedParams, result);
+        // Call progress callback if provided
+        if (options.onProgress) {
+          options.onProgress({
+            status: 'executing',
+            message: `Executing ${parsed.intent.action}`,
+            progress: 0.5
+          });
+        }
 
-      return {
-        success: result.success,
-        executedAction: parsed.intent.action,
-        parameters: resolvedParams,
-        result,
-        error: result.error
-      };
+        const result = await AgentActionRegistry.execute(parsed.intent.action, resolvedParams);
+
+        // Call progress callback for completion
+        if (options.onProgress) {
+          options.onProgress({
+            status: result.success ? 'completed' : 'failed',
+            message: result.success ? `Completed ${parsed.intent.action}` : `Failed ${parsed.intent.action}`,
+            progress: 1.0
+          });
+        }
+
+        // Update context for future commands
+        if (result.success) {
+          this.updateContext(parsed.intent.action, resolvedParams, result);
+        }
+
+        return {
+          success: result.success,
+          executedAction: parsed.intent.action,
+          parameters: resolvedParams,
+          result: result,
+          error: result.error,
+          suggestions: result.success ? undefined : this.generateSuggestions(parsed.intent.action)
+        };
+      } catch (executionError) {
+        // Call progress callback for error
+        if (options.onProgress) {
+          options.onProgress({
+            status: 'failed',
+            message: `Error executing ${parsed.intent.action}`,
+            progress: 1.0
+          });
+        }
+
+        // If action execution fails (e.g., action not found), return appropriate error
+        return {
+          success: false,
+          error: executionError instanceof Error ? executionError.message : 'Action execution failed',
+          executedAction: parsed.intent.action,
+          parameters: resolvedParams,
+          suggestions: this.generateSuggestions(parsed.intent.action)
+        };
+      }
 
     } catch (error) {
       return {
@@ -622,6 +763,46 @@ export class NaturalLanguageProcessor {
         error: error instanceof Error ? error.message : 'Unknown processing error'
       };
     }
+  }
+
+  /**
+   * Validate parameters for an action before execution
+   */
+  private validateActionParameters(actionName: string, parameters: any): { message: string; suggestions: string[] } | null {
+    const action = AgentActionRegistry.getAction(actionName);
+    
+    if (!action) {
+      return {
+        message: `Action '${actionName}' not found`,
+        suggestions: [
+          'select photo [photo-id]',
+          'create album "Album Name"',
+          'analyze photo [photo-id]'
+        ]
+      };
+    }
+
+    const missingParams = [];
+    for (const [paramName, paramDef] of Object.entries(action.parameters || {})) {
+      if (paramDef.required && (!parameters || parameters[paramName] === undefined)) {
+        missingParams.push(paramName);
+      }
+    }
+
+    if (missingParams.length > 0) {
+      const examples = {
+        'album.create': 'create album "Album Name"',
+        'photo.select': 'select photo photo-123',
+        'photo.batchAnalyze': 'analyze selected photos'
+      };
+
+      return {
+        message: `Missing required parameter${missingParams.length > 1 ? 's' : ''}: ${missingParams.join(', ')}`,
+        suggestions: [examples[actionName] || `${actionName} with required parameters`]
+      };
+    }
+
+    return null;
   }
 
   /**
@@ -703,10 +884,23 @@ Available commands:
    * Handle confirmation required for destructive actions
    */
   private handleConfirmationRequired(parsed: ParsedCommand): NLProcessingResult {
+    const actionParts = parsed.intent.action.split('.');
+    const actionType = actionParts[1]; // delete, remove, etc.
+    const targetType = actionParts[0]; // album, photo, etc.
+    
+    let targetName = '';
+    if (parsed.parameters.name) {
+      targetName = ` ${parsed.parameters.name}`;
+    } else if (parsed.parameters.albumName) {
+      targetName = ` ${parsed.parameters.albumName}`;  
+    } else if (parsed.parameters.photoId) {
+      targetName = ` ${parsed.parameters.photoId}`;
+    }
+
     return {
       success: false,
       requiresConfirmation: true,
-      confirmationPrompt: `This will ${parsed.intent.action.replace('.', ' ')}. Are you sure you want to continue?`
+      confirmationPrompt: `This will ${actionType} ${targetType}${targetName}. Are you sure you want to continue?`
     };
   }
 

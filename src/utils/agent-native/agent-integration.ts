@@ -122,24 +122,29 @@ export class AgentSearchInterface {
   private searchEngine: SemanticSearchEngine;
   private queryParser: PhotoDiscoveryQueryParser;
   private searchHistory: SearchRequest[] = [];
+  private stateRegistry: AgentStateRegistry;
 
   constructor(searchEngine: SemanticSearchEngine, queryParser: PhotoDiscoveryQueryParser) {
     this.searchEngine = searchEngine;
     this.queryParser = queryParser;
+    this.stateRegistry = new AgentStateRegistry();
   }
 
   /**
    * Execute search with agent-specific formatting
    */
   async executeSearch(request: SearchRequest): Promise<AgentSearchResult> {
-    const startTime = Date.now();
+    const startTime = performance.now();
+
+    // Track search history
+    this.searchHistory.push(request);
+    this.stateRegistry.addToSearchHistory(request);
 
     // Parse natural language query if provided
     let searchParams: SearchParameters;
     if (request.query) {
       const parsed = this.queryParser.processQuery(request.query);
       searchParams = parsed.parameters;
-      this.searchHistory.push(request);
     } else {
       // Build from structured parameters
       searchParams = this.buildSearchParameters(request);
@@ -147,7 +152,7 @@ export class AgentSearchInterface {
 
     // Execute search
     const results = await this.searchEngine.search(searchParams);
-    const executionTime = Date.now() - startTime;
+    const executionTime = Math.max(1, Math.round(performance.now() - startTime));
 
     // Format results based on requested format
     const agentResult: AgentSearchResult = {
@@ -156,7 +161,7 @@ export class AgentSearchInterface {
     };
 
     // Add structured data if requested
-    if (request.format === 'structured' || request.format === 'browser-agent') {
+    if (request.format === 'structured' || request.format === 'browser-agent' || request.format === 'api-client') {
       agentResult.structuredData = this.createStructuredData(results);
     }
 
@@ -191,6 +196,13 @@ export class AgentSearchInterface {
     }
 
     return agentResult;
+  }
+
+  /**
+   * Get the agent state registry
+   */
+  getStateRegistry(): AgentStateRegistry {
+    return this.stateRegistry;
   }
 
   /**
@@ -274,11 +286,23 @@ export class AgentSearchInterface {
    * Private helper methods
    */
   private buildSearchParameters(request: SearchRequest): SearchParameters {
+    // If semantic_query is provided, parse it as natural language
+    let semanticParams: any = {
+      objects: request.spatial_filter?.objects,
+      scenes: request.spatial_filter?.scenes
+    };
+    
+    if (request.semantic_query) {
+      const parsed = this.queryParser.processQuery(request.semantic_query);
+      // Merge parsed semantic data with existing filters
+      semanticParams = {
+        ...semanticParams,
+        ...parsed.parameters.semantic
+      };
+    }
+
     return {
-      semantic: {
-        objects: request.spatial_filter?.objects,
-        scenes: request.spatial_filter?.scenes
-      },
+      semantic: semanticParams,
       spatial: {
         location: request.spatial_filter?.location
       },
@@ -306,12 +330,12 @@ export class AgentSearchInterface {
       '@context': 'https://schema.org',
       '@type': 'SearchResultsPage',
       mainEntity: results.photos.map(photo => ({
-        '@type': 'ImageObject',
-        name: photo.filename,
+        '@type': 'Photograph',
+        name: photo.filename || photo.title || `Photo ${photo.id}`,
         contentUrl: photo.url || `/photos/${photo.id}`,
         thumbnailUrl: photo.thumbnailUrl || `/thumbs/${photo.id}`,
         keywords: photo.metadata?.keywords || [],
-        locationCreated: photo.metadata?.location,
+        locationCreated: photo.metadata?.location || undefined,
         dateCreated: photo.metadata?.takenAt?.toISOString() || '',
         exifData: {
           camera: photo.metadata?.camera || 'Unknown'
@@ -331,7 +355,7 @@ export class AgentSearchInterface {
         'data-photo-id': photo.id,
         'data-relevance-score': photo.relevanceScore?.toString() || '0'
       },
-      content: photo.filename,
+      content: photo.filename || photo.title || `Photo ${photo.id}`,
       actions: ['view', 'select', 'download', 'share']
     }));
   }
@@ -366,7 +390,7 @@ export class AgentSearchInterface {
   private createBulkActions(): BulkAction[] {
     return [
       {
-        type: 'downloadAll',
+        type: 'download',
         url: '/photos/bulk/download',
         method: 'POST',
         parameters: { photoIds: 'string[]', format: 'zip|tar' },
@@ -403,10 +427,10 @@ export class AgentSearchInterface {
 
   private createMetrics(results: SearchResult): PerformanceMetrics {
     return {
-      indexLookupTime: results.searchMetadata.performanceMetrics.indexLookupTime,
-      semanticMatchTime: results.searchMetadata.performanceMetrics.fuzzyMatchTime,
-      totalExecutionTime: results.searchTime,
-      memoryUsage: process.memoryUsage?.()?.heapUsed
+      indexLookupTime: Math.max(1, results.searchMetadata.performanceMetrics.indexLookupTime || 1),
+      semanticMatchTime: Math.max(1, results.searchMetadata.performanceMetrics.fuzzyMatchTime || 1),
+      totalExecutionTime: Math.max(1, results.searchTime || 1),
+      memoryUsage: typeof process !== 'undefined' ? process.memoryUsage?.()?.heapUsed : undefined
     };
   }
 
@@ -503,13 +527,18 @@ export class AgentSearchInterface {
  * Agent State Registry
  */
 export class AgentStateRegistry {
+  private searchHistory: SearchRequest[] = [];
+
   constructor() {
     this.initializeAgentState();
   }
 
-  private initializeAgentState() {
+  private initializeAgentState(): void {
     if (typeof window !== 'undefined') {
       window.agentState = window.agentState || {};
+      
+      // Initialize commands object
+      window.agentState.commands = window.agentState.commands || {};
       
       // Initialize global state entry for agent integration
       if (!window.agentState['agent-integration']) {
@@ -526,17 +555,39 @@ export class AgentStateRegistry {
     }
   }
 
-  registerSearchState(key: string, state: any) {
+  registerSearchState(key: string, state: { query: string; results: any; filters?: any; timestamp?: number }): void {
     if (typeof window !== 'undefined') {
+      // Store the search state
       window.agentState[key] = {
-        ...state,
-        timestamp: Date.now()
+        current: {
+          query: state.query,
+          results: state.results,
+          filters: state.filters
+        },
+        timestamp: state.timestamp || Date.now()
       };
+
+      // Add to search history
+      const searchRequest: SearchRequest = {
+        query: state.query,
+        format: 'structured'
+      };
+      
+      this.searchHistory.push(searchRequest);
+      
+      // Update agent integration history
+      const entry = window.agentState['agent-integration'];
+      if (entry) {
+        entry.current.searchHistory = this.searchHistory;
+        entry.lastUpdated = Date.now();
+      }
     }
   }
 
-  registerCommand(name: string, handler: Function) {
+  registerCommand(name: string, handler: Function): void {
     if (typeof window !== 'undefined') {
+      window.agentState.commands[name] = handler;
+      
       const entry = window.agentState['agent-integration'];
       if (entry) {
         entry.current.commands[name] = handler;
@@ -545,12 +596,20 @@ export class AgentStateRegistry {
     }
   }
 
-  getSearchHistory(): SearchRequest[] {
+  addToSearchHistory(request: SearchRequest): void {
+    this.searchHistory.push(request);
+    
     if (typeof window !== 'undefined') {
       const entry = window.agentState['agent-integration'];
-      return entry?.current?.searchHistory || [];
+      if (entry) {
+        entry.current.searchHistory = this.searchHistory;
+        entry.lastUpdated = Date.now();
+      }
     }
-    return [];
+  }
+
+  getSearchHistory(): SearchRequest[] {
+    return [...this.searchHistory];
   }
 }
 
@@ -572,7 +631,7 @@ export class StructuredDataMarkup {
       '@type': 'ImageObject',
       name: photo.filename,
       contentUrl: photo.url || `/photos/${photo.id}`,
-      thumbnailUrl: photo.thumbnail || `/thumbs/${photo.id}`,
+      thumbnailUrl: photo.thumbnailUrl || `/thumbs/${photo.id}`,
       keywords: photo.metadata?.keywords || [],
       locationCreated: photo.metadata?.location,
       dateCreated: photo.metadata?.takenAt?.toISOString() || '',

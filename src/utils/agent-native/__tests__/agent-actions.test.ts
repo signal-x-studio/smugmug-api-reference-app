@@ -297,7 +297,7 @@ describe('Agent Action Registry Infrastructure', () => {
           photoId: { type: 'string', required: true },
           options: { type: 'object', required: false }
         },
-        vi.fn().mockResolvedValue({ success: true, metadata: { keywords: ['sunset'] } })
+        vi.fn().mockResolvedValue({ success: true, data: { metadata: { keywords: ['sunset'] } } })
       );
 
       AgentActionRegistry.register('photo.select', selectAction);
@@ -326,7 +326,7 @@ describe('Agent Action Registry Infrastructure', () => {
             status: 'analyzed',
             metadata: { keywords: ['generated'] }
           }));
-          return { success: true, results };
+          return { success: true, data: { results } };
         })
       );
 

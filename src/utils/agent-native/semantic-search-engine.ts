@@ -23,6 +23,7 @@ export interface PhotoIndex {
   sceneIndex: Map<string, MetadataEntry>;
   locationIndex: Map<string, MetadataEntry>;
   peopleIndex: Map<string, MetadataEntry>;
+  moodIndex: Map<string, MetadataEntry>;
   temporalIndex: Map<string, string[]>; // year/month -> photo IDs
   cameraIndex: Map<string, MetadataEntry>;
 }
@@ -102,6 +103,7 @@ export class SemanticSearchEngine {
       sceneIndex: new Map(),
       locationIndex: new Map(),
       peopleIndex: new Map(),
+      moodIndex: new Map(),
       temporalIndex: new Map(),
       cameraIndex: new Map()
     };
@@ -187,13 +189,35 @@ export class SemanticSearchEngine {
     if (photo.metadata.camera) {
       this.addToIndex(this.index.cameraIndex, photo.metadata.camera, photo.id, photo.metadata.confidence || 1.0);
     }
+
+    // Index AI analysis metadata
+    if (photo.metadata.aiAnalysis) {
+      const aiAnalysis = photo.metadata.aiAnalysis;
+      
+      // Index mood from AI analysis
+      if (aiAnalysis.mood) {
+        this.addToIndex(this.index.moodIndex, aiAnalysis.mood, photo.id, aiAnalysis.technicalQuality || 1.0);
+      }
+      
+      // Index dominant colors as keywords (for broader searchability)
+      if (aiAnalysis.dominantColors && Array.isArray(aiAnalysis.dominantColors)) {
+        for (const color of aiAnalysis.dominantColors) {
+          this.addToIndex(this.index.keywordIndex, color, photo.id, aiAnalysis.technicalQuality || 1.0);
+        }
+      }
+      
+      // Index lighting conditions as scenes
+      if (aiAnalysis.lighting) {
+        this.addToIndex(this.index.sceneIndex, aiAnalysis.lighting, photo.id, aiAnalysis.technicalQuality || 1.0);
+      }
+    }
   }
 
   /**
    * Create searchable text from photo metadata
    */
   private createSearchableText(photo: Photo): string {
-    const parts: string[] = [photo.filename];
+    const parts: string[] = [photo.filename || 'untitled'];
     
     if (photo.metadata) {
       if (photo.metadata.keywords) parts.push(...photo.metadata.keywords);
@@ -258,7 +282,8 @@ export class SemanticSearchEngine {
       { name: 'objects', data: Array.from(this.index.objectIndex.keys()) },
       { name: 'scenes', data: Array.from(this.index.sceneIndex.keys()) },
       { name: 'locations', data: Array.from(this.index.locationIndex.keys()) },
-      { name: 'people', data: Array.from(this.index.peopleIndex.keys()) }
+      { name: 'people', data: Array.from(this.index.peopleIndex.keys()) },
+      { name: 'mood', data: Array.from(this.index.moodIndex.keys()) }
     ];
 
     for (const indexData of indexes) {
@@ -365,6 +390,21 @@ export class SemanticSearchEngine {
           matchingSets.scenes = {photoIds: sceneMatches, exactMatches};
         }
       }
+
+      if (query.semantic.mood) {
+        const moodMatches = new Set<string>();
+        const exactMatches = new Set<string>();
+        for (const mood of query.semantic.mood) {
+          const matches = await this.findMatches(mood, this.index.moodIndex, 'mood');
+          matches.forEach(match => {
+            moodMatches.add(match.id);
+            if (match.isExact) exactMatches.add(match.id);
+          });
+        }
+        if (moodMatches.size > 0) {
+          matchingSets.mood = {photoIds: moodMatches, exactMatches};
+        }
+      }
     }
 
     // Spatial matching
@@ -462,8 +502,8 @@ export class SemanticSearchEngine {
       };
       
       const currentYear = new Date().getFullYear();
-      const startNum = monthMap[startMonth];
-      const endNum = monthMap[endMonth];
+      const startNum = monthMap[startMonth as keyof typeof monthMap];
+      const endNum = monthMap[endMonth as keyof typeof monthMap];
       
       if (startNum && endNum) {
         for (let month = parseInt(startNum); month <= parseInt(endNum); month++) {
@@ -584,7 +624,7 @@ export class SemanticSearchEngine {
       }
 
       this.debounceTimer = setTimeout(async () => {
-        const result = await this.search(query, options);
+        const result = await this.executeSearch(query, options);
         resolve(result);
       }, this.config.debounceDelay);
     });

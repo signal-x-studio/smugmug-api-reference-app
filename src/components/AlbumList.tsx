@@ -88,7 +88,7 @@ const NodeItem: React.FC<{
     );
 };
 
-export const AlbumList: React.FC<AlbumListProps> = ({ nodes, selectedAlbum, onSelectAlbum, onCreateAlbum, isLoading, onOpenSmartAlbumModal }) => {
+export const AlbumList: React.FC<AlbumListProps> = React.memo(({ nodes, selectedAlbum, onSelectAlbum, onCreateAlbum, isLoading, onOpenSmartAlbumModal }) => {
   const [newAlbumName, setNewAlbumName] = useState('');
   const [isCreating, setIsCreating] = useState(false);
 
@@ -150,4 +150,4 @@ export const AlbumList: React.FC<AlbumListProps> = ({ nodes, selectedAlbum, onSe
       </div>
     </div>
   );
-};
+});

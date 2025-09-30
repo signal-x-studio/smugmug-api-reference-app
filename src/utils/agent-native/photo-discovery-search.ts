@@ -108,8 +108,8 @@ export interface AgentCommand {
  */
 export class PhotoDiscoveryQueryParser {
   private context: SearchParameters = {};
-  private entityPatterns: Array<{ type: EntityExtraction['type']; patterns: RegExp[]; confidence: number }>;
-  private intentPatterns: Array<{ type: SearchQueryIntent['type']; patterns: RegExp[]; confidence: number }>;
+  private entityPatterns!: Array<{ type: EntityExtraction['type']; patterns: RegExp[]; confidence: number }>;
+  private intentPatterns!: Array<{ type: SearchQueryIntent['type']; patterns: RegExp[]; confidence: number }>;
 
   constructor() {
     this.initializePatterns();
@@ -145,7 +145,7 @@ export class PhotoDiscoveryQueryParser {
         type: 'location',
         patterns: [
           /\b(?:in|at|from|near|for)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b/g,
-          /\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\s+(?:photos|pictures|images)\b/g
+          /\b(hawaii|california|florida|tokyo|paris|london|new\s+york|los\s+angeles|san\s+francisco|chicago|boston|miami|seattle|denver|portland|austin|dallas|houston|atlanta|phoenix|las\s+vegas|orlando|nashville|detroit|philadelphia|baltimore|washington|dc|europe|asia|africa|australia|america)\s+(?:photos|pictures|images)\b/gi
         ],
         confidence: 0.7
       },
@@ -840,7 +840,7 @@ export class PhotoDiscoveryQueryParser {
 
     return {
       success: true,
-      parameters: {},
+      parameters: command.parameters,
       intent: { type: 'discovery', confidence: 1.0 },
       confidence: 1.0,
       search_params: command.parameters,

@@ -58,12 +58,12 @@ export const useAgentIntegration = ({
     const suggestions: string[] = [];
     
     // Add suggestions based on search context
-    if (agentState.current?.lastQuery?.includes('beach')) {
+    if (agentState.lastQuery?.includes('beach')) {
       suggestions.push('Create "Hawaii Beach Photos" album');
     }
     
-    if (agentState.current?.currentFilters?.location) {
-      suggestions.push(`Tag as ${agentState.current.currentFilters.location} photos`);
+    if (agentState.currentFilters?.location) {
+      suggestions.push(`Tag as ${agentState.currentFilters.location} photos`);
     }
     
     // Add suggestions based on selection count

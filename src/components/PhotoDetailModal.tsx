@@ -20,7 +20,7 @@ const formatDate = (dateString: string) => {
     });
 }
 
-export const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({ photo, onClose, onSaveMetadata, onDeletePhoto, onRetry, aiConfig }) => {
+export const PhotoDetailModal: React.FC<PhotoDetailModalProps> = React.memo(({ photo, onClose, onSaveMetadata, onDeletePhoto, onRetry, aiConfig }) => {
   const [localData, setLocalData] = useState<AiData>(photo.aiData);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const confirmDeleteTimer = useRef<number | null>(null);
@@ -284,4 +284,4 @@ export const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({ photo, onClo
       </div>
     </div>
   );
-};
+});

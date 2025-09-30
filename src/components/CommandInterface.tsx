@@ -34,7 +34,8 @@ export const CommandInterface: React.FC<CommandInterfaceProps> = ({
     await onCommandSubmit(executor, selectedPhotos, onOperationExecute);
   };
 
-  if (!showCommandHelp) {
+  // Always show command interface when photos are selected
+  if (selectedPhotos.length === 0) {
     return null;
   }
 
@@ -53,6 +54,11 @@ export const CommandInterface: React.FC<CommandInterfaceProps> = ({
             type="text"
             value={commandInput}
             onChange={(e) => setCommandInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSubmit(e as any);
+              }
+            }}
             placeholder="Type bulk operation command..."
             className="command-input"
             disabled={selectedPhotos.length === 0}

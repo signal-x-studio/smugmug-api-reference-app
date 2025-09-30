@@ -30,6 +30,13 @@ export interface PhotoMetadata {
   takenAt?: Date;
   camera?: string;
   confidence?: number;
+  aiAnalysis?: {
+    dominantColors?: string[];
+    composition?: string;
+    lighting?: string;
+    mood?: string;
+    technicalQuality?: number;
+  };
 }
 
 export interface Photo {
@@ -123,3 +130,44 @@ export interface AlbumStoryState {
     story: AlbumStory | null;
     error: string | null;
 }
+
+// Filter types for FilterPanel
+export interface FilterOption {
+  value: string;
+  label: string;
+  count: number;
+}
+
+export interface FilterCategory {
+  id: string;
+  label: string;
+  options: FilterOption[];
+  type: 'multi-select' | 'single-select' | 'range';
+}
+
+export interface FilterState {
+  semantic?: {
+    objects?: string[];
+    scenes?: string[];
+    keywords?: string[];
+  };
+  spatial?: {
+    location?: string;
+    coordinates?: [number, number];
+  };
+  temporal?: {
+    date_range?: {
+      start: Date;
+      end: Date;
+    };
+  };
+  people?: {
+    names?: string[];
+  };
+  technical?: {
+    camera_make?: string;
+    camera_model?: string;
+  };
+}
+
+export type FilterCombination = 'AND' | 'OR';

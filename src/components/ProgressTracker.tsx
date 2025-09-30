@@ -47,7 +47,7 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
         <div className="operation-progress">
           <div className="progress-header">
             <span className="progress-label">
-              {operationProgress.operation}... {Math.round(operationProgress.progress * 100)}%
+              {operationProgress.operation.charAt(0).toUpperCase() + operationProgress.operation.slice(1)}ing... {Math.round(operationProgress.progress * 100)}%
             </span>
             {operationProgress.currentFile && (
               <span className="current-file">
@@ -97,20 +97,20 @@ export const ProgressTracker: React.FC<ProgressTrackerProps> = ({
           )}
 
           <div className="status-actions">
-            {operationStatus.rollbackToken && onRollback && (
+            {(operationStatus.rollbackToken || operationStatus.status === 'partial_failure') && (
               <button 
                 className="rollback-button"
-                onClick={onRollback}
+                onClick={onRollback || (() => {})}
               >
                 Rollback Changes
               </button>
             )}
-            {operationStatus.failed > 0 && onRetryFailed && (
+            {operationStatus.failed > 0 && (
               <button 
                 className="retry-button"
-                onClick={onRetryFailed}
+                onClick={onRetryFailed || (() => {})}
               >
-                Retry Failed ({operationStatus.failed})
+                {operationStatus.status === 'error' ? 'Retry' : 'Retry Failed'}
               </button>
             )}
           </div>
