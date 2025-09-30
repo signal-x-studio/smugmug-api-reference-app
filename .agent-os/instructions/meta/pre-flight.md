@@ -1,12 +1,29 @@
 ---
-description: Common Pre-Flight Steps for Agent OS Instructions
+description: Common Pre-Flight Steps for Agent OS Instructions with Sonnet 4.5 Optimization
 globs:
 alwaysApply: false
-version: 1.1
+version: 2.0
 encoding: UTF-8
 ---
 
 # Pre-Flight Rules
+
+## Model Detection & Workflow Selection
+
+<model_detection>
+  DETECT: Current model version
+
+  IF model = "claude-sonnet-4-5":
+    WORKFLOW: execute-task-sonnet45.md (optimized for 200K context)
+    MODE: Full context loading with parallel operations
+    VALIDATION: Bash tool integration enabled
+    FOCUS_MODES: Context Orchestrator, Architecture Guardian
+  ELSE:
+    WORKFLOW: execute-task.md (legacy, token-optimized)
+    MODE: Conditional context loading
+    VALIDATION: Manual reference
+    FOCUS_MODES: Not applicable
+</model_detection>
 
 ## Core Execution Rules
 
@@ -19,6 +36,18 @@ encoding: UTF-8
 - If you need clarification on any details of your current task, stop and ask the user specific numbered questions and then continue once you have all of the information you need.
 
 - Use exact templates as provided
+
+## Sonnet 4.5 Enhancements (If Applicable)
+
+<sonnet_45_capabilities>
+  IF using Sonnet 4.5 workflow:
+    - LOAD: All foundational docs in parallel (Step 0)
+    - MAINTAIN: Full context throughout session (200K window)
+    - LEVERAGE: Cross-document reasoning and pattern recognition
+    - INTEGRATE: Bash tool for real-time validation
+    - ACTIVATE: Focus modes for specialized tasks
+    - THINK: In high-level intents, not step-by-step instructions
+</sonnet_45_capabilities>
 
 ## 🤖 SmugMug Photo Discovery Subagent Integration
 
@@ -44,10 +73,35 @@ BEFORE generating ANY React/TypeScript code, you MUST:
 ### Critical Architecture Enforcement
 The subagent enforces these NON-NEGOTIABLE standards:
 - **Component Size**: Maximum 200 lines including JSX
-- **Hook Complexity**: Maximum 3 dependencies per useEffect  
+- **Hook Complexity**: Maximum 3 dependencies per useEffect
 - **Type Safety**: Zero tolerance for `any` types in production code
 - **Memory Management**: Required cleanup functions for all side effects
 - **Performance**: Mandatory memoization for expensive operations (>10ms)
+- **Agent-Native**: Dual-interface implementation for user-facing components (useDualInterface + AgentWrapper)
+
+### Quality Gates Integration (Sonnet 4.5)
+
+IF using Sonnet 4.5 workflow:
+  **Sequential Quality Gates (BLOCKING):**
+  1. Gate 1: TypeScript Compilation (npx tsc --noEmit)
+  2. Gate 2: Test Suite Execution (npm test)
+  3. Gate 3: Architecture Validation (bash subagent or self-assessment)
+  4. Gate 4: Build Validation (npm run build)
+
+  **All gates must pass before feature completion.**
+
+  **Performance Budgets (enforced via Gate 4):**
+  - Bundle size: <1MB total, <20KB per component
+  - Test coverage: >90% overall, >95% agent-native modules
+  - Memory growth: <100MB per session
+  - Build time: <2 minutes
+
+  **Work Preservation:**
+  - Auto-commit every 30 minutes
+  - Branch protection before checkout
+  - Checkpoint branches: checkpoint/[feature]-[timestamp]
+
+  See: `.agent-os/instructions/core/execute-task-sonnet45.md` for complete workflow
 
 ### Integration Pattern
 ```typescript

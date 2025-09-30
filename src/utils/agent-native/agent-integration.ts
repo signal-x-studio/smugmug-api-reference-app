@@ -7,6 +7,7 @@
 
 import { SearchParameters, PhotoDiscoveryQueryParser } from './photo-discovery-search';
 import { SemanticSearchEngine, SearchResult } from './semantic-search-engine';
+import { AgentStateEntry } from './agent-state';
 
 // Type definitions for agent integration
 export interface AgentSearchResult extends SearchResult {
@@ -538,7 +539,11 @@ export class AgentStateRegistry {
       window.agentState = window.agentState || {};
       
       // Initialize commands object
-      window.agentState.commands = window.agentState.commands || {};
+      window.agentState.commands = window.agentState.commands || ({
+        current: {},
+        actions: {},
+        lastUpdated: Date.now()
+      } as AgentStateEntry);
       
       // Initialize global state entry for agent integration
       if (!window.agentState['agent-integration']) {
@@ -564,7 +569,8 @@ export class AgentStateRegistry {
           results: state.results,
           filters: state.filters
         },
-        timestamp: state.timestamp || Date.now()
+        actions: {},
+        lastUpdated: state.timestamp || Date.now()
       };
 
       // Add to search history

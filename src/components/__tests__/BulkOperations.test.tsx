@@ -5,12 +5,10 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { 
-  BulkOperationsPanel,
-  BulkSelectionManager,
-  BulkOperationExecutor,
-  OperationConfirmationDialog
-} from '../BulkOperations';
+import { BulkOperationsPanel } from '../BulkOperations';
+import { BulkSelectionManager } from '../BulkSelectionManager';
+import { BulkOperationExecutor } from '../BulkOperationExecutor';
+import { OperationConfirmationDialog } from '../OperationConfirmationDialog';
 import { ResultsGrid } from '../ResultsGrid';
 import { Photo } from '../../types';
 
