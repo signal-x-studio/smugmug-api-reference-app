@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running runtime error detection (quick scan)..."
+
+# Run unit tests for runtime error detection
+pnpm test -- src/testing/runtime-errors/__tests__/ --run --reporter=verbose
+
+if [ $? -ne 0 ]; then
+  echo "❌ Runtime error detection tests failed. Fix errors before committing."
+  exit 1
+fi
+
+echo "✅ Runtime error detection tests passed"

@@ -15,6 +15,7 @@
     "test:e2e:debug": "playwright test --debug",
     "test:runtime-errors": "playwright test e2e/runtime-errors",
     "test:runtime-errors:report": "playwright show-report test-results/playwright-report",
+    "generate-error-report": "node scripts/generate-error-report.js",
     "lint": "eslint src --ext ts,tsx",
     "lint:fix": "eslint src --ext ts,tsx --fix"
   },

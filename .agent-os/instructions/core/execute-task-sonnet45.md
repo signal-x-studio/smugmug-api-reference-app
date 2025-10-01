@@ -250,6 +250,8 @@ Execute quality gates in sequence with fail-fast logic. Each gate must pass befo
     ↓ MUST PASS or SKIP
   Gate 4: Build Validation ← Ensures production readiness
     ↓ MUST PASS
+  Gate 5: Runtime Error Detection ← Validates production errors (optional for new features)
+    ↓ PASS or SKIP
   ✅ Feature Complete - All Gates Passed
 </gate_sequence>
 
@@ -367,8 +369,43 @@ Execute quality gates in sequence with fail-fast logic. Each gate must pass befo
     RETRY: Gate 4
     ITERATE: Until build succeeds
 
-  PROCEED: Feature completion
+  PROCEED: Gate 5 (Runtime Error Detection)
 </gate_4_build>
+
+<gate_5_runtime_errors>
+  **Gate 5: Runtime Error Detection (OPTIONAL)**
+
+  WHEN: New components or significant features added
+
+  RUN: Bash: pnpm test -- src/testing/runtime-errors/__tests__/ --run
+
+  SUCCESS CRITERIA:
+  - All runtime error detection tests passing
+  - No new critical errors introduced
+  - Agent-native integration errors: 0
+  - API integration errors handled gracefully
+  - Component errors caught by boundaries
+
+  IF FAILURE:
+    ANALYZE: Runtime error test failures
+    IDENTIFY: Error category:
+      - agent-native: Agent action/interface issues
+      - api-integration: SmugMug/Gemini API failures
+      - data-error: Null/undefined access violations
+      - component-error: React rendering errors
+      - hook-error: Hook dependency issues
+    FIX: Based on error category
+    RETRY: Gate 5
+    ITERATE: Until tests pass
+
+  OPTIONAL E2E VALIDATION:
+    IF major feature or agent integration:
+      RUN: Bash: pnpm test:runtime-errors
+      VERIFY: No runtime errors in E2E scenarios
+      REPORT: Error detection summary
+
+  PROCEED: Feature completion
+</gate_5_runtime_errors>
 
 <failure_handling>
   **Failure Handling Protocol**
