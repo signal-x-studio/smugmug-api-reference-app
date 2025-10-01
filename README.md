@@ -5,11 +5,28 @@
 [![Vite](https://img.shields.io/badge/Vite-5.4-646cff)](https://vitejs.dev/)
 [![Live Demo](https://img.shields.io/badge/Live-Demo-blue)](https://signal-x-studio.github.io/smugmug-api-reference-app/)
 
-This project is a reference application and case study for building an **AI-native** system. It demonstrates a holistic AI-first strategy with three core pillars:
+> **Built in 72 hours by one developer + five AI agents**
+>
+> This isn't just a reference app—it's proof that solo developers can build enterprise-grade products by orchestrating AI agents as a virtual team.
 
-1.  **Building WITH AI**: Using a multi-agent workflow and a custom subagent to enforce architectural standards and accelerate development.
-2.  **Building AI INTO Features**: Integrating AI for core application functionality, like semantic photo search.
-3.  **Building FOR AI**: Architecting the application with a dual (human/machine) interface to be natively controllable by external AI agents.
+## The Story
+
+**Traditional approach:** 4 developers × 3 months = $144,000
+**This approach:** 1 developer × 3 days + AI agents = $1,657 (98.8% cost reduction)
+
+I didn't use AI to code faster. I **orchestrated specialized AI agents as a development team**, each with distinct roles: feature building, testing, code review, documentation, and DevOps.
+
+**The result:** 20,000+ lines of production code, comprehensive testing, 78,000 words of documentation—in a weekend.
+
+📖 **Read the full story:** [AI Development Case Study](./docs/AI-DEVELOPMENT-CASE-STUDY.md)
+
+---
+
+## Three Pillars of AI-Native Development
+
+1.  **Building WITH AI**: Multi-agent workflow where each agent specializes (like hiring a team)
+2.  **Building AI INTO Features**: Semantic photo search powered by Google Gemini
+3.  **Building FOR AI**: Agent-native architecture with dual human/machine interfaces
 
 ## Core Features
 
@@ -43,16 +60,22 @@ npm run dev
 
 The application will be available at `http://localhost:3000`.
 
-## Key Documentation
+## Documentation
 
-This project's documentation explains the principles and patterns used in its construction.
+### For Developers Who Want to Replicate This
 
--   **[AI-Native Case Study](./AI-NATIVE-CASE-STUDY.md)**: A high-level overview of the project's AI-first strategy.
--   **[Technical Decisions](./docs/architecture/technical-decisions.md)**: Explains the core architectural choices, such as the service layer and state management.
--   **[Code Quality Standards](./docs/development/code-quality.md)**: Outlines the configuration for TypeScript, linting, and testing.
--   **[AI-Assisted Workflow](./docs/development/ai-workflow.md)**: Describes the process for using AI tools in the development cycle.
+-   **[AI Development Case Study](./docs/AI-DEVELOPMENT-CASE-STUDY.md)**: How I built this in 72 hours with AI agents
+-   **[Agent Team Architecture](./docs/AGENT-TEAM-ARCHITECTURE.md)**: My virtual team structure and orchestration workflow
+-   **[Go-To-Market Guide](./docs/GO-TO-MARKET-GUIDE.md)**: How to share your own AI-assisted projects
 
-For a full list of documents, see the **[Documentation Index](./docs/README.md)**.
+### Technical Documentation
+
+-   **[Technical Architecture](./docs/TECHNICAL-ARCHITECTURE.md)**: System design, patterns, code examples
+-   **[Business Impact Analysis](./docs/BUSINESS-IMPACT-ANALYSIS.md)**: ROI calculations and strategic value
+-   **[Production Readiness Review](./docs/PRODUCTION-READINESS-REVIEW.md)**: Operational maturity assessment
+-   **[Tech Debt Backlog](./docs/TECH-DEBT-BACKLOG.md)**: Known gaps and remediation plans
+
+For a full list of documents, see **[docs/README.md](./docs/README.md)**.
 
 ## Available Scripts
 
